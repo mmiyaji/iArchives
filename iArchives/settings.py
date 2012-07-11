@@ -31,7 +31,7 @@ TIME_ZONE = 'Asia/Tokyo'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja'
 
 SITE_ID = 1
 
@@ -81,7 +81,10 @@ STATICFILES_FINDERS = (
     )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = open(os.path.join(BASE_DIR, 'secretkey.txt')).readline()
+try:
+    SECRET_KEY = open(os.path.join(BASE_DIR, 'secretkey.txt')).readline()
+except:
+    SECRET_KEY = "NONE"
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
