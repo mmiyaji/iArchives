@@ -1,8 +1,10 @@
 *.pyc
 *.db
 *.svn*
+*.#*
 .DS_Store
 freeze/*
 *secretkey.txt
 .#*%
-media/tmp/*.{jpg,JPG,jpeg,JPEG,png,PNG,gif,GIF}
+media/tmp/*
+!media/tmp/*.txt
