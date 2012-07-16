@@ -1,6 +1,8 @@
 *.pyc
 *.db
+*.svn*
 .DS_Store
 freeze/*
 *secretkey.txt
 .#*%
+media/tmp/*

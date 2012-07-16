@@ -7,8 +7,7 @@ Created by mmiyaji on 2012-07-11.
 Copyright (c) 2012  ruhenheim.org. All rights reserved.
 """
 
-# -*- coding: utf-8 -*-
-import os, re, sys, commands, time, datetime, random
+import os, re, sys, commands, time, datetime, random, logging
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, loader
 from django.template import RequestContext
@@ -17,18 +16,14 @@ from django.core.urlresolvers import reverse
 from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_protect
+from archives.models import *
+
 # from utils import *
 # from getimageinfo import *
 # import isbooks.networkx as nx
 # from django.core.cache import cache
-
-
-def home():
-    """
-    """
-    temp_values = Context()
-    return render_to_response('iarchives/general/index.html',temp_values,
-                              context_instance=RequestContext(request))
+logger = logging.getLogger('app')
 
 def main():
     pass

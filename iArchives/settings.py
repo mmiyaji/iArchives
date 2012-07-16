@@ -1,6 +1,7 @@
 # Django settings for iArchives project.
 import os
 DEBUG = True
+# DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ADMINS = (
@@ -8,10 +9,10 @@ ADMINS = (
     )
 
 MANAGERS = ADMINS
-
+DATABASE_ENGINE = 'django.db.backends.sqlite3'
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': DATABASE_ENGINE, # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': os.path.join(BASE_DIR, 'mains.db'),                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
@@ -19,6 +20,10 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         }
     }
+# add personal modules setting
+APPEND_SLASH = True
+CSRF_COOKIE_NAME = "dreamjack"
+# end personal modules setting
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -48,28 +53,32 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = os.path.join(BASE_DIR, '../', 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = MEDIA_ROOT
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = BASE_DIR
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
+# os.path.join(STATIC_ROOT, 'static')
+
+ADMIN_MEDIA_PREFIX = os.path.join(STATIC_URL, 'admin')
 
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(BASE_DIR, 'static'),
     )
 
 # List of finder classes that know how to find static files in
@@ -84,7 +93,7 @@ STATICFILES_FINDERS = (
 try:
     SECRET_KEY = open(os.path.join(BASE_DIR, 'secretkey.txt')).readline()
 except:
-    SECRET_KEY = "NONE"
+    SECRET_KEY = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcd"
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -100,7 +109,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
-        # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
     )
 
 ROOT_URLCONF = 'iArchives.urls'
@@ -111,6 +120,7 @@ WSGI_APPLICATION = 'iArchives.wsgi.application'
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
+    os.path.join(BASE_DIR, '../archives/templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -127,6 +137,7 @@ INSTALLED_APPS = (
         'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
         'django.contrib.admindocs',
+    'archives',
     )
 
 # A sample logging configuration. The only tangible logging
@@ -137,6 +148,14 @@ INSTALLED_APPS = (
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+            },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+            },
+        },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
@@ -147,6 +166,11 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
+            },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
             }
         },
     'loggers': {
@@ -155,5 +179,34 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
             },
-        }
+        'app': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+            },
+        },
     }
+
+DEBUG_TOOLBAR = True
+
+INTERNAL_IPS=('127.0.0.1')
+
+if DEBUG_TOOLBAR:
+    INSTALLED_APPS += ('debug_toolbar',)
+    MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+    # TEMPLATE_DIRS += ('/some/where/debug_toolbar/templates',)
+    TEMPLATE_DIRS += (os.path.join(BASE_DIR, '../debug_toolbar/templates'),)
+    DEBUG_TOOLBAR_PANELS = (
+        'debug_toolbar.panels.version.VersionDebugPanel',
+        'debug_toolbar.panels.timer.TimerDebugPanel',
+        'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+        'debug_toolbar.panels.headers.HeaderDebugPanel',
+        'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+        'debug_toolbar.panels.template.TemplateDebugPanel',
+        'debug_toolbar.panels.sql.SQLDebugPanel',
+        'debug_toolbar.panels.signals.SignalDebugPanel',
+        'debug_toolbar.panels.logger.LoggingPanel',
+        )
+    DEBUG_TOOLBAR_CONFIG={
+        'INTERCEPT_REDIRECTS':False, # dont trap redirect
+        }
