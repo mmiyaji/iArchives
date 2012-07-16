@@ -5,4 +5,4 @@
 freeze/*
 *secretkey.txt
 .#*%
-media/tmp/*
+media/tmp/*.{jpg,JPG,jpeg,JPEG,png,PNG,gif,GIF}
