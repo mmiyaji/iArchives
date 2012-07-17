@@ -36,7 +36,6 @@ class Author(models.Model):
     graduated_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(auto_now = True)
     created_at = models.DateTimeField(auto_now_add = True)
-    # user = models.ForeignKey(ApplicationUser,blank=True, null=True)
     @staticmethod
     def get_by_student_id(keyid=""):
         result=None
@@ -57,29 +56,18 @@ def get_thumb_photo_upload_path(self, filename):
     return get_photo_upload_path(self, filename, types="thumbs")
 def get_photo_upload_path(self, filename, types="originals"):
     root_path = "archives/"+types+"/%Y/%m/%d/"
-    # user_path = root_path + "/" + self.user.username
-    # user_dir_path = settings.MEDIA_ROOT + "/" + user_path
     now = self.published_at
     user_path =  os.path.join(settings.MEDIA_ROOT, force_unicode(now.strftime(smart_str(root_path))))
-    # if not os.path.exists(user_dir_path):
-    #     os.makedirs(user_dir_path)
-    # name = force_unicode(now.strftime((smart_str("%Y%m%d_"+str(self.author_id)+"_"+str(self.id).zfill(5)+"."+filename.split(".")[-1]))))
     name = force_unicode(now.strftime((smart_str("%Y%m%d%H%M%S_"+str(self.id).zfill(5)+"."+filename.split(".")[-1]))))
     if types == "originals":
+        # at the case of originals, set title
         self.title = name
-    # print user_path+ "/mix" + filename
-    # return user_path + "/mix" + filename
-    # print name
     return os.path.join(user_path, name)
 
 class Photo(models.Model):
-    # author_name = models.CharField(max_length = 100, default="", blank=True, null=True)
-    # author = models.IntegerField()
     author = models.ManyToManyField(Author, blank=True, null=True)
-    # photo_id = models.AutoField()
     title = models.CharField(max_length = 100, default="", blank=True, null=True)
     original_title = models.CharField(max_length = 100, default="", blank=True, null=True)
-    # image = models.ImageField(upload_to ="archives/originals/%Y/%m/%d/",
     image = models.ImageField(upload_to=get_origin_photo_upload_path,
                               width_field="image_width",
                               height_field="image_height",

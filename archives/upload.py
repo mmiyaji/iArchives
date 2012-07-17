@@ -13,7 +13,7 @@ from django import forms
 from scan import Scanner
 WEBSITE = 'http://ruhenheim.org/'
 MIN_FILE_SIZE = 1 # bytes
-MAX_FILE_SIZE = 10000000 # bytes
+MAX_FILE_SIZE = 20000000 # bytes
 IMAGE_TYPES = re.compile('image/(gif|p?jpeg|(x-)?png)')
 ACCEPT_FILE_TYPES = IMAGE_TYPES
 THUMBNAIL_MODIFICATOR = '=s80' # max width / height
@@ -35,11 +35,8 @@ class UploadHandler(object):
         Case of GET REQUEST '/upload/'
         """
         temp_values = Context()
-        # t = loader.get_template('component/download_script.html')
         download_script = open(os.path.join(self.BASE_DIR, 'templates/component/download_script.html')).read()
         upload_script = open(os.path.join(self.BASE_DIR, 'templates/component/upload_script.html')).read()
-        # temp_values["download_script"] = download_script
-        # temp_values["upload_script"] = upload_script
         temp_values = {
             "download_script":download_script,
             "upload_script":upload_script,
@@ -106,8 +103,6 @@ class UploadHandler(object):
         print self._request.FILES.getlist('files[]')
         for fieldStorage in self._request.FILES.getlist('files[]'):
             print "fieldStorage:",fieldStorage,"fieldStorageTitle:",fieldStorage.file
-            # form = UploadFileForm(self._request.POST, self._request.FILES)
-            # print form
             if type(fieldStorage) is unicode:
                 continue
             result = {}
@@ -202,13 +197,7 @@ class UploadHandler(object):
                         result['name'].encode('utf-8'), '')
             results.append(result)
             print  self._request.get_host(),result['url']
-            # deferred.defer(
-            #     cleanup,
-            #     blob_keys,
-            #     _countdown=EXPIRATION_TIME
-            #     )
         return results
-
 
 @csrf_protect
 def home(request):
