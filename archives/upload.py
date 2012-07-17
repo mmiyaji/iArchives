@@ -10,7 +10,6 @@ from __future__ import with_statement
 from views import *
 import simplejson, re, urllib
 from django import forms
-from django.conf import settings
 from scan import Scanner
 WEBSITE = 'http://ruhenheim.org/'
 MIN_FILE_SIZE = 1 # bytes
@@ -118,19 +117,73 @@ class UploadHandler(object):
             result['size'] = self.get_file_size(fieldStorage.file)
             print "name: ",result['name'], ", size: ",result['size'], ", type: ",result['type']
             if self.validate(result):
-                photo = Photo(self._request.POST, fieldStorage)
                 image_url = os.path.join(settings.MEDIA_URL, 'tmp', result['name'])
                 destination = open(image_url, 'wb+')
+                print image_url
                 for chunk in fieldStorage.chunks():
                     destination.write(chunk)
                     destination.close()
 
+                scan = Scanner(image_url)
+                exif = scan.scanExif()
+                zimage = scan.scanQR()
+                published_at = None
+                try:
+                    if exif:
+                        if exif.has_key(36867):
+                            # DateTimeOriginal
+                            published_at = datetime.datetime.strptime(exif[36867], "%Y:%m:%d %H:%M:%S")
+                        elif exif.has_key(36868):
+                            # DateTimeDigitized
+                            published_at = datetime.datetime.strptime(exif[36868], "%Y:%m:%d %H:%M:%S")
+                        elif exif.has_key(306):
+                            # DateTime
+                            published_at = datetime.datetime.strptime(exif[306], "%Y:%m:%d %H:%M:%S")
+                        else:
+                            # now
+                            published_at = datetime.datetime.now()
+                    else:
+                        published_at = datetime.datetime.now()
+                except:
+                    published_at = datetime.datetime.now()
+                authors = []
+                if zimage:
+                    for i in zimage:
+                        if "QRCODE" == str(i.type):
+                            element = i.data.split(",")
+                            print element
+                            author = Author.get_by_student_id(element[2])
+                            if not author:
+                                author = Author()
+                                author.student_id = element[2].strip()
+                                author.name = element[1]
+                                author.nickname = element[3]
+                                author.save()
+                            authors.append(author)
+                # photo.author_id = 1
+                photo = Photo.get_by_pub_and_title(published_at, result["name"])
+                if photo:
+                    print "Already exists?"
+                else:
+                    photo = Photo()
+                # photo.title=result['name']
+                # photo.author = "mmiyaji"
+                photo.published_at = published_at
+                photo.save(isFirst = True)
+                photo.image = fieldStorage
+                # print result['size']
+                photo.original_title = result['name']
+                # photo.image_width = 300
+                # # int(result['size'][0])
+                # photo.image_height = 300
+                # # int(result['size'][1])
+                for a in authors:
+                    photo.author.add(a)
+                photo.save()
                 # blob_key = str(
                 #     self.write_blob(fieldStorage.value, result)
                 #     )
                 # blob_keys.append(blob_key)
-                scan = Scanner(image_url)
-                scan.scanExif()
                 blob_key = "media/tmp"
                 result['delete_type'] = 'DELETE'
                 result['delete_url'] = "http://"+self._request.get_host() +\

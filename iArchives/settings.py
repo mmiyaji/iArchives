@@ -23,6 +23,8 @@ DATABASES = {
 # add personal modules setting
 APPEND_SLASH = True
 CSRF_COOKIE_NAME = "dreamjack"
+FILE_UPLOAD_HANDLERS = ('django.core.files.uploadhandler.MemoryFileUploadHandler',) 
+FILE_UPLOAD_MAX_MEMORY_SIZE = 20000000
 # end personal modules setting
 
 # Local time zone for this installation. Choices can be found here:

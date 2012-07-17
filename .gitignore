@@ -7,4 +7,5 @@ freeze/*
 *secretkey.txt
 .#*%
 media/tmp/*
+media/archives/*
 !media/tmp/*.txt

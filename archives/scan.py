@@ -21,7 +21,7 @@ class Scanner():
         - `path`: image path
         """
         self.path = path
-        print "load: ",path
+        # print "load: ",path
         # obtain image data
         self.image = Image.open(path)
         self.pil = self.image.convert('L')
@@ -29,14 +29,20 @@ class Scanner():
 
     def scanExif(self):
         """
+        36867	9003	DateTimeOriginal
+        36868	9004	DateTimeDigitized
+        306		DateTime
         """
-        exif = self.image._getexif()
-        if exif:
-            print exif.__class__
-            for tag,value in exif.items():
-                if tag!=37500:
-                    tagname=ExifTags.TAGS.get(tag)
-                    print str(tagname) + "==>" + str(value)
+        try:
+            exif = self.image._getexif()
+        except:
+            exif = None
+        # if exif:
+        #     print exif.__class__
+        #     for tag,value in exif.items():
+        #         if tag!=37500:
+        #             tagname=ExifTags.TAGS.get(tag)
+        #             print str(tagname) + "==>" + str(value)
         return exif
     def scanQR(self):
         """
@@ -55,9 +61,9 @@ class Scanner():
         scanner.scan(zimage)
 
         # extract results
-        for symbol in zimage:
-            # do something useful with results
-            print 'decoded', symbol.type, 'symbol', '"%s"' % symbol.data
+        # for symbol in zimage:
+        #     # do something useful with results
+        #     print 'decoded', symbol.type, 'symbol', '"%s"' % symbol.data
         return zimage
     def __def__(self):
         """

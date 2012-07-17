@@ -31,13 +31,13 @@ $(function () {
 	console.log("demo");
         $('#fileupload').fileupload('option', {
             url: window.location.href,
-            // maxFileSize: 10000000,
+            maxFileSize: 20000000,
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
             process: [
                 {
                     action: 'load',
                     fileTypes: /^image\/(gif|jpeg|png)$/,
-                    // maxFileSize: 20000000 // 20MB
+                    maxFileSize: 20000000 // 20MB
                 },
                 // {
                 //     action: 'resize',

@@ -18,6 +18,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_protect
 from archives.models import *
+from django.conf import settings
 
 # from utils import *
 # from getimageinfo import *
