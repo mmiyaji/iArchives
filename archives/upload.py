@@ -11,6 +11,7 @@ from views import *
 import simplejson, re, urllib
 from django import forms
 from scan import Scanner
+from django.utils.encoding import force_unicode, smart_str
 WEBSITE = 'http://ruhenheim.org/'
 MIN_FILE_SIZE = 1 # bytes
 MAX_FILE_SIZE = 20000000 # bytes
@@ -165,6 +166,8 @@ class UploadHandler(object):
                 # photo.author = "mmiyaji"
                 photo.published_at = published_at
                 photo.save(isFirst = True)
+                name = force_unicode(photo.published_at.strftime((smart_str("%Y%m%d%H%M%S_"+str(photo.id).zfill(5)+"."+result['name'].split(".")[-1]))))
+                photo.title = name
                 photo.image = fieldStorage
                 # print result['size']
                 photo.original_title = result['name']
