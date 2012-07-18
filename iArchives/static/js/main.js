@@ -30,6 +30,8 @@ $(function () {
         // Demo settings:
 	console.log("demo");
         $('#fileupload').fileupload('option', {
+            prependFiles: true,
+            // previewMaxWidth: 180,
             url: window.location.href,
             maxFileSize: 20000000,
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
@@ -68,6 +70,7 @@ $(function () {
             var that = this;
             $.getJSON(this.action, function (result) {
                 if (result && result.length) {
+                    // $(that).fileupload('option', { prependFiles: true,})
                     $(that).fileupload('option', 'done')
                         .call(that, null, {result: result});
                 }

@@ -75,7 +75,8 @@
             filesContainer: undefined,
             // By default, files are appended to the files container.
             // Set the following option to true, to prepend files instead:
-            prependFiles: false,
+            // prependFiles: false,
+            prependFiles: true,
             // The expected data type of the upload response, sets the dataType
             // option of the $.ajax upload requests:
             dataType: 'json',
@@ -145,6 +146,7 @@
                     data.context.each(function (index) {
                         var file = ($.isArray(data.result) &&
                                 data.result[index]) || {error: 'emptyResult'};
+			console.log(file);
                         if (file.error) {
                             that._adjustMaxNumberOfFiles(1);
                         }

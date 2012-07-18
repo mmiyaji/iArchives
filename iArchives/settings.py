@@ -72,7 +72,7 @@ STATIC_ROOT = BASE_DIR
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static/'
+STATIC_URL = '/static'
 # os.path.join(STATIC_ROOT, 'static')
 
 ADMIN_MEDIA_PREFIX = os.path.join(STATIC_URL, 'admin')

@@ -7,8 +7,7 @@ Created by mmiyaji on 2012-07-16.
 Copyright (c) 2012  ruhenheim.org. All rights reserved.
 """
 
-import sys,datetime
-import os
+import sys, os, datetime, uuid
 from django.db import models
 from django.db.models import Q
 from django.core.cache import cache
@@ -71,7 +70,8 @@ def get_photo_upload_path(self, filename, types="originals"):
     return os.path.join(user_path, name)
 
 class Photo(models.Model):
-    author = models.ManyToManyField(Author, blank=True, null=True)
+    authors = models.ManyToManyField(Author, blank=True, null=True)
+    uuid = models.CharField(max_length = 32, unique = True)
     title = models.CharField(max_length = 100, default="", blank=True, null=True)
     original_title = models.CharField(max_length = 100, default="", blank=True, null=True)
     image = models.ImageField(upload_to=get_origin_photo_upload_path,
@@ -109,6 +109,8 @@ class Photo(models.Model):
     def __unicode__(self):
         return self.title
     def save(self, force_update=False, force_insert=False, thumb_size=(180,300), isFirst = False):
+        if not self.uuid:
+            self.uuid = uuid.uuid4().hex
         if isFirst:
             super(Photo, self).save(force_update, force_insert)
         else:
