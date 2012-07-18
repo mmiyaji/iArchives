@@ -85,7 +85,7 @@
             // widget (via file input selection, drag & drop or add API call).
             // See the basic file upload widget for more information:
             add: function (e, data) {
-		console.log(e, data);
+		console.log("add: ", e, data);
                 var that = $(this).data('fileupload'),
                     options = that.options,
                     files = data.files;
@@ -112,6 +112,7 @@
             },
             // Callback for the start of each file upload request:
             send: function (e, data) {
+		console.log("send: ", e, data);
                 var that = $(this).data('fileupload');
                 if (!data.isValidated) {
                     if (!data.isAdjusted) {
@@ -140,6 +141,7 @@
             },
             // Callback for successful uploads:
             done: function (e, data) {
+		console.log("done: ",e, data);
                 var that = $(this).data('fileupload'),
                     template;
                 if (data.context) {
@@ -232,12 +234,21 @@
             progress: function (e, data) {
                 if (data.context) {
                     var progress = parseInt(data.loaded / data.total * 100, 10);
+		    console.log(progress);
                     data.context.find('.progress')
                         .attr('aria-valuenow', progress)
                         .find('.bar').css(
                             'width',
                             progress + '%'
                         );
+		    if(progress >= 100){
+			console.log("progress done");
+			data.context.find('.progress')
+			    .removeClass('progress-success')
+			    .addClass('progress-warning')
+			    .after('<p>indexing.....</p>');
+		    }
+
                 }
             },
             // Callback for global upload progress events:

@@ -11,9 +11,10 @@ from views import *
 
 def home(request):
     """
+    Case of GET REQUEST '/'
+    home page
     """
     temp_values = Context()
-    temp_values["tmp"]=""
     return render_to_response('general/index.html',temp_values,
                               context_instance=RequestContext(request))
 
