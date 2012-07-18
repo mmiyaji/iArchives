@@ -57,7 +57,8 @@ def get_thumb_photo_upload_path(self, filename):
 def get_photo_upload_path(self, filename, types="originals"):
     root_path = "archives/"+types+"/%Y/%m/%d/"
     now = self.published_at
-    user_path =  os.path.join(settings.MEDIA_ROOT, force_unicode(now.strftime(smart_str(root_path))))
+    # user_path =  os.path.join(settings.MEDIA_ROOT, force_unicode(now.strftime(smart_str(root_path))))
+    user_path = force_unicode(now.strftime(smart_str(root_path)))
     # name = force_unicode(now.strftime((smart_str("%Y%m%d%H%M%S_"+str(self.id).zfill(5)+"."+filename.split(".")[-1]))))
     if types == "originals":
         # at the case of originals, set title

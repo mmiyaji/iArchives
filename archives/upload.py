@@ -178,6 +178,10 @@ class UploadHandler(object):
                 for a in authors:
                     photo.author.add(a)
                 photo.save()
+                print "name: ",photo.thumbnail.name," path: ",photo.thumbnail.path," url: ",photo.thumbnail.url
+                print settings.MEDIA_URL
+                print "name: ",photo.image.name," path: ",photo.image.path," url: ",photo.image.url
+                print photo.image.path.lstrip(settings.MEDIA_URL)
                 # blob_key = str(
                 #     self.write_blob(fieldStorage.value, result)
                 #     )
@@ -188,16 +192,20 @@ class UploadHandler(object):
                     '/?key=' + urllib.quote(blob_key, '')
                 if (IMAGE_TYPES.match(result['type'])):
                     try:
-                        result['url'] = "http://"+self._request.get_host() +\
-                            '/' + blob_key + '/' + urllib.quote(
-                            result['name'].encode('utf-8'), '')
-                        result['thumbnail_url'] = result['url']
+                        result['url'] = "http://"+self._request.get_host()+"/media/"+photo.image.name
+                        result['thumbnail_url'] = "http://"+self._request.get_host()+"/media/"+photo.thumbnail.name
+                        # result['url'] = "http://"+self._request.get_host() +\
+                        #     '/' + blob_key + '/' + urllib.quote(
+                        #     result['name'].encode('utf-8'), '')
+                        # result['thumbnail_url'] = result['url']
                     except: # Could not get an image serving url
                         pass
                 if not 'url' in result:
-                    result['url'] = "http://"+self._request.get_host() +\
-                        '/' + blob_key + '/' + urllib.quote(
-                        result['name'].encode('utf-8'), '')
+                    result['url'] = "http://"+self._request.get_host()+"/media/"+photo.image.name
+                    result['thumbnail_url'] = "http://"+self._request.get_host()+"/media/"+photo.thumbnail.name
+                    # result['url'] = "http://"+self._request.get_host() +\
+                    #     '/' + blob_key + '/' + urllib.quote(
+                    #     result['name'].encode('utf-8'), '')
             results.append(result)
             print  self._request.get_host(),result['url']
         return results
