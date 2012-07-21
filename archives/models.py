@@ -109,9 +109,9 @@ class Photo(models.Model):
     def __unicode__(self):
         return self.title
     def save(self, force_update=False, force_insert=False, thumb_size=(180,300), isFirst = False):
-        if not self.uuid:
-            self.uuid = uuid.uuid4().hex
         if isFirst:
+            if not self.uuid:
+                self.uuid = uuid.uuid4().hex
             super(Photo, self).save(force_update, force_insert)
         else:
             image = Image.open(self.image)
