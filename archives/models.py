@@ -71,7 +71,7 @@ def get_photo_upload_path(self, filename, types="originals"):
 
 class Photo(models.Model):
     authors = models.ManyToManyField(Author, blank=True, null=True)
-    uuid = models.CharField(max_length = 32, unique = True)
+    uuid = models.CharField(max_length = 32, unique = True, default=uuid.uuid4().hex)
     title = models.CharField(max_length = 100, default="", blank=True, null=True)
     original_title = models.CharField(max_length = 100, default="", blank=True, null=True)
     image = models.ImageField(upload_to=get_origin_photo_upload_path,
