@@ -162,6 +162,7 @@
                                 that._transition(template).done(
                                     function () {
                                         data.context = $(this);
+					console.log(data.context);
                                         that._trigger('completed', e, data);
                                     }
                                 );

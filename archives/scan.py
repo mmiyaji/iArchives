@@ -7,7 +7,7 @@ Created by mmiyaji on 2012-07-16.
 Copyright (c) 2012  ruhenheim.org. All rights reserved.
 """
 import zbar
-import Image
+from PIL import Image
 import ExifTags
 
 class Scanner():

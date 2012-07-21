@@ -29,7 +29,7 @@ def detail(request):
 
 def delete(request):
     """
-    Case of DELETE REQUEST '/photo/<photo_uuid>/delete'
+    Case of DELETE REQUEST '/photo/<photo_uuid>/delete/'
     対象画像の削除
     DELETE リクエストにのみレスポンス
     """

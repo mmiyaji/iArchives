@@ -156,6 +156,7 @@ class UploadHandler(object):
                 photo = Photo.get_by_pub_and_title(published_at, result["name"])
                 if photo:
                     print "Already exists?"
+                    result['already'] = True
                 else:
                     photo = Photo()
                 photo.published_at = published_at
