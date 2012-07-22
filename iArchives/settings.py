@@ -1,7 +1,12 @@
 # Django settings for iArchives project.
-import os
+import os, socket
 DEBUG = True
+if socket.gethostname() == 'iarchives.ruhenheim.org':
+    DEPLOY = True
+else:
+    DEPLOY = False
 # DEBUG = False
+# DEPLOY = False
 TEMPLATE_DEBUG = DEBUG
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ADMINS = (
@@ -9,17 +14,31 @@ ADMINS = (
     )
 
 MANAGERS = ADMINS
-DATABASE_ENGINE = 'django.db.backends.sqlite3'
-DATABASES = {
-    'default': {
-        'ENGINE': DATABASE_ENGINE, # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.join(BASE_DIR, 'mains.db'),                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+if DEPLOY:
+    DATABASE_ENGINE = 'django.db.backends.mysql'
+    DATABASES = {
+        'default': {
+            'ENGINE': DATABASE_ENGINE, # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'iarchives',                      # Or path to database file if using sqlite3.
+            'USER': 'root',                      # Not used with sqlite3.
+            'PASSWORD': open(os.path.join(BASE_DIR, 'dbkey.txt')).readline(),                  # Not used with sqlite3.
+            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+            }
         }
-    }
+else:
+    DATABASE_ENGINE = 'django.db.backends.sqlite3'
+    DATABASES = {
+        'default': {
+            'ENGINE': DATABASE_ENGINE, # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': os.path.join(BASE_DIR, 'mains.db'),                      # Or path to database file if using sqlite3.
+            'USER': '',                      # Not used with sqlite3.
+            'PASSWORD': '',                  # Not used with sqlite3.
+            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+            }
+        }
+
 # add personal modules setting
 APPEND_SLASH = True
 CSRF_COOKIE_NAME = "dreamjack"
