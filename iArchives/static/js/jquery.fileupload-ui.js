@@ -86,6 +86,7 @@
             // See the basic file upload widget for more information:
             add: function (e, data) {
 		        console.log("add: ", e, data);
+                $('#fileupload .nocontent').fadeOut("slow");
                 var that = $(this).data('fileupload'),
                 options = that.options,
                 files = data.files;
@@ -235,7 +236,7 @@
             progress: function (e, data) {
                 if (data.context) {
                     var progress = parseInt(data.loaded / data.total * 100, 10);
-		            console.log(progress);
+                    // console.log(progress);
                     data.context.find('.progress')
                         .attr('aria-valuenow', progress)
                         .find('.bar').css(
@@ -243,7 +244,7 @@
                             progress + '%'
                         );
 		            if(progress >= 100){
-			            console.log("progress done");
+                        console.log("progress done");
 			            data.context.find('.progress')
 			                .removeClass('progress-success')
 			                .addClass('progress-warning')
