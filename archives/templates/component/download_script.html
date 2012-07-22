@@ -9,24 +9,47 @@
     <td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
     {% } else { %}
     <td class="preview">{% if (file.thumbnail_url) { %}
-      <a href="{%=file.url%}" title="{%=file.name%}" rel="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
+      <a href="{%=file.url%}" title="{%=file.title%}" rel="gallery" download="{%=file.title%}" class="thumbnail"><img src="{%=file.thumbnail_url%}"></a>
       {% } %}</td>
     <td class="name">
-      <a href="{%=file.url%}" title="{%=file.name%}" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
+      <p><a href="{%=file.url%}" title="{%=file.title%}" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.title%}">{%=file.title%}</a>
+        <small>[ {%=file.name%} ]</small>
+      </p>
+      <p>created at: {%=file.published_at%}</p>
     </td>
     <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-    {% if (file.already) { %}
-    <td class="status"><span>Already entried</span></td>
-    {% } else { %}
-    <td colspan="2"></td>
-    {% } %}
+    <td class="status">
+      {% if (file.already) { %}
+      <div class="alert alert-error alert-block">
+        <a class="close" data-dismiss="alert" href="#">×</a>
+        <h4 class="alert-heading">Warning!</h4>
+        Already exists.
+      </div>
+      {% } %}
+      {% if (file.author) { %}
+      <p>Author: {%=file.author.name%}<small> ID: {%=file.author.student_id%}</small></p>
+      {% } else { %}
+      <div class="alert alert-warnig alert-block">
+        <a class="close" data-dismiss="alert" href="#">×</a>
+        <h4 class="alert-heading">Warning!</h4>
+        Author not found.
+      </div>
+      {% } %}
+    </td>
     {% } %}
     <td class="delete">
       <button class="btn btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}">
-	<i class="icon-trash icon-white"></i>
-	<span>{%=locale.fileupload.destroy%}</span>
+        <i class="icon-trash icon-white"></i>
+        <span>{%=locale.fileupload.destroy%}</span>
       </button>
       <input type="checkbox" name="delete" value="1">
+    </td>
+    <td class="update">
+      <button class="btn btn-info" data-type="{%=file.update_type%}" data-url="{%=file.update_url%}">
+        <i class="icon-refresh icon-white"></i>
+        <span>{%=locale.fileupload.update%}</span>
+      </button>
+      <input type="checkbox" name="update" value="1">
     </td>
   </tr>
   {% } %}

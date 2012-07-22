@@ -71,7 +71,7 @@ def get_photo_upload_path(self, filename, types="originals"):
 
 class Photo(models.Model):
     authors = models.ManyToManyField(Author, blank=True, null=True)
-    uuid = models.CharField(max_length = 32, unique = True, default=uuid.uuid4().hex)
+    uuid = models.CharField(max_length = 32, default=uuid.uuid4().hex)
     title = models.CharField(max_length = 100, default="", blank=True, null=True)
     original_title = models.CharField(max_length = 100, default="", blank=True, null=True)
     image = models.ImageField(upload_to=get_origin_photo_upload_path,
@@ -94,12 +94,15 @@ class Photo(models.Model):
     created_at = models.DateTimeField(auto_now_add = True)
 
     @staticmethod
-    def get_by_pub_and_title(pup, title):
+    def get_by_pub_and_name(pub, name):
         result = None
         try:
-            result = Photo.objects.filter(published_at__exact=pub).filter(title__exact=title)
+            # 写真の撮影日時が同一の場合
+            result = Photo.objects.filter(published_at__exact=pub)[0]
+            # filter(original_title__exact=name)
         except:
             result = None
+        return result
     def __str__(self):
         # aname = ""
         # for i in self.author:

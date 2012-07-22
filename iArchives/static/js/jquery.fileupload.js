@@ -875,6 +875,15 @@
             this.options.fileInput
                 .unbind('change.' + ns, this._onChange);
         },
+        _updateEventHandlers: function () {
+            var ns = this.options.namespace;
+            this.options.dropZone
+                .unbind('dragover.' + ns, this._onDragOver)
+                .unbind('drop.' + ns, this._onDrop)
+                .unbind('paste.' + ns, this._onPaste);
+            this.options.fileInput
+                .unbind('change.' + ns, this._onChange);
+        },
 
         _setOption: function (key, value) {
             var refresh = $.inArray(key, this._refreshOptionsList) !== -1;
@@ -916,6 +925,11 @@
         destroy: function () {
             this._destroyEventHandlers();
             $.Widget.prototype.destroy.call(this);
+        },
+
+        update: function () {
+            this._updateEventHandlers();
+            $.Widget.prototype.update.call(this);
         },
 
         enable: function () {

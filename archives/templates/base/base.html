@@ -9,27 +9,22 @@
 
     <!-- Le styles -->
     <link href="{{ STATIC_URL }}/css/bootstrap.css" rel="stylesheet">
-    <style type="text/css">
-      body {
-      padding-top: 60px;
-      padding-bottom: 40px;
-      }
-    </style>
     <link href="{{ STATIC_URL }}/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}/css/docs.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}/js/google-code-prettify/prettify.css" rel="stylesheet">
     <!-- Bootstrap CSS fixes for IE6 -->
     <!--[if lt IE 7]>
-	<link rel="stylesheet" href="{{ STATIC_URL }}/css/bootstrap-ie6.min.css">
-	<![endif]-->
+	    <link rel="stylesheet" href="{{ STATIC_URL }}/css/bootstrap-ie6.min.css">
+	    <![endif]-->
     <!-- Bootstrap Image Gallery styles -->
     <link rel="stylesheet" href="{{ STATIC_URL }}/css/bootstrap-image-gallery.min.css">
     <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
     <link rel="stylesheet" href="{{ STATIC_URL }}/css/jquery.fileupload-ui.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}/css/style.css">
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
+	    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	    <![endif]-->
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="{{ STATIC_URL }}/ico/favicon.ico">
@@ -41,7 +36,7 @@
 
   <!-- <body data-spy="scroll" data-target=".subnav" data-offset="50"> -->
   <body>
-{% include "component/nav_bar.html" %}
+    {% include "component/nav_bar.html" %}
     <div class="container">
       {% block main %}
       {% endblock main %}
@@ -50,7 +45,7 @@
       </footer>
     </div> <!-- /container -->
     <!-- Le javascript
-	 ================================================== -->
+	     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{{ STATIC_URL }}/js/jquery.js"></script>
     <script src="{{ STATIC_URL }}/js/bootstrap-transition.js"></script>
@@ -91,11 +86,11 @@
     <!--[if gte IE 8]><script src="{{ STATIC_URL }}/js/cors/jquery.xdr-transport.js"></script><![endif]-->
     <script type="text/javascript">
       <!--
-	  $('.carousel').carousel({
-	  // default 5000
-	  interval: 10000
-	  })
-	-->
+	      $('.carousel').carousel({
+	      // default 5000
+	      interval: 10000
+	      })
+	    -->
     </script>
   </body>
 </html>

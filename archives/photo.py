@@ -33,7 +33,13 @@ def delete(request):
     対象画像の削除
     DELETE リクエストにのみレスポンス
     """
-    
+
+def update(request):
+    """
+    Case of UPDATE REQUEST '/photo/<photo_uuid>/update/'
+    対象画像の更新
+    UPDATE リクエストにのみレスポンス
+    """
 
 def main():
     pass
@@ -41,5 +47,5 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
+
 

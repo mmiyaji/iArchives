@@ -75,7 +75,9 @@ STATIC_ROOT = BASE_DIR
 STATIC_URL = '/static'
 # os.path.join(STATIC_ROOT, 'static')
 
-ADMIN_MEDIA_PREFIX = os.path.join(STATIC_URL, 'admin')
+# ADMIN_MEDIA_DIR = os.path.join(STATIC_URL, 'admin')
+# ADMIN_MEDIA_PREFIX = os.path.join(STATIC_URL, 'admin')
+ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -110,6 +112,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.transaction.TransactionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:

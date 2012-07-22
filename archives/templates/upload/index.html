@@ -7,7 +7,7 @@
 </div>
 <blockquote>
   <p>File Upload widget with multiple file selection, drag&amp;drop support.
-</p>
+  </p>
 </blockquote>
 <br>
 <!-- The file upload form used as target for the file upload widget -->
@@ -33,7 +33,12 @@
         <i class="icon-trash icon-white"></i>
         <span>Delete</span>
       </button>
-      <input type="checkbox" class="toggle">
+      <input type="checkbox" class="dtoggle">
+      <button type="button" class="btn btn-info update">
+        <i class="icon-refresh icon-white"></i>
+        <span>Update</span>
+      </button>
+      <input type="checkbox" class="utoggle">
     </div>
     <!-- The global progress information -->
     <div class="span5 fileupload-progress fade">
@@ -50,16 +55,16 @@
   <br>
   <!-- The table listing the files available for upload/download -->
   <div class="well">
-  <table role="presentation" class="table table-striped">
-    <thead>
-      <tr class="template-upload">
-	<th>Preview</th><th>File Name</th><th>Size</th><th>Upload Progress / Status</th><th></th><th></th>
-      </tr>
-    </thead>
-    <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
-    </tbody>
-  </table>
-  <p>No content<p>
+    <table role="presentation" class="table table-striped">
+      <thead>
+        <tr class="template-upload">
+	      <th>Preview</th><th>File Name</th><th>Size</th><th>Status</th><th></th><th></th>
+        </tr>
+      </thead>
+      <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
+      </tbody>
+    </table>
+    <p>No content<p>
   </div>
   {% csrf_token %}
 </form>

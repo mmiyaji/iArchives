@@ -153,7 +153,7 @@ class UploadHandler(object):
                                 author.save()
                             authors.append(author)
                 # photo.author_id = 1
-                photo = Photo.get_by_pub_and_title(published_at, result["name"])
+                photo = Photo.get_by_pub_and_name(published_at, result["name"])
                 if photo:
                     print "Already exists?"
                     result['already'] = True
@@ -169,8 +169,16 @@ class UploadHandler(object):
                     photo.authors.add(a)
                 photo.save()
                 result['title'] = name
-                result['authors'] = serializers.serialize("json", photo.authors.all())
+                # result['authors'] = serializers.serialize("json", photo.authors.all())
+                if len(photo.authors.all()):
+                    result['author'] = {'name':photo.authors.all()[0].name,
+                                        'student_id':photo.authors.all()[0].student_id}
+                # else:
+                #     result['author'] = None
+                result['published_at'] = photo.published_at.strftime("%Y-%m-%d %H:%M:%S")
                 result['uuid'] = photo.uuid
+                result['update_type'] = 'UPDATE'
+                result['update_url'] = "http://%s/photo/%s/update/" % (self._request.get_host(), photo.uuid)
                 result['delete_type'] = 'DELETE'
                 result['delete_url'] = "http://%s/photo/%s/delete/" % (self._request.get_host(), photo.uuid)
                 if (IMAGE_TYPES.match(result['type'])):

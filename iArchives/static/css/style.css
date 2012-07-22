@@ -11,5 +11,9 @@
  */
 
 body{
-  padding-top: 60px;
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+.template-download img{
+    width: 150px;
 }
