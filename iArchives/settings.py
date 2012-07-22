@@ -1,10 +1,7 @@
 # Django settings for iArchives project.
 import os, socket
 DEBUG = True
-if socket.gethostname() == 'rune':
-    DEPLOY = True
-else:
-    DEPLOY = False
+DEPLOY = True
 # DEBUG = False
 # DEPLOY = False
 TEMPLATE_DEBUG = DEBUG
@@ -12,8 +9,18 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ADMINS = (
     ('mmiyaji', 'ruhenheim1223@gmail.com'),
     )
+SQLADMIN_PASS = ""
+MANAGERS = SQLADMIN_PASS
 
-MANAGERS = ADMINS
+try:
+    from settings_local import *
+except:
+    pass
+try:
+    from settings_deploy import *
+except:
+    pass
+
 if DEPLOY:
     DATABASE_ENGINE = 'django.db.backends.mysql'
     DATABASES = {
@@ -21,7 +28,7 @@ if DEPLOY:
             'ENGINE': DATABASE_ENGINE, # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'iarchives',                      # Or path to database file if using sqlite3.
             'USER': 'root',                      # Not used with sqlite3.
-            'PASSWORD': open(os.path.join(BASE_DIR, 'dbkey.txt')).readline(),                  # Not used with sqlite3.
+            'PASSWORD': SQLADMIN_PASS,                  # Not used with sqlite3.
             'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
             }

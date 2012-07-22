@@ -9,3 +9,5 @@ freeze/*
 media/tmp/*
 media/archives/*
 !media/tmp/*.txt
+settings_local.py
+settings_deploy.py
