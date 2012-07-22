@@ -1,7 +1,7 @@
 # Django settings for iArchives project.
 import os, socket
 DEBUG = True
-if socket.gethostname() == 'iarchives.ruhenheim.org':
+if socket.gethostname() == 'rune':
     DEPLOY = True
 else:
     DEPLOY = False
