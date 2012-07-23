@@ -69,28 +69,37 @@
         </div>
 
         <hr class="soften">
-
         <div class="control-group">
-          <label class="control-label" for="input01">Text inputs</label>
+          <label class="control-label" for="input_author">製作者</label>
           <div class="controls">
-            <input type="text" class="input-xlarge" id="input01" value="{{photo.title}}">
-            <p class="help-block">In addition to freeform text, any HTML5 text-based input appears like so.</p>
+            <input type="text" class="input-xlarge" id="input_author" value=" {% for author in photo.get_authors %}{{author.student_id}}({{author.name}}),{% endfor %}">
+            <p class="help-block">写真の著作物の製作者(著者)です．「,」(半角カンマ)区切りで複数人入力可能です．</p>
+            <p class="help-block">「学生ID(名前)」という表記で入力してください．()内の文字は更新時には無視されます．英数字は全て半角で入力してください．</p>
           </div>
         </div>
         <div class="control-group">
           <label class="control-label" for="input_caption">キャプション</label>
           <div class="controls">
-            <input type="text" class="input-xlarge" id="input_caption" value="{{photo.caption}}">
+            <input type="text" class="input-xlarge" id="input_caption" name="caption" value="{{photo.caption}}">
             <p class="help-block">ファイル名の代わりに表示される，写真のタイトルです．</p>
           </div>
         </div>
         <div class="control-group">
-          <label class="control-label" for="textarea">コメント</label>
+          <label class="control-label" for="textarea_comment">コメント</label>
           <div class="controls">
-            <textarea class="input-xlarge" id="textarea" rows="3"></textarea>
+            <textarea class="input-xlarge" id="textarea_comment" rows="3" name="comment"></textarea>
             <p class="help-block">写真に対するコメントです．</p>
           </div>
         </div>
+        <div class="control-group">
+          <label class="control-label" for="input_pubdate">撮影日</label>
+          <div class="controls date" id="datepicker" data-date="{{photo.published_at|date:'Y-m-d'}}" data-date-format="yyyy-mm-dd">
+            <input type="text" class="input-xlarge" id="input_pubdate" name="pubdate" value="{{photo.published_at|date:'Y-m-d'}}" readonly>
+            <span class="add-on"><i class="icon-th"></i></span>
+            <p class="help-block">写真の撮影日です．フォーム右のボタンから選択してください．</p>
+          </div>
+        </div>
+
         <div class="form-actions">
           <button type="submit" class="btn btn-primary">Save changes</button>
           <button class="btn">Cancel</button>

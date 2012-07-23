@@ -148,8 +148,8 @@ class UploadHandler(object):
                             if not author:
                                 author = Author()
                                 author.student_id = element[2].strip()
-                                author.name = element[1]
-                                author.nickname = element[3]
+                                author.name = element[1].strip()
+                                author.nickname = element[3].strip()
                                 author.save()
                             authors.append(author)
                 # photo.author_id = 1
@@ -165,6 +165,7 @@ class UploadHandler(object):
                 photo.title = name
                 photo.image = fieldStorage
                 photo.original_title = result['name']
+                photo.authors.clear()
                 for a in authors:
                     photo.authors.add(a)
                 photo.save()

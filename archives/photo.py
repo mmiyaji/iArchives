@@ -30,6 +30,7 @@ def detail(request, photo_uuid):
     temp_values = {
         "photo":photo,
         "subscroll":True,
+        "datepicker":"datepicker",
         }
     return render_to_response('photo/index.html',temp_values,
                               context_instance=RequestContext(request))

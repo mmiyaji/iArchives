@@ -118,6 +118,8 @@ class Photo(models.Model):
         except:
             result = None
         return result
+    def get_authors(self):
+        return self.authors.all()
     def get_original_img_url(self):
         return "/media/"+str(self.image.name)
     def get_thumnail_img_url(self):
