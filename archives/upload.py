@@ -86,16 +86,6 @@ class UploadHandler(object):
         file.seek(0) # Reset the file position to the beginning
         return size
 
-    def write_blob(self, data, info):
-        blob = files.blobstore.create(
-            mime_type=info['type'],
-            _blobinfo_uploaded_filename=info['name']
-            )
-        with files.open(blob, 'a') as f:
-            f.write(data)
-        files.finalize(blob)
-        return files.blobstore.get_blob_key(blob)
-
     def handle_upload(self):
         results = []
         blob_keys = []

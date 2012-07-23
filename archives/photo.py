@@ -42,12 +42,36 @@ def delete(request, photo_uuid):
     DELETE リクエストにのみレスポンス
     """
 
+@csrf_protect
 def update(request, photo_uuid):
     """
     Case of UPDATE REQUEST '/photo/<photo_uuid>/update/'
     対象画像の更新
-    UPDATE リクエストにのみレスポンス
+    UPDATE/POST リクエストにのみレスポンス
     """
+    request_type = request.method
+    print request_type
+    logger.debug(request_type)
+    if request_type == 'GET':
+        raise Http404
+    elif request_type == 'OPTION' or request_type == 'HEAD':
+        return HttpResponse("OK")
+    elif request_type == 'POST' or request_type == 'UPDATE':
+        photo = Photo.get_by_uuid(photo_uuid)
+        if not photo:
+            # 見つからない場合は404エラー送出
+            raise Http404
+        param = {
+            "authors":request.POST['authors'],
+            "caption":request.POST['caption'],
+            "comment":request.POST['comment'],
+            "pubdate":request.POST['pubdate'],
+            }
+        print param
+        return HttpResponse(param)
+    else:
+        raise Http404
+
 
 def main():
     pass

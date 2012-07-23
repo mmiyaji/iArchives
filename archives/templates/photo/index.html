@@ -72,9 +72,9 @@
         <div class="control-group">
           <label class="control-label" for="input_author">製作者</label>
           <div class="controls">
-            <input type="text" class="input-xlarge" id="input_author" value=" {% for author in photo.get_authors %}{{author.student_id}}({{author.name}}),{% endfor %}">
-            <p class="help-block">写真の著作物の製作者(著者)です．「,」(半角カンマ)区切りで複数人入力可能です．</p>
-            <p class="help-block">「学生ID(名前)」という表記で入力してください．()内の文字は更新時には無視されます．英数字は全て半角で入力してください．</p>
+            <input type="text" class="input-xlarge" id="input_author" name="authors" value="{% for author in photo.get_authors %}{{author.student_id}}({{author.name}}),{% endfor %}">
+            <p class="help-block">写真の著作物の製作者(著者)です．「,」(半角カンマ)区切りで複数人入力可能です．<br>
+             「学生ID(名前)」という表記で入力してください．()内の文字は更新時には無視されます．英数字は全て半角で入力してください．</p>
           </div>
         </div>
         <div class="control-group">
