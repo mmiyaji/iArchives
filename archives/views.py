@@ -19,6 +19,7 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_protect
 from archives.models import *
 from django.conf import settings
+from django.http import Http404
 
 # from utils import *
 # from getimageinfo import *

@@ -17,24 +17,31 @@ def home(request):
     return render_to_response('photo/index.html',temp_values,
                               context_instance=RequestContext(request))
 
-def detail(request):
+def detail(request, photo_uuid):
     """
     Case of GET REQUEST '/photo/<photo_uuid>/'
     個別の画像の詳細を表示するページ
     """
     temp_values = Context()
+    photo = Photo.get_by_uuid(photo_uuid)
+    if not photo:
+        # 見つからない場合は404エラー送出
+        raise Http404
+    temp_values = {
+        "photo":photo,
+        "subscroll":True,
+        }
     return render_to_response('photo/index.html',temp_values,
                               context_instance=RequestContext(request))
 
-
-def delete(request):
+def delete(request, photo_uuid):
     """
     Case of DELETE REQUEST '/photo/<photo_uuid>/delete/'
     対象画像の削除
     DELETE リクエストにのみレスポンス
     """
 
-def update(request):
+def update(request, photo_uuid):
     """
     Case of UPDATE REQUEST '/photo/<photo_uuid>/update/'
     対象画像の更新

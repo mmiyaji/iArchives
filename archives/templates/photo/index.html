@@ -3,30 +3,101 @@
 <!-- Masthead
      ================================================== -->
 <header class="jumbotron subhead" id="overview">
-  <h1>How to use "iArchives"</h1>
-  <h2 id="about">本アプリケーションについて</h2>
-  <p class="lead">本アプリケーションは「<a href="http://mikilab.doshisha.ac.jp" target="_blank">同志社大学工学部インテリジェント工学科知的システムデザイン研究室</a> 及び <a href="http://is.doshisha.ac.jp/" target="_blank">同大学生命医科学部医情報学科医療情報システム研究室</a>」専用のアプリケーションとなります．
-    両研究室の関係者の方で，認証を済ましていない方は<a href="/registration">コチラ</a>にて認証作業を行ってください．
-  </p>
-  <h3>注意事項</h3>
-  <div class="alert alert-info alert-ja">
-    <ol>
-      <li>参加者の気持ちが下がるような投稿は極力さけること（もちろん助言は除く）．</li>
-      <li>本システムの運用は参加者平等ではなく、廣安先生の管理下にあること．</li>
-    </ol>
-  </div>
+  <h1 id="title">{{ photo.caption|default:"Photo" }}</h1>
+  <p class="lead">{{ photo.comment|default:"Comment" }}</p>
   <div class="subnav">
     <ul class="nav nav-pills">
-      <li><a href="#about">About</a></li>
-      <li><a href="#reply_rt">POST</a></li>
-      <li><a href="#post_image">Image</a></li>
-      <!-- <li><a href="#search_func">検索機能</a></li> -->
-      <li><a href="#room_func">Room</a></li>
-      <!-- <li><a href="#comein">ComeIn</a></li> -->
-      <!-- <li><a href="#walkin">WalkIn</a></li> -->
-      <!-- <li><a href="#istwitapi">ISTwit API</a></li> -->
-      <!-- <li><a href="#bot">様々なbot</a></li> -->
+      <li><a href="#title">Title</a></li>
+      <li><a href="#photo">Photo</a></li>
+      <li><a href="#info">Information</a></li>
     </ul>
   </div>
 </header>
+<!-- Photo view
+     ================================================== -->
+<section>
+  <div class="page-header" id="photo">
+    <h1>{{ photo.title }} <small>{{ photo.get_original_img_url }}</small></h1>
+  </div>
+  <div class="carousel">
+    <img src="{{ photo.get_original_img_url }}" alt="{{ photo.title }}">
+    <div class="carousel-caption">
+      <h4>{{ photo.caption }}</h4>
+      <p>{{ photo.comment }}</p>
+    </div>
+  </div>
+  <hr class="soften">
+  <div class="photo-info" id="info">
+    <h2>Information</h2>
+    <form class="form-horizontal" method="POST" action="/photo/{{photo.uuid}}/update/">
+      <fieldset>
+        <div class="control-group">
+          <label class="control-label">ファイル名</label>
+          <div class="controls">
+            <span class="input-xlarge uneditable-input">{{photo.title}}</span>
+            <p class="help-block">写真のファイル名です．変更できません．</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">オリジナルファイル名</label>
+          <div class="controls">
+            <span class="input-xlarge uneditable-input">{{photo.original_title}}</span>
+            <p class="help-block">アップロードしたときの元のファイル名です．変更できません．</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">写真の大きさ</label>
+          <div class="controls">
+            <span class="input-xlarge uneditable-input">{{photo.image_width}} x {{photo.image_height}}, {{photo.image.size|filesizeformat}}</span>
+            <p class="help-block">アップロードしたときの元のファイル名です．変更できません．</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">保存場所</label>
+          <div class="controls">
+            <span class="input-xxlarge uneditable-input">{{photo.get_original_img_url}}</span>
+            <p class="help-block">写真の保存場所です．変更できません．</p>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">サムネイル保存場所</label>
+          <div class="controls">
+            <span class="input-xxlarge uneditable-input">{{photo.get_thumnail_img_url}}</span>
+            <p class="help-block">サムネイル写真の保存場所です．変更できません．</p>
+          </div>
+        </div>
+
+        <hr class="soften">
+
+        <div class="control-group">
+          <label class="control-label" for="input01">Text inputs</label>
+          <div class="controls">
+            <input type="text" class="input-xlarge" id="input01" value="{{photo.title}}">
+            <p class="help-block">In addition to freeform text, any HTML5 text-based input appears like so.</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="input_caption">キャプション</label>
+          <div class="controls">
+            <input type="text" class="input-xlarge" id="input_caption" value="{{photo.caption}}">
+            <p class="help-block">ファイル名の代わりに表示される，写真のタイトルです．</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="textarea">コメント</label>
+          <div class="controls">
+            <textarea class="input-xlarge" id="textarea" rows="3"></textarea>
+            <p class="help-block">写真に対するコメントです．</p>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button class="btn">Cancel</button>
+        </div>
+      </fieldset>
+      {% csrf_token %}
+    </form>
+  </div>
+</section>
 {% endblock main %}

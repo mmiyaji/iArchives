@@ -19,6 +19,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 
 class Author(models.Model):
     """
+    著者モデル
+    QRコードから抽出した情報を保持する
     """
     name = models.CharField(max_length = 100, default="", blank=True, null=True)
     nickname = models.CharField(max_length=255, blank=True, null=True)
@@ -70,6 +72,11 @@ def get_photo_upload_path(self, filename, types="originals"):
     return os.path.join(user_path, name)
 
 class Photo(models.Model):
+    """
+    写真モデル
+    アップロードした写真を保存、保存時にQRコードとExif情報を解析してメタ情報を記録しておく
+    保存時には、自動で縮小したサムネイル用画像も作成する
+    """
     authors = models.ManyToManyField(Author, blank=True, null=True)
     uuid = models.CharField(max_length = 32, default=uuid.uuid4().hex)
     title = models.CharField(max_length = 100, default="", blank=True, null=True)
@@ -89,6 +96,7 @@ class Photo(models.Model):
     thumbnail_width = models.IntegerField(blank=True, null=True)
     thumbnail_height = models.IntegerField(blank=True, null=True)
     caption = models.CharField(max_length = 250, default="", blank=True, null=True)
+    comment = models.TextField(default="", blank=True, null=True)
     published_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(auto_now = True)
     created_at = models.DateTimeField(auto_now_add = True)
@@ -97,12 +105,23 @@ class Photo(models.Model):
     def get_by_pub_and_name(pub, name):
         result = None
         try:
-            # 写真の撮影日時が同一の場合
-            result = Photo.objects.filter(published_at__exact=pub)[0]
-            # filter(original_title__exact=name)
+            # 写真の撮影日時が同一の場合 ファイル名が同じ場合
+            result = Photo.objects.filter(published_at__exact=pub).filter(original_title__exact=name)[0]
         except:
             result = None
         return result
+    @staticmethod
+    def get_by_uuid(photo_uuid):
+        result = None
+        try:
+            result = Photo.objects.filter(uuid__exact=photo_uuid).get()
+        except:
+            result = None
+        return result
+    def get_original_img_url(self):
+        return "/media/"+str(self.image.name)
+    def get_thumnail_img_url(self):
+        return "/media/"+str(self.thumbnail.name)
     def __str__(self):
         # aname = ""
         # for i in self.author:
