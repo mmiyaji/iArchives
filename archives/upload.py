@@ -139,9 +139,9 @@ class UploadHandler(object):
                             author = Author.get_by_student_id(element[2])
                             if not author:
                                 author = Author()
-                                author.student_id = element[2].strip()
-                                author.name = element[1].strip()
-                                author.nickname = element[3].strip()
+                                author.student_id = element[2].replace("　"," ").strip()
+                                author.name = element[1].replace("　"," ").strip()
+                                author.nickname = element[3].replace("　"," ").strip()
                                 author.save()
                             authors.append(author)
                 # photo.author_id = 1
