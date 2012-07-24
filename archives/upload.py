@@ -40,6 +40,7 @@ class UploadHandler(object):
         download_script = open(os.path.join(self.BASE_DIR, 'templates/component/download_script.html')).read()
         upload_script = open(os.path.join(self.BASE_DIR, 'templates/component/upload_script.html')).read()
         temp_values = {
+            "target":"upload",
             "download_script":download_script,
             "upload_script":upload_script,
             }
@@ -115,15 +116,12 @@ class UploadHandler(object):
                         if exif.has_key(36867):
                             # DateTimeOriginal
                             published_at = date_validate(exif[36867], "%Y:%m:%d %H:%M:%S")
-                            # datetime.datetime.strptime(exif[36867], "%Y:%m:%d %H:%M:%S")
                         elif exif.has_key(36868):
                             # DateTimeDigitized
                             published_at = date_validate(exif[36868], "%Y:%m:%d %H:%M:%S")
-                            # datetime.datetime.strptime(exif[36868], "%Y:%m:%d %H:%M:%S")
                         elif exif.has_key(306):
                             # DateTime
                             published_at = date_validate(exif[306], "%Y:%m:%d %H:%M:%S")
-                            # datetime.datetime.strptime(exif[306], "%Y:%m:%d %H:%M:%S")
                         else:
                             # now
                             published_at = datetime.datetime.now()

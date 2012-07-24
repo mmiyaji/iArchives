@@ -72,13 +72,15 @@
             singleFileUploads: true,
             // To limit the number of files uploaded with one XHR request,
             // set the following option to an integer greater than 0:
-            limitMultiFileUploads: undefined,
+            // limitMultiFileUploads: undefined,
+            limitMultiFileUploads: 3,
             // Set the following option to true to issue all file upload requests
             // in a sequential order:
             sequentialUploads: false,
             // To limit the number of concurrent uploads,
             // set the following option to an integer greater than 0:
-            limitConcurrentUploads: undefined,
+            // limitConcurrentUploads: undefined,
+            limitConcurrentUploads: 3,
             // Set the following option to true to force iframe transport uploads:
             forceIframeTransport: false,
             // Set the following option to the location of a redirect url on the

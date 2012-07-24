@@ -78,7 +78,7 @@ class Photo(models.Model):
     保存時には、自動で縮小したサムネイル用画像も作成する
     """
     authors = models.ManyToManyField(Author, blank=True, null=True)
-    uuid = models.CharField(max_length = 32, default=uuid.uuid4().hex)
+    uuid = models.CharField(max_length = 32, default="")
     title = models.CharField(max_length = 100, default="", blank=True, null=True)
     original_title = models.CharField(max_length = 100, default="", blank=True, null=True)
     image = models.ImageField(upload_to=get_origin_photo_upload_path,
@@ -97,9 +97,22 @@ class Photo(models.Model):
     thumbnail_height = models.IntegerField(blank=True, null=True)
     caption = models.CharField(max_length = 250, default="", blank=True, null=True)
     comment = models.TextField(default="", blank=True, null=True)
+    isvalid = models.BooleanField(default=True)
     published_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(auto_now = True)
     created_at = models.DateTimeField(auto_now_add = True)
+
+    @staticmethod
+    def get_items(span=10, page=0, order="-published_at"):
+        result = None
+        if page!=0:
+            page = page*span - span
+        endpage = page + span
+        try:
+            result = Photo.objects.order_by(order).filter(isvalid=True)[page:endpage]
+        except:
+            pass
+        return result
 
     @staticmethod
     def get_by_pub_and_name(pub, name):
@@ -114,7 +127,7 @@ class Photo(models.Model):
     def get_by_uuid(photo_uuid):
         result = None
         try:
-            result = Photo.objects.filter(uuid__exact=photo_uuid).get()
+            result = Photo.objects.filter(uuid__exact=photo_uuid)[0]
         except:
             result = None
         return result
@@ -122,7 +135,7 @@ class Photo(models.Model):
         return self.authors.all()
     def get_original_img_url(self):
         return "/media/"+str(self.image.name)
-    def get_thumnail_img_url(self):
+    def get_thumbnail_img_url(self):
         return "/media/"+str(self.thumbnail.name)
     def __str__(self):
         # aname = ""

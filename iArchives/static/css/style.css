@@ -17,3 +17,8 @@ body{
 .template-download img{
     width: 150px;
 }
+.nowrap{
+    text-overflow: ellipsis;
+    -webkit-text-overflow: ellipsis; /* Safari */
+    -o-text-overflow: ellipsis; /* Opera */
+}

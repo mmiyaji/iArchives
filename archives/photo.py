@@ -13,7 +13,15 @@ def home(request):
     Case of GET REQUEST '/photo/'
     画像の一覧を表示するページ
     """
+    # 必要なリクエストパラメータを変数に抽出
+    # span = request.GET['span']
     temp_values = Context()
+    photos = Photo.get_items(span=6, order="-created_at")
+    print photos
+    temp_values = {
+        "target":"photo",
+        "photos":photos,
+        }
     return render_to_response('photo/index.html',temp_values,
                               context_instance=RequestContext(request))
 
@@ -28,11 +36,12 @@ def detail(request, photo_uuid):
         # 見つからない場合は404エラー送出
         raise Http404
     temp_values = {
+        "target":"photo",
         "photo":photo,
         "subscroll":True,
         "datepicker":"datepicker",
         }
-    return render_to_response('photo/index.html',temp_values,
+    return render_to_response('photo/detail.html',temp_values,
                               context_instance=RequestContext(request))
 
 def delete(request, photo_uuid):
@@ -96,7 +105,8 @@ def update(request, photo_uuid):
                 # 年月日のみ更新
                 photo.published_at = photo.published_at.replace(year=p.year, month=p.month, day=p.day)
         photo.save()
-        return HttpResponseRedirect("/photo/%s/" % (photo_uuid))
+        # 元のページにリダイレクト ブラウザのキャッシュで更新されてない画面が出るのを防止
+        return HttpResponseRedirect("/photo/%s/?update=%d" % (photo_uuid, datetime.datetime.now().microsecond))
     else:
         raise Http404
 

@@ -3,12 +3,11 @@
 <!-- Masthead
      ================================================== -->
 <div class="page-header">
-  <h1>iArchives File Upload</h1>
+  <h1>写真アップロード</h1>
 </div>
-<blockquote>
-  <p>File Upload widget with multiple file selection, drag&amp;drop support.
+  <p class="lead">Add Fileボタンを押して，登録したい写真を選択(複数選択可能)しましょう．<br>
+  選択しただけではファイルはシステムに登録されません．Start Uploadボタンを押すとアップロードが開始します．
   </p>
-</blockquote>
 <br>
 <!-- The file upload form used as target for the file upload widget -->
 <form id="fileupload" action="/upload/" method="POST" enctype="multipart/form-data">
@@ -58,7 +57,7 @@
     <table role="presentation" class="table table-striped">
       <thead>
         <tr class="template-upload">
-	      <th>Preview</th><th>File Name</th><th>Size</th><th>Status</th><th></th><th></th>
+          <th>Preview</th><th>File Name</th><th>Size</th><th>Status</th><th></th><th></th>
         </tr>
       </thead>
       <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
@@ -70,12 +69,11 @@
 </form>
 <br>
 <div class="well">
-  <h3>Notes</h3>
+  <h3>備考</h3>
   <ul>
-    <li>The maximum file size for uploads in this system is <strong>10 MB</strong>.</li>
-    <li>Only image files (<strong>JPG, GIF, PNG</strong>) are allowed in this system.</li>
-    <li>Uploaded files will be deleted automatically after <strong>5 minutes</strong> (demo setting).</li>
-    <li>You can <strong>drag &amp; drop</strong> files from your desktop on this webpage with Google Chrome, Mozilla Firefox and Apple Safari.</li>
+    <li>アップロード可能なファイルサイズは <strong>10 MB</strong> までです．</li>
+    <li>利用可能な画像ファイル形式は (<strong>JPG, GIF, PNG</strong>) です．</li>
+    <li>ブラウザとしてSafari，Google Chrome，Firefoxをご利用の場合はファイルをウィンドウにドラッグ&amp;ドロップすることで入力されます．</li>
   </ul>
 </div>
 <!-- modal-gallery is the modal dialog used for the image gallery -->

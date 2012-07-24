@@ -1,0 +1,122 @@
+{% extends "base/base.html" %}
+{% block main %}
+<!-- Masthead
+     ================================================== -->
+<header class="jumbotron subhead" id="overview">
+  <h1 id="title">{{ photo.caption|default:photo.title }}</h1>
+  <p class="lead">{{ photo.comment|default:photo.get_original_img_url }}</p>
+  <div class="subnav">
+    <ul class="nav nav-pills">
+      <li><a href="#title">Title</a></li>
+      <li><a href="#photo">Photo</a></li>
+      <li><a href="#info">Information</a></li>
+    </ul>
+  </div>
+</header>
+<!-- Photo view
+     ================================================== -->
+<section>
+  <div class="page-header" id="photo">
+    {% ifnotequal photo.caption "" %}
+    <h1>{{ photo.title }} <small>{{ photo.get_original_img_url }}</small></h1>
+    {% endifnotequal %}
+  </div>
+  <div class="thumbnail">
+    <a href="{{ photo.get_original_img_url }}" class="thumbnail" target="_blank">
+      <img src="{{ photo.get_original_img_url }}" alt="{{ photo.title }}">
+    </a>
+    {% ifnotequal photo.caption "" %}
+    <h2>{{ photo.caption }}</h2>
+    <p>{{ photo.comment }}</p>
+    {% endifnotequal %}
+  </div>
+  <div class="form-actions">
+    <a class="btn btn-primary modal-download" target="_blank" href="{{ photo.get_original_img_url }}">
+      <i class="icon-download icon-white"></i>
+      <span>Download</span>
+    </a>
+  </div>
+  <hr class="soften">
+  <div class="photo-info" id="info">
+    <h2>写真の詳細</h2>
+    <form class="form-horizontal" method="POST" action="/photo/{{photo.uuid}}/update/">
+      <fieldset>
+        <div class="control-group">
+          <label class="control-label">ファイル名</label>
+          <div class="controls">
+            <span class="input-xlarge uneditable-input">{{photo.title}}</span>
+            <p class="help-block">写真のファイル名です．変更できません．</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">オリジナルファイル名</label>
+          <div class="controls">
+            <span class="input-xlarge uneditable-input">{{photo.original_title}}</span>
+            <p class="help-block">アップロードしたときの元のファイル名です．変更できません．</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">写真の大きさ</label>
+          <div class="controls">
+            <span class="input-xlarge uneditable-input">{{photo.image_width}} x {{photo.image_height}}, {{photo.image.size|filesizeformat}}</span>
+            <p class="help-block">アップロードしたときの元のファイル名です．変更できません．</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">保存場所</label>
+          <div class="controls">
+            <span class="input-xxlarge uneditable-input">{{photo.get_original_img_url}}</span>
+            <p class="help-block">写真の保存場所です．変更できません．</p>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">サムネイル保存場所</label>
+          <div class="controls">
+            <span class="input-xxlarge uneditable-input">{{photo.get_thumbnail_img_url}}</span>
+            <p class="help-block">サムネイル写真の保存場所です．変更できません．</p>
+          </div>
+        </div>
+
+        <hr class="soften">
+        <div class="control-group">
+          <label class="control-label" for="input_author">製作者</label>
+          <div class="controls">
+            <input type="text" class="input-xlarge" id="input_author" name="authors" value="{% for author in photo.get_authors %}{{author.student_id}}({{author.name}}),{% endfor %}">
+            <p class="help-block">写真の著作物の製作者(著者)です．「,」(半角カンマ)区切りで複数人入力可能です．<br>
+             「学生ID(名前)」という表記で入力してください．()内の文字は更新時には無視されます．英数字は全て半角で入力してください．</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="input_caption">キャプション</label>
+          <div class="controls">
+            <input type="text" class="input-xlarge" id="input_caption" name="caption" value="{{photo.caption}}">
+            <p class="help-block">ファイル名の代わりに表示される，写真のタイトルです．</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="textarea_comment">コメント</label>
+          <div class="controls">
+            <textarea class="input-xlarge" id="textarea_comment" rows="3" name="comment">{{photo.comment}}</textarea>
+            <p class="help-block">写真に対するコメントです．</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="input_pubdate">撮影日</label>
+          <div class="controls date" id="datepicker" data-date="{{photo.published_at|date:'Y-m-d'}}" data-date-format="yyyy-mm-dd">
+            <input type="text" class="input-xlarge" id="input_pubdate" name="pubdate" value="{{photo.published_at|date:'Y-m-d'}}" readonly>
+            <span class="add-on"><i class="icon-th"></i></span>
+            <p class="help-block">写真の撮影日です．フォーム右のボタンから選択してください．</p>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button class="btn">Cancel</button>
+        </div>
+      </fieldset>
+      {% csrf_token %}
+    </form>
+  </div>
+</section>
+{% endblock main %}
