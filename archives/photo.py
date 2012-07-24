@@ -16,10 +16,11 @@ def home(request):
     # 必要なリクエストパラメータを変数に抽出
     # span = request.GET['span']
     temp_values = Context()
-    photos = Photo.get_items(span=6, order="-created_at")
+    photos = Photo.get_items(span=15, order="-created_at")
     print photos
     temp_values = {
         "target":"photo",
+        "title":u"写真一覧ページ",
         "photos":photos,
         }
     return render_to_response('photo/index.html',temp_values,
@@ -37,6 +38,7 @@ def detail(request, photo_uuid):
         raise Http404
     temp_values = {
         "target":"photo",
+        "title":u"写真詳細[ %s ]" % photo.title,
         "photo":photo,
         "subscroll":True,
         "datepicker":"datepicker",

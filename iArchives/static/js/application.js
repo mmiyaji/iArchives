@@ -4,11 +4,11 @@
 
     // Disable certain links in docs
     $('section [href^=#]').click(function (e) {
-      e.preventDefault()
-    })
+        e.preventDefault();
+    });
 
     // make code pretty
-    window.prettyPrint && prettyPrint()
+      window.prettyPrint && prettyPrint();
 
     // position static twipsies for components page
     if ($(".twipsies a").length) {
@@ -20,8 +20,8 @@
             , trigger: 'manual'
             })
             .tooltip('show')
-          })
-      })
+        });
+      });
     }
 
     // add tipsies to grid for scaffolding
@@ -29,7 +29,7 @@
       $('#grid-system').tooltip({
           selector: '.show-grid > div'
         , title: function () { return $(this).width() + 'px' }
-      })
+      });
     }
 
     // fix sub nav on scroll
@@ -38,33 +38,33 @@
       , navTop = $('.subnav').length && $('.subnav').offset().top - 150
       , isFixed = 0
 
-    processScroll()
-
+      processScroll();
     // hack sad times - holdover until rewrite for 2.1
     $nav.on('click', function () {
       if (!isFixed) setTimeout(function () {  $win.scrollTop($win.scrollTop() - 150) }, 10)
-    })
+    });
 
-    $win.on('scroll', processScroll)
+      $win.on('scroll', processScroll);
+      $('.img_popover').popover();
 
     function processScroll() {
-      var i, scrollTop = $win.scrollTop()
+        var i, scrollTop = $win.scrollTop();
       if (scrollTop >= navTop && !isFixed) {
-        isFixed = 1
-        $nav.addClass('subnav-fixed')
+          isFixed = 1;
+          $nav.addClass('subnav-fixed');
       } else if (scrollTop <= navTop && isFixed) {
-        isFixed = 0
-        $nav.removeClass('subnav-fixed')
+          isFixed = 0;
+          $nav.removeClass('subnav-fixed');
       }
     }
       // carousel demo
-      $('#myCarousel').carousel()
+      $('#myCarousel').carousel();
       $('.carousel').carousel({
           // default 5000
           interval: 10000
       });
 
-  })
+  });
 
 // Modified from the original jsonpi https://github.com/benvinegar/jquery-jsonpi
 $.ajaxTransport('jsonpi', function(opts, originalOptions, jqXHR) {

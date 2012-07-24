@@ -41,6 +41,7 @@ class UploadHandler(object):
         upload_script = open(os.path.join(self.BASE_DIR, 'templates/component/upload_script.html')).read()
         temp_values = {
             "target":"upload",
+            "title":"Upload form",
             "download_script":download_script,
             "upload_script":upload_script,
             }
