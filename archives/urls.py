@@ -13,6 +13,7 @@ urlpatterns = patterns('',
                        url(r'^photo/(?P<photo_uuid>\w{32})/$', 'archives.photo.detail'),
                        url(r'^photo/(?P<photo_uuid>\w{32})/delete/$', 'archives.photo.delete'),
                        url(r'^photo/(?P<photo_uuid>\w{32})/update/$', 'archives.photo.update'),
+                       url(r'^author/$', 'archives.author.home'),
                        url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
                        url(r'^adminsite/', include(admin.site.urls)),
                        )

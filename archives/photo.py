@@ -13,8 +13,6 @@ def home(request):
     Case of GET REQUEST '/photo/'
     画像の一覧を表示するページ
     """
-    # 必要なリクエストパラメータを変数に抽出
-    # span = request.GET['span']
     temp_values = Context()
     page=1
     span = 15

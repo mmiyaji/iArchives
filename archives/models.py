@@ -33,10 +33,26 @@ class Author(models.Model):
         ('e','Etcetera'),
         )
     roll = models.CharField(max_length=10, choices=ROLL_CHOICES, default="s")
+    # isvalid = models.BooleanField(default=True)
     admitted_at = models.DateTimeField(blank=True, null=True)
     graduated_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(auto_now = True)
     created_at = models.DateTimeField(auto_now_add = True)
+    @staticmethod
+    def get_items(span=10, page=0, order="-created_at"):
+        result = None
+        result_count = 0
+        if page!=0:
+            page = page*span - span
+        endpage = page + span
+        try:
+            # 検索対象のすべてのエントリー数とSPANで区切ったエントリーを返す
+            result = Author.objects.order_by(order)#.filter(isvalid=True)
+            result_count = result.count()
+            result = result[page:endpage]
+        except:
+            pass
+        return result, result_count
     @staticmethod
     def get_by_student_id(keyid=""):
         result=None

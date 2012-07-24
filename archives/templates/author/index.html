@@ -1,0 +1,39 @@
+{% extends "base/base.html" %}
+{% block main %}
+<!-- Masthead
+     ================================================== -->
+<header class="jumbotron subhead" id="overview">
+  <h1 id="title">著者一覧</h1>
+  <p class="lead">{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示{% endif %}</p>
+</header>
+<!-- Photo view
+     ================================================== -->
+<section>
+  <dl class="dl-horizontal">
+    <dt>学籍番号</dt>
+    <dd>氏名</dd>
+    {% for author in authors %}
+    <dt>{{author.student_id}}</dt>
+    <dd>{{author.name}}</dd>
+    {% endfor %}
+  </dl>
+  <hr class="soften">
+  <div class="pagination">
+    <p>{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示{% endif %}</p>
+    <ul>
+      {% if pages.pre_page %}
+      <li><a href="/photo/?page={{pages.pre_page}}">Prev</a></li>
+      {% endif %}
+      {% for page in page_list %}{% ifequal page pages.now_page %}
+      <li class="active">
+        <a href="#">{{page}}</a>
+      </li>{% else %}
+      <li><a href="/photo/?page={{page}}">{{page}}</a></li>
+      {% endifequal %}{% endfor %}
+      {% if pages.next_page %}
+      <li><a href="/photo/?page={{pages.next_page}}">Next</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</section>
+{% endblock main %}
