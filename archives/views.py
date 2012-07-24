@@ -34,6 +34,7 @@ def date_validate(date, dateformat="%Y-%m-%d"):
         return None
 
 def get_page_list(page, count, search_span, view_max=13):
+    # pagerのために必要な値を計算するメソッド
     pages = dict()
     page_max = (count / search_span)
     if page <= 0:

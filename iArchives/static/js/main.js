@@ -28,7 +28,6 @@ $(function () {
     // );
     if (window.location.hostname === '127.0.0.1') {
         // Demo settings:
-	console.log("demo");
         $('#fileupload').fileupload('option', {
             prependFiles: true,
             // previewMaxWidth: 180,
@@ -57,7 +56,6 @@ $(function () {
                 url: window.location.href,
                 type: 'HEAD'
             }).fail(function () {
-		    console.log("Upload server currently unavailable");
                 $('<span class="alert alert-error"/>')
                     .text('Upload server currently unavailable - ' +
                             new Date())
