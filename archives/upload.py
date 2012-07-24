@@ -114,13 +114,16 @@ class UploadHandler(object):
                     if exif:
                         if exif.has_key(36867):
                             # DateTimeOriginal
-                            published_at = datetime.datetime.strptime(exif[36867], "%Y:%m:%d %H:%M:%S")
+                            published_at = date_validate(exif[36867], "%Y:%m:%d %H:%M:%S")
+                            # datetime.datetime.strptime(exif[36867], "%Y:%m:%d %H:%M:%S")
                         elif exif.has_key(36868):
                             # DateTimeDigitized
-                            published_at = datetime.datetime.strptime(exif[36868], "%Y:%m:%d %H:%M:%S")
+                            published_at = date_validate(exif[36868], "%Y:%m:%d %H:%M:%S")
+                            # datetime.datetime.strptime(exif[36868], "%Y:%m:%d %H:%M:%S")
                         elif exif.has_key(306):
                             # DateTime
-                            published_at = datetime.datetime.strptime(exif[306], "%Y:%m:%d %H:%M:%S")
+                            published_at = date_validate(exif[306], "%Y:%m:%d %H:%M:%S")
+                            # datetime.datetime.strptime(exif[306], "%Y:%m:%d %H:%M:%S")
                         else:
                             # now
                             published_at = datetime.datetime.now()

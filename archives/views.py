@@ -26,6 +26,12 @@ from django.http import Http404
 # import isbooks.networkx as nx
 # from django.core.cache import cache
 logger = logging.getLogger('app')
+def date_validate(date, dateformat="%Y-%m-%d"):
+    # 指定したフォーマットでdatetimeオブジェクトに変換可能かチェック
+    try:
+        return datetime.datetime.strptime(date, dateformat)
+    except:
+        return None
 
 def main():
     pass
