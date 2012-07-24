@@ -4,13 +4,12 @@
      ================================================== -->
 <header class="jumbotron subhead" id="overview">
   <h1 id="title">登録済みファイル</h1>
-  <p class="lead">最新アップロード6件を表示しています．</p>
+  <p class="lead">{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示{% endif %}</p>
 </header>
 <!-- Photo view
      ================================================== -->
 <section>
   <h1>プレビュー</h1>
-  <p>登録件数</p>
   <ul class="thumbnails">
     {% for photo in photos %}
     <li class="span3">
@@ -28,15 +27,20 @@
   </ul>
   <hr class="soften">
   <div class="pagination">
+    <p>{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示{% endif %}</p>
     <ul>
-      <li><a href="#">Prev</a></li>
+      {% if pages.pre_page %}
+      <li><a href="/photo/?page={{pages.pre_page}}">Prev</a></li>
+      {% endif %}
+      {% for page in page_list %}{% ifequal page pages.now_page %}
       <li class="active">
-        <a href="#">1</a>
-      </li>
-      <li><a href="#">2</a></li>
-      <li><a href="#">3</a></li>
-      <li><a href="#">4</a></li>
-      <li><a href="#">Next</a></li>
+        <a href="#">{{page}}</a>
+      </li>{% else %}
+      <li><a href="/photo/?page={{page}}">{{page}}</a></li>
+      {% endifequal %}{% endfor %}
+      {% if pages.next_page %}
+      <li><a href="/photo/?page={{pages.next_page}}">Next</a></li>
+      {% endif %}
     </ul>
   </div>
 </section>

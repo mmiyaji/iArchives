@@ -105,14 +105,18 @@ class Photo(models.Model):
     @staticmethod
     def get_items(span=10, page=0, order="-published_at"):
         result = None
+        result_count = 0
         if page!=0:
             page = page*span - span
         endpage = page + span
         try:
-            result = Photo.objects.order_by(order).filter(isvalid=True)[page:endpage]
+            # 検索対象のすべてのエントリー数とSPANで区切ったエントリーを返す
+            result = Photo.objects.order_by(order).filter(isvalid=True)
+            result_count = result.count()
+            result = result[page:endpage]
         except:
             pass
-        return result
+        return result, result_count
 
     @staticmethod
     def get_by_pub_and_name(pub, name):

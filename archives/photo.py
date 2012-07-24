@@ -16,12 +16,21 @@ def home(request):
     # 必要なリクエストパラメータを変数に抽出
     # span = request.GET['span']
     temp_values = Context()
-    photos = Photo.get_items(span=15, order="-created_at")
+    page=1
+    span = 15
+    if request.GET.has_key('page'):
+        page = int(request.GET['page'])
+    if request.GET.has_key('span'):
+        span = int(request.GET['span'])
+    photos,entry_count = Photo.get_items(span=span, page=page, order="-created_at")
     print photos
+    page_list,pages = get_page_list(page, entry_count, span)
     temp_values = {
         "target":"photo",
         "title":u"写真一覧ページ",
         "photos":photos,
+        "page_list":page_list,
+        "pages":pages,
         }
     return render_to_response('photo/index.html',temp_values,
                               context_instance=RequestContext(request))
