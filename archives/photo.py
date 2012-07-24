@@ -91,11 +91,11 @@ def update(request, photo_uuid):
         # author登録
         photo.authors.clear()
         for i in param['authors'].split(','):
-            aid = re.sub('\(.*\)','',i.strip())
+            aid = re.sub('\(.*\)','',i.replace(u"　"," ").strip())
             aname = ''
             a = re.search('\(.*\)', i.strip())
             if a:
-                aname = a.group(0).replace('(','').replace(')','').strip()
+                aname = a.group(0).replace('(','').replace(')','').replace(u"　"," ").strip()
             if aid:
                 author = Author.get_by_student_id(aid)
                 if not author:
