@@ -77,6 +77,9 @@
                 options.index = 0;
             }
         },
+        getUuid: function (element) {
+            return $(element).attr('uuid');
+        },
         getUrl: function (element) {
             return element.href || $(element).data('href');
         },
@@ -121,6 +124,7 @@
             var $this = this,
                 modal = this.$element,
                 index = this.options.index,
+                uuid = this.getUuid(this.$links[index]),
                 url = this.getUrl(this.$links[index]),
                 oldImg;
             this.abortLoad();
@@ -137,6 +141,10 @@
                 oldImg.remove();
             }, 3000);
             modal.find('.modal-title').text(this.$links[index].title);
+            modal.find('.modal-detail').prop(
+                'href',
+                "/photo/"+uuid+"/"
+            );
             modal.find('.modal-download').prop(
                 'href',
                 url

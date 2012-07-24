@@ -9,10 +9,10 @@
     <td class="error"><span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
     {% } else { %}
     <td class="preview">{% if (file.thumbnail_url) { %}
-      <a href="{%=file.url%}" title="{%=file.title%}" rel="gallery" download="{%=file.title%}" class="thumbnail"><img src="{%=file.thumbnail_url%}"></a>
+      <a href="{%=file.url%}" title="{%=file.title%}" rel="gallery" download="{%=file.title%}" class="thumbnail" uuid="{%=file.uuid%}"><img src="{%=file.thumbnail_url%}"></a>
       {% } %}</td>
     <td class="name">
-      <p><a href="{%=file.url%}" title="{%=file.title%}" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.title%}">{%=file.title%}</a>
+      <p><a href="{%=file.url%}" title="{%=file.title%}" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.title%}" uuid="{%=file.uuid%}">{%=file.title%}</a>
         <small>[ {%=file.name%} ]</small>
       </p>
       <p>created at: {%=file.published_at%}</p>
