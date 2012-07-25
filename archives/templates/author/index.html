@@ -4,19 +4,61 @@
      ================================================== -->
 <header class="jumbotron subhead" id="overview">
   <h1 id="title">著者一覧</h1>
-  <p class="lead">{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示{% endif %}</p>
+  <p class="lead">{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示 / {{pages.now_page}}ページ目{% endif %}</p>
 </header>
 <!-- Photo view
      ================================================== -->
+<div class="btn-toolbar">
+  <div class="btn-group">
+    <button class="btn">ソート順序(学籍番号)</button>
+    <button class="btn dropdown-toggle" data-toggle="dropdown">
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <!-- dropdown menu links -->
+      <li><a href="#">ソート順序(学籍番号)</a></li>
+      <li><a href="#">ソート順序(氏名)</a></li>
+      <li><a href="#">ソート順序(更新日)</a></li>
+    </ul>
+  </div>
+  <div class="btn-group">
+    <button class="btn">昇順</button>
+    <button class="btn dropdown-toggle" data-toggle="dropdown">
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <!-- dropdown menu links -->
+      <li><a href="#">昇順</a></li>
+      <li><a href="#">降順</a></li>
+    </ul>
+  </div>
+  <form class="form-search form-inline input-prepend" action="/author/" method="GET" accept-charset="UTF-8">
+    <span class="add-on">氏名</span>
+    <input type="text" class="input-medium" name="search_query">
+    <button type="submit" class="btn">検索</button>
+  </form>
+  <div class="pagination">
+    <ul>
+      {% if pages.pre_page %}
+      <li><a href="/author/?page={{pages.pre_page}}">&laquo;</a></li>
+      {% endif %}
+      {% for page in page_list %}{% ifequal page pages.now_page %}
+      <li class="active">
+        <a href="#">{{page}}</a>
+      </li>{% else %}
+      {% ifequal page -1 %}
+      <li class="disabled"><a href="#">...</a></li>
+      {% else %}
+      <li><a href="/author/?page={{page}}">{{page}}</a></li>
+      {% endifequal %}{% endifequal %}{% endfor %}
+      {% if pages.next_page %}
+      <li><a href="/author/?page={{pages.next_page}}">&raquo;</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
 <section>
-  <!-- <dl class="dl-horizontal"> -->
-  <!--   <dt>学籍番号</dt> -->
-  <!--   <dd>氏名</dd> -->
-  <!--   {% for author in authors %} -->
-  <!--   <dt>{{author.student_id}}</dt> -->
-  <!--   <dd>{{author.name}}</dd> -->
-  <!--   {% endfor %} -->
-  <!-- </dl> -->
+  {% if search_query %}<h1>[ {% for s in search_query %}{{s}} {% endfor %} ]検索結果</h1>{% endif %}
   <table class="table table-bordered table-striped">
     <thead>
       <tr>
@@ -24,10 +66,12 @@
         <th>学籍番号</th>
         <th>氏名</th>
         <th>種別</th>
-        <th>ニックネーム</th>
-        <th>氏名読み</th>
+        {# <th>ニックネーム</th> #}
+        {#- <th>氏名読み</th> #}
         <th>最終更新日</th>
         <th>作成日</th>
+        <th>登録作品数</th>
+        <!-- <th></th> -->
       </tr>
     </thead>
     <tbody>
@@ -37,10 +81,12 @@
         <td>{{author.student_id}}</td>
         <td>{{author.name}}</td>
         <td>{{author.get_roll_display}}</td>
-        <td>{{author.nickname}}</td>
-        <td>{{author.roman}}</td>
+        {# <td>{{author.nickname}}</td> #}
+        {# <td>{{author.roman}}</td> #}
         <td>{{author.updated_at}}</td>
         <td>{{author.created_at}}</td>
+        <td>{{author.get_photo_num}}</td>
+        <!-- <td><a class="btn" href="#"><i class="icon-wrench"></i><span>Edit</span></a></td> -->
       </tr>
       {% endfor %}
     </tbody>

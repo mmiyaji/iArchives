@@ -38,20 +38,33 @@ class Author(models.Model):
     graduated_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(auto_now = True)
     created_at = models.DateTimeField(auto_now_add = True)
+    def get_photo_num(self):
+        """
+        自分の著作の数を返す
+        """
+        num = Photo.objects.filter(authors__exact=self).count()
+        return num
     @staticmethod
-    def get_items(span=10, page=0, order="-created_at"):
+    def get_items(span=10, page=0, search_query=None, isvalid=True, order="-created_at"):
         result = None
         result_count = 0
         if page!=0:
             page = page*span - span
         endpage = page + span
-        try:
+        # try:
+        if True:
             # 検索対象のすべてのエントリー数とSPANで区切ったエントリーを返す
-            result = Author.objects.order_by(order)#.filter(isvalid=True)
+            result = Author.objects.order_by(order)#.filter(isvalid=isvalid)
+            if search_query:
+                qs = [Q(name__icontains=w) for w in search_query]
+                query = qs.pop()
+                for q in qs:
+                    query |= q
+                result = result.filter(query)
             result_count = result.count()
             result = result[page:endpage]
-        except:
-            pass
+        # except:
+        #     pass
         return result, result_count
     @staticmethod
     def get_by_student_id(keyid=""):
@@ -119,7 +132,7 @@ class Photo(models.Model):
     created_at = models.DateTimeField(auto_now_add = True)
 
     @staticmethod
-    def get_items(span=10, page=0, order="-published_at"):
+    def get_items(span=10, page=0, isvalid=True, order="-published_at"):
         result = None
         result_count = 0
         if page!=0:
@@ -127,7 +140,7 @@ class Photo(models.Model):
         endpage = page + span
         try:
             # 検索対象のすべてのエントリー数とSPANで区切ったエントリーを返す
-            result = Photo.objects.order_by(order).filter(isvalid=True)
+            result = Photo.objects.order_by(order).filter(isvalid=isvalid)
             result_count = result.count()
             result = result[page:endpage]
         except:
