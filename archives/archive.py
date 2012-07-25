@@ -8,6 +8,7 @@ Copyright (c) 2012  ruhenheim.org. All rights reserved.
 """
 from views import *
 import re
+import zipfile
 def home(request):
     """
     Case of GET REQUEST '/archive/'
@@ -41,6 +42,16 @@ def years(request):
     pass
 def year(request, year):
     pass
+
+def execZip(fileList, exportPath, filename):
+    # 指定したファイル群をzipに圧縮する
+    # execZip(["/Users/mmiyaji/tmp/sc.JPG","/Users/mmiyaji/tmp/sc.psd","/Users/mmiyaji/tmp/scs.jpg"], ["a/sc.JPG","a/psd/sc.psd","a/scs.JPG"],"exporttest.zip")
+    z = zipfile.ZipFile(filename, 'w', zipfile.ZIP_DEFLATED)
+    for l,p in zip(fileList, exportPath):
+        z.write(l, p)
+    z.close()
+    return filename
+
 def detail(request, photo_uuid):
     """
     Case of GET REQUEST '/archive/<photo_uuid>/'
