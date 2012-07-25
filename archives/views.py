@@ -59,17 +59,21 @@ def get_page_list(page, count, search_span, view_max=13):
         end = (page)*search_span
     pages['end'] = end
     page_list = []
-    if page_max>15:
+    if page_max>(view_max+2):
         page_list.append(1)
         mins = page-5
         maxs = page+6
         if mins<2:
             mins = 2
             maxs = view_max
+        else:
+            page_list.append(-1)
         if maxs>page_max:
             maxs = page_max
         for x in range(mins, maxs):
             page_list.append(x)
+        if maxs<page_max:
+            page_list.append(-1)
         page_list.append(page_max)
     else:
         for x in range(1, page_max+1):

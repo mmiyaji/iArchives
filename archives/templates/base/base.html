@@ -39,15 +39,25 @@
     <div class="container">
       {% block main %}
       {% endblock main %}
+
+    </div><!-- /container -->
       <!-- Footer
            ================================================== -->
       <footer class="footer">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; mmiyajix {% now "Y" %}</p>
+        <div class="container">
+          <div class="row">
+            <div class="span3"><p>&copy; mmiyajix {% now "Y" %}</p></div>
+            <div class="span3"><p><a href="http://github.com/mmiyaji/iArchives" target="_blank">Project Page on Github</a></p></div>
+          <p class="pull-right">
+            <i class="icon-arrow-up icon-white"></i>
+            <a href="#">Back to top</a>
+          </p>
+          </div>
+          <!-- <p class="pull-right"></p> -->
+          <!--  -->
+        </div>
       </footer>
-
-    </div><!-- /container -->
-        <!-- Le javascript
+      <!-- Le javascript
               ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{{ STATIC_URL }}/js/jquery.js"></script>

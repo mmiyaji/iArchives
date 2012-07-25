@@ -10,10 +10,10 @@
  * http://www.opensource.org/licenses/MIT
  */
 
-body{
-    /* padding-top: 80px; */
-    padding-bottom: 40px;
-}
+/* body{ */
+/*     /\* padding-top: 80px; *\/ */
+/*     padding-bottom: 40px; */
+/* } */
 .template-download img{
     width: 150px;
 }
@@ -21,4 +21,19 @@ body{
     text-overflow: ellipsis;
     -webkit-text-overflow: ellipsis; /* Safari */
     -o-text-overflow: ellipsis; /* Opera */
+}
+footer{
+  padding-top: 10px;
+  color: #aaaaaa;
+  background: -o-linear-gradient(top, #1c1c1c 0%, #2f2f2f 10%, #1c1c1c 100%), transparent;
+  background: -ms-linear-gradient(top, #1c1c1c 0%, #2f2f2f 10%, #1c1c1c 100%), transparent;
+  background: linear-gradient(top, #1c1c1c 0%, #2f2f2f 10%, #1c1c1c 100%), transparent;
+  background: -webkit-linear-gradient(top, #1c1c1c 0%, #2f2f2f 10%, #1c1c1c 100%), transparent;
+  background: -moz-linear-gradient(top, #1c1c1c 0%, #2f2f2f 10%, #1c1c1c 100%), transparent;
+}
+footer a{
+    color:#bbbbbb;
+}
+footer a:hover{
+    color:#ffffff;
 }

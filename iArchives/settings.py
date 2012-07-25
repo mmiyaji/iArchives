@@ -11,7 +11,7 @@ ADMINS = (
     )
 SQLADMIN_PASS = ""
 MANAGERS = SQLADMIN_PASS
-
+DBPATH = os.path.join(BASE_DIR, 'mains.db')
 try:
     from settings_local import *
 except:
@@ -38,7 +38,8 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': DATABASE_ENGINE, # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': os.path.join(BASE_DIR, 'mains.db'),                      # Or path to database file if using sqlite3.
+            'NAME': DBPATH,                      # Or path to database file if using sqlite3.
+            # 'NAME': ":memory:",                      # Or path to database file if using sqlite3.
             'USER': '',                      # Not used with sqlite3.
             'PASSWORD': '',                  # Not used with sqlite3.
             'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.

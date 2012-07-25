@@ -45,7 +45,9 @@
     });
 
       $win.on('scroll', processScroll);
-      $('.img_popover').popover();
+      $('.img_popover').popover({
+          placement:'bottom'
+      });
 
     function processScroll() {
         var i, scrollTop = $win.scrollTop();

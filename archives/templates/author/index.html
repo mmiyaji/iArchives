@@ -9,29 +9,60 @@
 <!-- Photo view
      ================================================== -->
 <section>
-  <dl class="dl-horizontal">
-    <dt>学籍番号</dt>
-    <dd>氏名</dd>
-    {% for author in authors %}
-    <dt>{{author.student_id}}</dt>
-    <dd>{{author.name}}</dd>
-    {% endfor %}
-  </dl>
+  <!-- <dl class="dl-horizontal"> -->
+  <!--   <dt>学籍番号</dt> -->
+  <!--   <dd>氏名</dd> -->
+  <!--   {% for author in authors %} -->
+  <!--   <dt>{{author.student_id}}</dt> -->
+  <!--   <dd>{{author.name}}</dd> -->
+  <!--   {% endfor %} -->
+  <!-- </dl> -->
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>学籍番号</th>
+        <th>氏名</th>
+        <th>種別</th>
+        <th>ニックネーム</th>
+        <th>氏名読み</th>
+        <th>最終更新日</th>
+        <th>作成日</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for author in authors %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{author.student_id}}</td>
+        <td>{{author.name}}</td>
+        <td>{{author.get_roll_display}}</td>
+        <td>{{author.nickname}}</td>
+        <td>{{author.roman}}</td>
+        <td>{{author.updated_at}}</td>
+        <td>{{author.created_at}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
   <hr class="soften">
   <div class="pagination">
     <p>{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示{% endif %}</p>
     <ul>
       {% if pages.pre_page %}
-      <li><a href="/photo/?page={{pages.pre_page}}">Prev</a></li>
+      <li><a href="/author/?page={{pages.pre_page}}">&laquo;</a></li>
       {% endif %}
       {% for page in page_list %}{% ifequal page pages.now_page %}
       <li class="active">
         <a href="#">{{page}}</a>
       </li>{% else %}
-      <li><a href="/photo/?page={{page}}">{{page}}</a></li>
-      {% endifequal %}{% endfor %}
+      {% ifequal page -1 %}
+      <li class="disabled"><a href="#">...</a></li>
+      {% else %}
+      <li><a href="/author/?page={{page}}">{{page}}</a></li>
+      {% endifequal %}{% endifequal %}{% endfor %}
       {% if pages.next_page %}
-      <li><a href="/photo/?page={{pages.next_page}}">Next</a></li>
+      <li><a href="/author/?page={{pages.next_page}}">&raquo;</a></li>
       {% endif %}
     </ul>
   </div>
