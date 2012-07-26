@@ -39,6 +39,7 @@
   </form>
   <div class="pagination">
     <ul>
+      <p>{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示{% endif %}</p>
       {% if pages.pre_page %}
       <li><a href="/author/?page={{pages.pre_page}}">&laquo;</a></li>
       {% endif %}
@@ -58,7 +59,10 @@
   </div>
 </div>
 <section>
+  <div class="page-header">
   {% if search_query %}<h1>[ {% for s in search_query %}{{s}} {% endfor %} ]検索結果</h1>{% endif %}
+  </div>
+  <div>
   <table id="author_table" class="table table-bordered table-striped">
     <thead>
       <tr>
@@ -76,7 +80,7 @@
     </thead>
     <tbody>
       {% for author in authors %}
-      <tr id="author_{{author.student_id}}">
+      <tr id="author_{{author.student_id|urlencode}}">
         <td>{{ forloop.counter }}</td>
         <td>{{author.student_id}}</td>
         <td>{{author.name}}</td>
@@ -91,6 +95,7 @@
       {% endfor %}
     </tbody>
   </table>
+  </div>
   <hr class="soften">
   <div class="pagination">
     <p>{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示{% endif %}</p>

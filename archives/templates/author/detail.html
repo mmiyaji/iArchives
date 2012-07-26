@@ -4,7 +4,7 @@
      ================================================== -->
 <header class="jumbotron subhead" id="overview">
   <h1 id="title">{{ author.name|default:"" }}</h1>
-  <p class="lead">学籍番号: {{ author.student_id|default:"" }}<small>{{ author.nickname|default:"" }}</small></p>
+  <p class="lead">学籍番号: {{ author.student_id|default:"" }} <small>{{ author.nickname|default:"" }}</small></p>
   <div class="subnav">
     <ul class="nav nav-pills">
       <li><a href="#photo">写真</a></li>
@@ -16,6 +16,26 @@
 <section  id="photo">
   <div class="page-header">
     <h1>写真</h1>
+  </div>
+  <div class="pagination">
+    <p>{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示{% endif %}</p>
+    <ul>
+      {% if pages.pre_page %}
+      <li><a href="/author/{{author.student_id|urlencode}}/?page={{pages.pre_page}}">&laquo;</a></li>
+      {% endif %}
+      {% for page in page_list %}{% ifequal page pages.now_page %}
+      <li class="active">
+        <a href="#">{{page}}</a>
+      </li>{% else %}
+      {% ifequal page -1 %}
+      <li class="disabled"><a href="#">...</a></li>
+      {% else %}
+      <li><a href="/author/{{author.student_id|urlencode}}/?page={{page}}">{{page}}</a></li>
+      {% endifequal %}{% endifequal %}{% endfor %}
+      {% if pages.next_page %}
+      <li><a href="/author/{{author.student_id|urlencode}}/?page={{pages.next_page}}">&raquo;</a></li>
+      {% endif %}
+    </ul>
   </div>
   {% if files %}
   <div class="thumbnail">
@@ -39,11 +59,11 @@
             </p>
             <p>作成日: {{file.published_at}}</p>
           </td>
-          <td class="size"><span>{{file.image.size}}</span></td>
+          <td class="size"><span>{{file.image.size|filesizeformat}}</span></td>
           <td class="status">
             {% if file.get_authors %}
             {% for a in file.get_authors %}
-            <a href="/author/{{a.student_id}}/" target="_blank"><p>Author: {{a.name}}<small> ID: {{a.student_id}}</small></p></a>
+            <a href="/author/{{a.student_id|urlencode}}/" target="_blank"><p>Author: {{a.name}}<small> ID: {{a.student_id}}</small></p></a>
             {% endfor %}
             {% else %}
             <div class="alert alert-warnig alert-block">
@@ -75,14 +95,13 @@
   {% else %}
   <p class="nocontent">アップロードされた写真がありません<p>
     {% endif %}
-    <hr class="soften">
 </section>
 <section id="info">
   <div class="page-header">
     <h1>著者情報詳細</h1>
   </div>
   <div>
-    <form class="form-horizontal" method="POST" action="/author/{{author.student_id}}/update/" accept-charset="UTF-8">
+    <form class="form-horizontal" method="POST" action="/author/{{author.student_id|urlencode}}/update/" accept-charset="UTF-8">
       <fieldset>
         <div class="control-group">
           <label class="control-label" for="input_author">氏名</label>
@@ -131,7 +150,7 @@
     <h1>アーカイブ化</h1>
   </div>
   <div class="download-btn">
-    <a class="btn btn-primary" href="#" >アーカイブ化設定ページ</a>
+    <a class="btn btn-primary" href="/archive/author/{{author.student_id|urlencode}}/" >アーカイブ化設定ページ</a>
   </div>
 </section>
 {% include "component/image_modal.html" %}

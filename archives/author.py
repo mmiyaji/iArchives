@@ -42,15 +42,29 @@ def detail(request, author_id):
     著者詳細を表示するページ
     """
     temp_values = Context()
+    page=1
+    span = 30
+    search_query = None
     author = Author.get_by_student_id(author_id)
     if not author:
         # 見つからない場合は404エラー送出
         raise Http404
+    if request.GET.has_key('page'):
+        page = int(request.GET['page'])
+    if request.GET.has_key('span'):
+        span = int(request.GET['span'])
+    if request.GET.has_key('search_query'):
+        search_query = request.GET['search_query'].replace(u"　", " ").split(" ")
+    files,entry_count = author.get_photos(span=span, page=page, search_query=search_query)
+    page_list,pages = get_page_list(page, entry_count, span)
     temp_values = {
         "target":"author",
         "title":u"著者詳細[ %s ]" % author.name,
         "author":author,
-        "files":author.get_photos(),
+        "files":files,
+        "page_list":page_list,
+        "pages":pages,
+        "search_query":search_query,
         "subscroll":True,
         "datepicker":"datepicker",
         }

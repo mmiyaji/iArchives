@@ -64,7 +64,27 @@ def authors(request):
                               context_instance=RequestContext(request))
 
 def author(request, author_id):
-    pass
+    """
+    Case of GET REQUEST '/archive/author/<author_id>/'
+    アーカイブページ
+    """
+    temp_values = Context()
+    author = Author.get_by_student_id(author_id)
+    if not author:
+        # 見つからない場合は404エラー送出
+        raise Http404
+    files,entry_count = author.get_photos(all=True)
+    page_list,pages = get_page_list(1, entry_count, 10000)
+    temp_values = {
+        "target":"author",
+        "title":u"アーカイブページ[ %s ]" % author.name,
+        "author":author,
+        "files":files,
+        "page_list":page_list,
+        "pages":pages,
+        }
+    return render_to_response('archive/author_detail.html',temp_values,
+                              context_instance=RequestContext(request))
 def years(request):
     pass
 def year(request, year):

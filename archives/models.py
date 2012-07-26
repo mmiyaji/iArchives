@@ -38,12 +38,12 @@ class Author(models.Model):
     graduated_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(auto_now = True)
     created_at = models.DateTimeField(auto_now_add = True)
-    def get_photos(self):
+    def get_photos(self, span=10, page=0, search_query=None, isvalid=True, order="-created_at", all=False):
         """
         自分の著作を返す
         """
-        result = Photo.objects.filter(authors__exact=self)
-        return result
+        result,count = Photo.get_items(author=self, span=span, page=page, search_query=search_query, isvalid=isvalid, order=order, all=all)
+        return result,count
     def get_photo_num(self):
         """
         自分の著作の数を返す
@@ -51,7 +51,7 @@ class Author(models.Model):
         num = Photo.objects.filter(authors__exact=self).count()
         return num
     @staticmethod
-    def get_items(span=10, page=0, search_query=None, isvalid=True, order="-created_at"):
+    def get_items(span=10, page=0, search_query=None, isvalid=True, order="-created_at", all=False):
         result = None
         result_count = 0
         if page!=0:
@@ -68,7 +68,8 @@ class Author(models.Model):
                     query |= q
                 result = result.filter(query)
             result_count = result.count()
-            result = result[page:endpage]
+            if not all:
+                result = result[page:endpage]
         # except:
         #     pass
         return result, result_count
@@ -138,7 +139,7 @@ class Photo(models.Model):
     created_at = models.DateTimeField(auto_now_add = True)
 
     @staticmethod
-    def get_items(span=10, page=0, isvalid=True, search_query=None, order="-published_at"):
+    def get_items(author=None, span=10, page=0, isvalid=True, search_query=None, order="-published_at", all=False):
         result = None
         result_count = 0
         if page!=0:
@@ -147,6 +148,8 @@ class Photo(models.Model):
         try:
             # 検索対象のすべてのエントリー数とSPANで区切ったエントリーを返す
             result = Photo.objects.order_by(order).filter(isvalid=isvalid)
+            if author:
+                result = result.filter(authors__exact=author)
             if search_query:
                 qs = [Q(title__icontains=w) for w in search_query]
                 query = qs.pop()
@@ -154,7 +157,8 @@ class Photo(models.Model):
                     query |= q
                 result = result.filter(query)
             result_count = result.count()
-            result = result[page:endpage]
+            if not all:
+                result = result[page:endpage]
         except:
             pass
         return result, result_count
