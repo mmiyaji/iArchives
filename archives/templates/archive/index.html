@@ -1,0 +1,101 @@
+{% extends "base/base.html" %}
+{% block main %}
+<!-- Masthead
+     ================================================== -->
+<header class="jumbotron subhead" id="overview">
+  <h1 id="title">アーカイブ</h1>
+  <p class="lead">{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示 / {{pages.now_page}}ページ目{% endif %}</p>
+</header>
+<!-- Photo view
+     ================================================== -->
+<div class="btn-toolbar">
+  <!-- <div class="btn-group"> -->
+  <!--   <button class="btn">ソート順序(学籍番号)</button> -->
+  <!--   <button class="btn dropdown-toggle" data-toggle="dropdown"> -->
+  <!--     <span class="caret"></span> -->
+  <!--   </button> -->
+  <!--   <ul class="dropdown-menu"> -->
+  <!--     <\!-- dropdown menu links -\-> -->
+  <!--     <li><a href="#">ソート順序(学籍番号)</a></li> -->
+  <!--     <li><a href="#">ソート順序(氏名)</a></li> -->
+  <!--     <li><a href="#">ソート順序(更新日)</a></li> -->
+  <!--   </ul> -->
+  <!-- </div> -->
+  <!-- <div class="btn-group"> -->
+  <!--   <button class="btn">昇順</button> -->
+  <!--   <button class="btn dropdown-toggle" data-toggle="dropdown"> -->
+  <!--     <span class="caret"></span> -->
+  <!--   </button> -->
+  <!--   <ul class="dropdown-menu"> -->
+  <!--     <\!-- dropdown menu links -\-> -->
+  <!--     <li><a href="#">昇順</a></li> -->
+  <!--     <li><a href="#">降順</a></li> -->
+  <!--   </ul> -->
+  <!-- </div> -->
+  <form class="form-search form-inline input-prepend" action="/photo/" method="GET" accept-charset="UTF-8">
+    <span class="add-on">ファイル名</span>
+    <input type="text" class="input-medium" name="search_query">
+    <button type="submit" class="btn">検索</button>
+  </form>
+  <div class="pagination">
+    <ul>
+      {% if pages.pre_page %}
+      <li><a href="/photo/?page={{pages.pre_page}}">&laquo;</a></li>
+      {% endif %}
+      {% for page in page_list %}{% ifequal page pages.now_page %}
+      <li class="active">
+        <a href="#">{{page}}</a>
+      </li>{% else %}
+      {% ifequal page -1 %}
+      <li class="disabled"><a href="#">...</a></li>
+      {% else %}
+      <li><a href="/photo/?page={{page}}">{{page}}</a></li>
+      {% endifequal %}{% endifequal %}{% endfor %}
+      {% if pages.next_page %}
+      <li><a href="/photo/?page={{pages.next_page}}">&raquo;</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+
+<section>
+  <h1>プレビュー</h1>
+  <ul class="thumbnails" data-toggle="modal-gallery" data-target="#modal-gallery">
+    {% for photo in photos %}
+    <li class="span3">
+      <div class="thumbnail img_popover" rel="popover" title="{{photo.title}}" data-content="<h4>作成者</h4><ul>{% if photo.get_authors %}{% for author in photo.get_authors %}<li>学生ID: {{author.student_id}}, 氏名: {{author.name}}</li>{% endfor %}{% else %}<li>未登録</li>{% endif %}</ul><hr><h4>作成日</h4><ul><li>{{photo.published_at}}</li></ul>">
+        <a href="/photo/{{photo.uuid}}/" class="thumbnail" target="_blank">
+          <img src="{{ photo.get_thumbnail_img_url }}" alt="">
+        </a>
+        {% ifnotequal photo.caption "" %}
+        <h3>{{ photo.caption }}</h3>
+        <p>{{ photo.comment }}</p>
+        {% endifnotequal %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  <hr class="soften">
+  <div class="pagination">
+    <p>{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示{% endif %}</p>
+    <ul>
+      {% if pages.pre_page %}
+      <li><a href="/photo/?page={{pages.pre_page}}">&laquo;</a></li>
+      {% endif %}
+      {% for page in page_list %}{% ifequal page pages.now_page %}
+      <li class="active">
+        <a href="#">{{page}}</a>
+      </li>{% else %}
+      {% ifequal page -1 %}
+      <li class="disabled"><a href="#">...</a></li>
+      {% else %}
+      <li><a href="/photo/?page={{page}}">{{page}}</a></li>
+      {% endifequal %}{% endifequal %}{% endfor %}
+      {% if pages.next_page %}
+      <li><a href="/photo/?page={{pages.next_page}}">&raquo;</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</section>
+{% include "component/image_modal.html" %}
+{% endblock main %}

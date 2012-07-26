@@ -56,6 +56,44 @@ def detail(request, author_id):
         }
     return render_to_response('author/detail.html',temp_values,
                               context_instance=RequestContext(request))
+@csrf_protect
+def update(request, author_id):
+    """
+    Case of UPDATE REQUEST '/author/<author_id>/update/'
+    対象著者の更新
+    UPDATE/POST リクエストにのみレスポンス
+    """
+    request_type = request.method
+    print request_type
+    logger.debug(request_type)
+    if request_type == 'GET':
+        raise Http404
+    elif request_type == 'OPTION' or request_type == 'HEAD':
+        return HttpResponse("OK")
+    elif request_type == 'POST' or request_type == 'UPDATE':
+        # author_idからAuthorを取得
+        author = Author.get_by_student_id(author_id)
+        if not author:
+            # 見つからない場合は404エラー送出
+            raise Http404
+        # 必要なリクエストパラメータを変数に抽出
+        param = {
+            "name":request.POST['name'],
+            "student_id":request.POST['student_id'],
+            "nickname":request.POST['nickname'],
+            }
+        print param
+        if param['name']:
+            author.name = param['name']
+        if param['student_id']:
+            author.student_id = param['student_id']
+        if param['nickname']:
+            author.nickname = param['nickname']
+        author.save()
+        # 元のページにリダイレクト ブラウザのキャッシュで更新されてない画面が出るのを防止
+        return HttpResponseRedirect("/author/%s/?update=%d" % (param['student_id'], datetime.datetime.now().microsecond))
+    else:
+        raise Http404
 
 def main():
     pass

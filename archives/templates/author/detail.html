@@ -3,25 +3,26 @@
 <!-- Masthead
      ================================================== -->
 <header class="jumbotron subhead" id="overview">
-  <h1 id="title">{{ author.name }}</h1>
-  <p class="lead">{{ author.nickname }}</p>
+  <h1 id="title">{{ author.name|default:"" }}</h1>
+  <p class="lead">学籍番号: {{ author.student_id|default:"" }}<small>{{ author.nickname|default:"" }}</small></p>
   <div class="subnav">
     <ul class="nav nav-pills">
-      <li><a href="#title">Title</a></li>
+      <li><a href="#photo">写真</a></li>
+      <li><a href="#info">詳細</a></li>
+      <li><a href="#archive">アーカイブ化</a></li>
     </ul>
   </div>
 </header>
-<!-- Authoro view
-     ================================================== -->
-<section>
-  <div class="page-header" id="author">
-    <h1>{{ author.name }} <small>{{ author.nickname }}</small></h1>
+<section  id="photo">
+  <div class="page-header">
+    <h1>写真</h1>
   </div>
+  {% if files %}
   <div class="thumbnail">
     <table role="presentation" class="table table-striped">
       <thead>
         <tr class="template-upload">
-          <th>Preview</th><th>File Name</th><th>Size</th><th>Status</th><th></th><th></th>
+          <th>プレビュー</th><th>ファイル名</th><th>ファイルサイズ</th><th>ステータス</th><th></th><th></th>
         </tr>
       </thead>
       <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
@@ -36,33 +37,33 @@
             <p><a href="{{file.get_original_img_url}}" title="{{file.title}}" rel="gallery" download="{{file.title}}" uuid="{{file.uuid}}">{{file.title}}</a>
               <small>[ {{file.original_title}} ]</small>
             </p>
-            <p>created at: {{file.published_at}}</p>
+            <p>作成日: {{file.published_at}}</p>
           </td>
           <td class="size"><span>{{file.image.size}}</span></td>
           <td class="status">
             {% if file.get_authors %}
             {% for a in file.get_authors %}
-            <p>Author: {{a.name}}<small> ID: {{a.student_id}}</small></p>
+            <a href="/author/{{a.student_id}}/" target="_blank"><p>Author: {{a.name}}<small> ID: {{a.student_id}}</small></p></a>
             {% endfor %}
             {% else %}
             <div class="alert alert-warnig alert-block">
               <a class="close" data-dismiss="alert" href="#">×</a>
               <h4 class="alert-heading">Warning!</h4>
-              Author not found.
+              登録された著者情報が見つかりません
             </div>
             {% endif %}
           </td>
           <td class="delete">
             <button class="btn btn-danger" data-type="DELETE" data-url="/photo/{{file.uuid}}/delete/">
               <i class="icon-trash icon-white"></i>
-              <span>Delete</span>
+              <span>削除</span>
             </button>
             <input type="checkbox" name="delete" value="1">
           </td>
           <td class="update">
             <button class="btn btn-info" data-type="Update" data-url="/photo/{{file.uuid}}/update/}">
               <i class="icon-refresh icon-white"></i>
-              <span>Update</span>
+              <span>更新</span>
             </button>
             <input type="checkbox" name="update" value="1">
           </td>
@@ -70,9 +71,68 @@
         {% endfor %}
       </tbody>
     </table>
-    <p class="nocontent">No content<p>
   </div>
-  <hr class="soften">
+  {% else %}
+  <p class="nocontent">アップロードされた写真がありません<p>
+    {% endif %}
+    <hr class="soften">
+</section>
+<section id="info">
+  <div class="page-header">
+    <h1>著者情報詳細</h1>
+  </div>
+  <div>
+    <form class="form-horizontal" method="POST" action="/author/{{author.student_id}}/update/" accept-charset="UTF-8">
+      <fieldset>
+        <div class="control-group">
+          <label class="control-label" for="input_author">氏名</label>
+          <div class="controls">
+            <input type="text" class="input-xlarge" name="name" value="{{author.name|default:""}}">
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="input_caption">学籍番号</label>
+          <div class="controls">
+            <input type="text" class="input-xlarge" name="student_id" value="{{author.student_id}}">
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="input_nickname">ニックネーム</label>
+          <div class="controls">
+            <input type="text" class="input-xlarge" name="nickname" value="{{author.nickname|default:""}}">
+            <p class="help-block">設定されたニックネームです．</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="input_createat">登録日時</label>
+          <div class="controls">
+            <span class="input-xlarge uneditable-input">{{author.created_at}}</span>
+            <p class="help-block">変更不可</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="input_num">登録作品数</label>
+          <div class="controls">
+            <span class="input-xlarge uneditable-input">{{author.get_photo_num}}</span>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">変更を保存</button>
+          <!-- <button type="submit" class="btn btn-danger">削除</button> -->
+          <!-- <button class="btn">Cancel</button> -->
+        </div>
+      </fieldset>
+      {% csrf_token %}
+    </form>
+  </div>
+</section>
+<section id="archive">
+  <div class="page-header">
+    <h1>アーカイブ化</h1>
+  </div>
+  <div class="download-btn">
+    <a class="btn btn-primary" href="#" >アーカイブ化設定ページ</a>
+  </div>
 </section>
 {% include "component/image_modal.html" %}
 {% endblock main %}

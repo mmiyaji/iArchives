@@ -27,7 +27,7 @@
       </div>
       {% } %}
       {% if (file.author) { %}
-      <p>Author: {%=file.author.name%}<small> ID: {%=file.author.student_id%}</small></p>
+      <a href="/author/{%=file.author.student_id%}/" target="_blank"><p>Author: {%=file.author.name%}<small> ID: {%=file.author.student_id%}</small></p></a>
       {% } else { %}
       <div class="alert alert-warnig alert-block">
         <a class="close" data-dismiss="alert" href="#">×</a>

@@ -5,8 +5,8 @@
 <div class="page-header">
   <h1>写真アップロード</h1>
 </div>
-  <p class="lead">Add Fileボタンを押して，登録したい写真を選択(複数選択可能)しましょう．<br>
-  選択しただけではファイルはシステムに登録されません．Start Uploadボタンを押すとアップロードが開始します．
+  <p class="lead">「ファイルの追加」ボタンを押して，登録したい写真を選択(複数選択可能)しましょう．<br>
+  選択しただけではファイルはシステムに登録されません．「アップロードの開始」ボタンを押してください．
   </p>
 <br>
 <!-- The file upload form used as target for the file upload widget -->
@@ -17,25 +17,25 @@
       <!-- The fileinput-button span is used to style the file input field as button -->
       <span class="btn btn-success fileinput-button">
         <i class="icon-plus icon-white"></i>
-        <span>Add files...</span>
+        <span>ファイルの追加...</span>
         <input type="file" name="files[]" multiple>
       </span>
       <button type="submit" class="btn btn-primary start">
         <i class="icon-upload icon-white"></i>
-        <span>Start upload</span>
+        <span>アップロード開始</span>
       </button>
       <button type="reset" class="btn btn-warning cancel">
         <i class="icon-ban-circle icon-white"></i>
-        <span>Cancel upload</span>
+        <span>アップロード中止</span>
       </button>
       <button type="button" class="btn btn-danger delete">
         <i class="icon-trash icon-white"></i>
-        <span>Delete</span>
+        <span>削除</span>
       </button>
       <input type="checkbox" class="dtoggle">
       <button type="button" class="btn btn-info update">
         <i class="icon-refresh icon-white"></i>
-        <span>Update</span>
+        <span>更新</span>
       </button>
       <input type="checkbox" class="utoggle">
     </div>
@@ -57,13 +57,13 @@
     <table role="presentation" class="table table-striped">
       <thead>
         <tr class="template-upload">
-          <th>Preview</th><th>File Name</th><th>Size</th><th>Status</th><th></th><th></th>
+          <th>プレビュー</th><th>ファイル名</th><th>ファイルサイズ</th><th>ステータス</th><th></th><th></th>
         </tr>
       </thead>
       <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
       </tbody>
     </table>
-    <p class="nocontent">No content<p>
+    <p class="nocontent">アップロード待ちファイルがありません<p>
   </div>
   {% csrf_token %}
 </form>

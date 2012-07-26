@@ -25,17 +25,44 @@ def home(request):
     print photos
     page_list,pages = get_page_list(page, entry_count, span)
     temp_values = {
-        "target":"photo",
-        "title":u"写真一覧ページ",
+        "target":"archive",
+        "title":u"アーカイブ化",
         "photos":photos,
         "page_list":page_list,
         "pages":pages,
         }
-    return render_to_response('photo/index.html',temp_values,
+    return render_to_response('archive/index.html',temp_values,
                               context_instance=RequestContext(request))
 
 def authors(request):
-    pass
+    """
+    Case of GET REQUEST '/archive/author/'
+    著者アーカイブ化(ダウンロード)ページ
+    """
+    temp_values = Context()
+    page=1
+    span = 30
+    search_query = None
+    if request.GET.has_key('page'):
+        page = int(request.GET['page'])
+    if request.GET.has_key('span'):
+        span = int(request.GET['span'])
+    if request.GET.has_key('search_query'):
+        search_query = request.GET['search_query'].replace(u"　", " ").split(" ")
+    authors,entry_count = Author.get_items(span=span, page=page, search_query=search_query, order="-created_at")
+    print authors
+    page_list,pages = get_page_list(page, entry_count, span)
+    temp_values = {
+        "target":"author",
+        "title":u"製作者(著者)一覧ページ",
+        "authors":authors,
+        "page_list":page_list,
+        "pages":pages,
+        "search_query":search_query,
+        }
+    return render_to_response('author/index.html',temp_values,
+                              context_instance=RequestContext(request))
+
 def author(request, author_id):
     pass
 def years(request):
