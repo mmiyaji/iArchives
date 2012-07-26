@@ -36,6 +36,26 @@ def home(request):
         }
     return render_to_response('author/index.html',temp_values,
                               context_instance=RequestContext(request))
+def detail(request, author_id):
+    """
+    Case of GET REQUEST '/author/<author_id>/'
+    著者詳細を表示するページ
+    """
+    temp_values = Context()
+    author = Author.get_by_student_id(author_id)
+    if not author:
+        # 見つからない場合は404エラー送出
+        raise Http404
+    temp_values = {
+        "target":"author",
+        "title":u"著者詳細[ %s ]" % author.name,
+        "author":author,
+        "files":author.get_photos(),
+        "subscroll":True,
+        "datepicker":"datepicker",
+        }
+    return render_to_response('author/detail.html',temp_values,
+                              context_instance=RequestContext(request))
 
 def main():
     pass

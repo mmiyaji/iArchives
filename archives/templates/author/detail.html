@@ -1,0 +1,107 @@
+{% extends "base/base.html" %}
+{% block main %}
+<!-- Masthead
+     ================================================== -->
+<header class="jumbotron subhead" id="overview">
+  <h1 id="title">{{ author.name }}</h1>
+  <p class="lead">{{ author.nickname }}</p>
+  <div class="subnav">
+    <ul class="nav nav-pills">
+      <li><a href="#title">Title</a></li>
+    </ul>
+  </div>
+</header>
+<!-- Authoro view
+     ================================================== -->
+<section>
+  <div class="page-header" id="author">
+    <h1>{{ author.name }} <small>{{ author.nickname }}</small></h1>
+  </div>
+  <div class="thumbnail">
+    <table role="presentation" class="table table-striped">
+      <thead>
+        <tr class="template-upload">
+          <th>Preview</th><th>File Name</th><th>Size</th><th>Status</th><th></th><th></th>
+        </tr>
+      </thead>
+      <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
+        {% for file in files %}
+        <tr class="template-download">
+          <td class="preview">
+            <a href="{{file.get_original_img_url}}" title="{{file.title}}" rel="gallery" download="{{file.title}}" class="thumbnail" uuid="{{file.uuid}}">
+              <img src="{{file.get_thumbnail_img_url}}">
+            </a>
+          </td>
+          <td class="name">
+            <p><a href="{{file.get_original_img_url}}" title="{{file.title}}" rel="gallery" download="{{file.title}}" uuid="{{file.uuid}}">{{file.title}}</a>
+              <small>[ {{file.original_title}} ]</small>
+            </p>
+            <p>created at: {{file.published_at}}</p>
+          </td>
+          <td class="size"><span>{{file.image.size}}</span></td>
+          <td class="status">
+            {% if file.get_authors %}
+            {% for a in file.get_authors %}
+            <p>Author: {{a.name}}<small> ID: {{a.student_id}}</small></p>
+            {% endfor %}
+            {% else %}
+            <div class="alert alert-warnig alert-block">
+              <a class="close" data-dismiss="alert" href="#">×</a>
+              <h4 class="alert-heading">Warning!</h4>
+              Author not found.
+            </div>
+            {% endif %}
+          </td>
+          <td class="delete">
+            <button class="btn btn-danger" data-type="DELETE" data-url="/photo/{{file.uuid}}/delete/">
+              <i class="icon-trash icon-white"></i>
+              <span>Delete</span>
+            </button>
+            <input type="checkbox" name="delete" value="1">
+          </td>
+          <td class="update">
+            <button class="btn btn-info" data-type="Update" data-url="/photo/{{file.uuid}}/update/}">
+              <i class="icon-refresh icon-white"></i>
+              <span>Update</span>
+            </button>
+            <input type="checkbox" name="update" value="1">
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="nocontent">No content<p>
+  </div>
+  <hr class="soften">
+</section>
+<!-- modal-gallery is the modal dialog used for the image gallery -->
+<div id="modal-gallery" class="modal modal-gallery hide fade" data-filter=":odd">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">&times;</a>
+    <h3 class="modal-title"></h3>
+  </div>
+  <div class="modal-body"><div class="modal-image"></div></div>
+  <div class="modal-footer">
+    <a class="btn btn-info modal-detail" target="_blank">
+      <i class="icon-info-sign icon-white"></i>
+      <span>Detail</span>
+    </a>
+    <a class="btn modal-download" target="_blank">
+      <i class="icon-download"></i>
+      <span>Download</span>
+    </a>
+    <a class="btn btn-success modal-play modal-slideshow" data-slideshow="5000">
+      <i class="icon-play icon-white"></i>
+      <span>Slideshow</span>
+    </a>
+    <a class="btn btn-primary modal-prev">
+      <i class="icon-arrow-left icon-white"></i>
+      <span>Previous</span>
+    </a>
+    <a class="btn btn-primary modal-next">
+      <span>Next</span>
+      <i class="icon-arrow-right icon-white"></i>
+    </a>
+  </div>
+</div>
+{% endblock main %}

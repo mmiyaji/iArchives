@@ -38,6 +38,12 @@ class Author(models.Model):
     graduated_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(auto_now = True)
     created_at = models.DateTimeField(auto_now_add = True)
+    def get_photos(self):
+        """
+        自分の著作を返す
+        """
+        result = Photo.objects.filter(authors__exact=self)
+        return result
     def get_photo_num(self):
         """
         自分の著作の数を返す
@@ -132,7 +138,7 @@ class Photo(models.Model):
     created_at = models.DateTimeField(auto_now_add = True)
 
     @staticmethod
-    def get_items(span=10, page=0, isvalid=True, order="-published_at"):
+    def get_items(span=10, page=0, isvalid=True, search_query=None, order="-published_at"):
         result = None
         result_count = 0
         if page!=0:
@@ -141,6 +147,12 @@ class Photo(models.Model):
         try:
             # 検索対象のすべてのエントリー数とSPANで区切ったエントリーを返す
             result = Photo.objects.order_by(order).filter(isvalid=isvalid)
+            if search_query:
+                qs = [Q(title__icontains=w) for w in search_query]
+                query = qs.pop()
+                for q in qs:
+                    query |= q
+                result = result.filter(query)
             result_count = result.count()
             result = result[page:endpage]
         except:

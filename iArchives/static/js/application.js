@@ -59,13 +59,15 @@
           $nav.removeClass('subnav-fixed');
       }
     }
-      // carousel demo
+      // 写真のスライドショー
       $('#myCarousel').carousel();
       $('.carousel').carousel({
           // default 5000
           interval: 10000
       });
-
+      $("#author_table tbody tr").click(function () {
+	      document.location =　"/author/"+$(this).attr("id").split("_")[1]+"/";
+      })
   });
 
 // Modified from the original jsonpi https://github.com/benvinegar/jquery-jsonpi

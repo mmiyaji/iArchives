@@ -59,9 +59,9 @@
             // The maximum file size of images that are to be displayed as preview:
             previewSourceMaxFileSize: 5000000, // 5MB
             // The maximum width of the preview images:
-            previewMaxWidth: 80,
+            previewMaxWidth: 150,
             // The maximum height of the preview images:
-            previewMaxHeight: 80,
+            previewMaxHeight: 150,
             // By default, preview images are displayed as canvas elements
             // if supported by the browser. Set the following option to false
             // to always display preview images as img elements:
@@ -85,7 +85,7 @@
             // widget (via file input selection, drag & drop or add API call).
             // See the basic file upload widget for more information:
             add: function (e, data) {
-		        console.log("add: ", e, data);
+                console.log("add: ", e, data);
                 $('#fileupload .nocontent').fadeOut("slow");
                 var that = $(this).data('fileupload'),
                 options = that.options,
@@ -243,14 +243,13 @@
                             'width',
                             progress + '%'
                         );
-		            if(progress >= 100){
+                    if(progress >= 100){
                         console.log("progress done");
-			            data.context.find('.progress')
-			                .removeClass('progress-success')
-			                .addClass('progress-warning')
-			                .after('<p>indexing.....</p>');
-		            }
-
+                        data.context.find('.progress')
+                            .removeClass('progress-success')
+                            .addClass('progress-warning')
+                            .after('<p>indexing.....</p>');
+                    }
                 }
             },
             // Callback for global upload progress events:

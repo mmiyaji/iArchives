@@ -16,11 +16,14 @@ def home(request):
     temp_values = Context()
     page=1
     span = 15
+    search_query = None
     if request.GET.has_key('page'):
         page = int(request.GET['page'])
     if request.GET.has_key('span'):
         span = int(request.GET['span'])
-    photos,entry_count = Photo.get_items(span=span, page=page, order="-created_at")
+    if request.GET.has_key('search_query'):
+        search_query = request.GET['search_query'].replace(u"　", " ").split(" ")
+    photos,entry_count = Photo.get_items(span=span, page=page, search_query=search_query, order="-created_at")
     print photos
     page_list,pages = get_page_list(page, entry_count, span)
     temp_values = {
