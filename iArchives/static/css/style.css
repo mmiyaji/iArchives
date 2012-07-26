@@ -1,14 +1,4 @@
 @charset 'UTF-8';
-/*
- * jQuery File Upload Plugin CSS Example 1.0
- * https://github.com/blueimp/jQuery-File-Upload
- *
- * Copyright 2012, Sebastian Tschan
- * https://blueimp.net
- *
- * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
- */
 
 /* body{ */
 /*     /\* padding-top: 80px; *\/ */
@@ -24,16 +14,16 @@
 }
 footer{
   padding-top: 10px;
-  color: #aaaaaa;
-  background: -o-linear-gradient(top, #1c1c1c 0%, #2f2f2f 10%, #1c1c1c 100%), transparent;
-  background: -ms-linear-gradient(top, #1c1c1c 0%, #2f2f2f 10%, #1c1c1c 100%), transparent;
-  background: linear-gradient(top, #1c1c1c 0%, #2f2f2f 10%, #1c1c1c 100%), transparent;
-  background: -webkit-linear-gradient(top, #1c1c1c 0%, #2f2f2f 10%, #1c1c1c 100%), transparent;
-  background: -moz-linear-gradient(top, #1c1c1c 0%, #2f2f2f 10%, #1c1c1c 100%), transparent;
+  color: #777777;
+  /* background: -o-linear-gradient(top, #1c1c1c 0%, #2f2f2f 10%, #1c1c1c 100%), transparent; */
+  /* background: -ms-linear-gradient(top, #1c1c1c 0%, #2f2f2f 10%, #1c1c1c 100%), transparent; */
+  /* background: linear-gradient(top, #1c1c1c 0%, #2f2f2f 10%, #1c1c1c 100%), transparent; */
+  /* background: -webkit-linear-gradient(top, #1c1c1c 0%, #2f2f2f 10%, #1c1c1c 100%), transparent; */
+  /* background: -moz-linear-gradient(top, #1c1c1c 0%, #2f2f2f 10%, #1c1c1c 100%), transparent; */
 }
 footer a{
     color:#bbbbbb;
 }
 footer a:hover{
-    color:#ffffff;
+    color:#333333;
 }
