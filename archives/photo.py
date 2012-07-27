@@ -16,7 +16,7 @@ def home(request):
     temp_values = Context()
     page=1
     span = 15
-    search_query = None
+    search_query
     if request.GET.has_key('page'):
         page = int(request.GET['page'])
     if request.GET.has_key('span'):

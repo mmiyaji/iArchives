@@ -59,9 +59,11 @@
   </div>
 </div>
 <section>
+  {% if search_query %}
   <div class="page-header">
-  {% if search_query %}<h1>[ {% for s in search_query %}{{s}} {% endfor %} ]検索結果</h1>{% endif %}
+  <h1>[ {% for s in search_query %}{{s}} {% endfor %} ]検索結果</h1>
   </div>
+  {% endif %}
   <div>
   <table id="author_table" class="table table-bordered table-striped">
     <thead>
@@ -96,7 +98,6 @@
     </tbody>
   </table>
   </div>
-  <hr class="soften">
   <div class="pagination">
     <p>{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示{% endif %}</p>
     <ul>
@@ -117,5 +118,6 @@
       {% endif %}
     </ul>
   </div>
+  <hr class="soften">
 </section>
 {% endblock main %}

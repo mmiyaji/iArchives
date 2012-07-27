@@ -82,6 +82,7 @@ def author(request, author_id):
         "files":files,
         "page_list":page_list,
         "pages":pages,
+        "subscroll":True,
         }
     return render_to_response('archive/author_detail.html',temp_values,
                               context_instance=RequestContext(request))

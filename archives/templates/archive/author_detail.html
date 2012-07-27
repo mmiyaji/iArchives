@@ -3,9 +3,18 @@
 <!-- Masthead
      ================================================== -->
 <div class="page-header">
-  <h1 id="title">著者アーカイブ[ {{ author.name|default:"" }} ]</h1>
+  <h1 id="title">著者アーカイブ</h1>
 </div>
-<p class="lead">学籍番号: {{ author.student_id|default:"" }} <small>{{ author.nickname|default:"" }}</small></p>
+<p class="lead">氏名: {{ author.name|default:"" }}<br>
+  学籍番号: {{ author.student_id|default:"" }} <small>{{ author.nickname|default:"" }}</small></p>
+<div class="subnav">
+  <ul class="nav nav-pills">
+    <li><a href="#select_photo">写真選択</a></li>
+    <li><a href="#select_type">書き出し形式</a></li>
+    <li><a href="#download">ダウンロード</a></li>
+  </ul>
+</div>
+
 <br>
 {% if files %}
 <!-- The file upload form used as target for the file upload widget -->
@@ -22,11 +31,11 @@
         <i class="icon-ban-circle icon-white"></i>
         <span>アップロード中止</span>
       </button>
-      <button type="button" class="btn btn-danger delete">
-        <i class="icon-trash icon-white"></i>
-        <span>削除</span>
+      <button type="button" class="btn btn-success archive">
+        <i class="icon-download icon-white"></i>
+        <span>アーカイブ対象選択</span>
       </button>
-      <input type="checkbox" class="dtoggle">
+      <input type="checkbox" class="atoggle">
     </div>
     <!-- The global progress information -->
     <div class="span5 fileupload-progress fade">
@@ -40,13 +49,13 @@
   </div>
   <!-- The loading indicator is shown during file processing -->
   <div class="fileupload-loading"></div>
-  <br>
+  <h2 id="select_photo">写真選択</h2>
   <!-- The table listing the files available for upload/download -->
   <div class="well">
     <table role="presentation" class="table table-striped">
       <thead>
         <tr class="template-upload">
-          <th>プレビュー</th><th>ファイル名</th><th>ファイルサイズ</th><th>ステータス</th><th></th><th></th>
+          <th>プレビュー</th><th>ファイル情報</th><th>著者情報</th><th>ステータス</th><th></th><th></th>
         </tr>
       </thead>
       <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
@@ -58,17 +67,22 @@
             </a>
           </td>
           <td class="name">
-            <p><a href="{{file.get_original_img_url}}" title="{{file.title}}" rel="gallery" download="{{file.title}}" uuid="{{file.uuid}}">{{file.title}}</a>
-              <small>[ {{file.original_title}} ]</small>
-            </p>
-            <p>作成日: {{file.published_at}}</p>
+            <ul>
+              <li>ファイル名: <a href="{{file.get_original_img_url}}" title="{{file.title}}" rel="gallery" download="{{file.title}}" uuid="{{file.uuid}}">{{file.title}}</a></li>
+              <li>元のファイル名: <span>{{file.original_title}}</span></li>
+              <li>撮影日: <span>{{file.published_at}}</span></li>
+              <li>写真の大きさ: <span>{{file.image_width}} x {{file.image_height}}, {{file.image.size|filesizeformat}}</span></li>
+            </ul>
           </td>
-          <td class="size"><span>{{file.image.size|filesizeformat}}</span></td>
-          <td class="status">
+          <td class="author">
             {% if file.get_authors %}
-            {% for a in file.get_authors %}
-            <a href="/author/{{a.student_id|urlencode}}/" target="_blank"><p>Author: {{a.name}}<small> ID: {{a.student_id}}</small></p></a>
-            {% endfor %}
+            <ul>
+              {% for a in file.get_authors %}
+              <li>
+                <a href="/author/{{a.student_id|urlencode}}/" target="_blank">{{a.student_id}}({{a.name}})</a>
+              </li>
+              {% endfor %}
+              <ul>
             {% else %}
             <div class="alert alert-warnig alert-block">
               <a class="close" data-dismiss="alert" href="#">×</a>
@@ -76,6 +90,8 @@
               登録された著者情報が見つかりません
             </div>
             {% endif %}
+          </td>
+          <td class="status">
           </td>
           <td class="delete">
             <button class="btn btn-success" data-type="DOWNLOAD" data-url="/photo/{{file.uuid}}/download/">
@@ -89,9 +105,41 @@
       </tbody>
     </table>
   </div>
+  <h2 id="select_type">書き出し形式選択</h2>
+  <div class="row thumbnails">
+    <div class="span3">
+      <label class="radio">
+        <input type="radio" name="archive_type" value="1" checked>
+        日付ごとにフォルダ分け(年月日)
+        <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype01.png">
+      </label>
+    </div>
+    <div class="span3">
+      <label class="radio">
+        <input type="radio" name="archive_type" value="2">
+        日付ごとにフォルダ分け(年月)
+        <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype02.png">
+      </label>
+    </div>
+    <div class="span3">
+      <label class="radio">
+        <input type="radio" name="archive_type" value="3">
+        日付ごとにフォルダ分け(年)
+        <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype03.png">
+      </label>
+    </div>
+    <div class="span3">
+      <label class="radio">
+        <input type="radio" name="archive_type" value="4">
+        すべて同じフォルダ
+        <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype04.png">
+      </label>
+    </div>
+  </div>
+</div>
   {% csrf_token %}
 </form>
-<div class="download-btn">
+<div id="download" class="download-btn">
   <a class="btn btn-primary disabled" id="btn_archive_downlowd" href="/archive/author/{{author.student_id|urlencode}}/" >ダウンロード</a>
 </div>
 {% else %}
