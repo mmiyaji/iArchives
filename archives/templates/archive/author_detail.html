@@ -11,7 +11,7 @@
   <ul class="nav nav-pills">
     <li><a href="#select_photo">写真選択</a></li>
     <li><a href="#select_type">書き出し形式</a></li>
-    <li><a href="#download">ダウンロード</a></li>
+    <li><a href="#download_archive">ダウンロード</a></li>
   </ul>
 </div>
 
@@ -98,6 +98,7 @@
       </tbody>
     </table>
   </div>
+  <hr class="soften">
   <h2 id="select_type">書き出し形式選択</h2>
   <div class="row thumbnails">
     <div class="span3">
@@ -130,12 +131,14 @@
     </div>
   </div>
   {% csrf_token %}
+  <hr class="soften">
+  <h2 id="download_archive">ダウンロード</h2>
   <div id="download" class="download-btn">
     <button class="btn btn-success" type="submit">
       <span>アーカイブ化</span>
     </button>
   </div>
-<!-- <div id="download" class="download-btn"> -->
+  <!-- <div id="download" class="download-btn"> -->
 <!--   <a class="btn btn-primary disabled" id="btn_archive_downlowd" href="#">ダウンロード</a> -->
 <!-- </div> -->
 </div>
