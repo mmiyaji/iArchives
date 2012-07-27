@@ -66,8 +66,15 @@
           interval: 10000
       });
       $("#author_table tbody tr").click(function () {
-	      document.location =　"/author/"+$(this).attr("id").split("_")[1]+"/";
-      })
+          document.location = "/author/"+$(this).attr("id").split("_")[1]+"/";
+      });
+      $("#atoggle").click(function(){
+          if($(this).attr('checked')){
+              $('.isarchive').attr('checked', true);
+          }else{
+              $('.isarchive').attr('checked', false);
+          }
+      });
   });
 
 // Modified from the original jsonpi https://github.com/benvinegar/jquery-jsonpi

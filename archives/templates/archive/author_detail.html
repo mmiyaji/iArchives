@@ -5,8 +5,8 @@
 <div class="page-header">
   <h1 id="title">著者アーカイブ</h1>
 </div>
-<p class="lead">氏名: {{ author.name|default:"" }}<br>
-  学籍番号: {{ author.student_id|default:"" }} <small>{{ author.nickname|default:"" }}</small></p>
+<p class="lead">氏名: {{ author.name|default:"" }} <small>{{ author.nickname|default:"" }}</small><br>
+  学籍番号: {{ author.student_id|default:"" }}</p>
 <div class="subnav">
   <ul class="nav nav-pills">
     <li><a href="#select_photo">写真選択</a></li>
@@ -18,25 +18,9 @@
 <br>
 {% if files %}
 <!-- The file upload form used as target for the file upload widget -->
-<form id="fileuploads" action="/upload/" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
+<form id="fileuploads" action="/archive/author/{{author.student_id}}/" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
   <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
   <div class="row fileupload-buttonbar">
-    <div class="span7">
-      <!-- The fileinput-button span is used to style the file input field as button -->
-      <button type="submit" class="btn btn-primary start">
-        <i class="icon-upload icon-white"></i>
-        <span>アップロード開始</span>
-      </button>
-      <button type="reset" class="btn btn-warning cancel">
-        <i class="icon-ban-circle icon-white"></i>
-        <span>アップロード中止</span>
-      </button>
-      <button type="button" class="btn btn-success archive">
-        <i class="icon-download icon-white"></i>
-        <span>アーカイブ対象選択</span>
-      </button>
-      <input type="checkbox" class="atoggle">
-    </div>
     <!-- The global progress information -->
     <div class="span5 fileupload-progress fade">
       <!-- The global progress bar -->
@@ -55,7 +39,17 @@
     <table role="presentation" class="table table-striped">
       <thead>
         <tr class="template-upload">
-          <th>プレビュー</th><th>ファイル情報</th><th>著者情報</th><th>ステータス</th><th></th><th></th>
+          <th>プレビュー</th>
+          <th>ファイル情報</th>
+          <th>著者情報</th>
+          <!-- <th>ステータス</th> -->
+          <th>
+            <label>
+              <i class="icon-check"></i>
+              <span>全選択</span>
+            <input type="checkbox" id="atoggle" class="atoggle" checked="checked">
+            </label>
+          </th>
         </tr>
       </thead>
       <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
@@ -83,22 +77,21 @@
               </li>
               {% endfor %}
               <ul>
-            {% else %}
-            <div class="alert alert-warnig alert-block">
-              <a class="close" data-dismiss="alert" href="#">×</a>
-              <h4 class="alert-heading">Warning!</h4>
-              登録された著者情報が見つかりません
-            </div>
-            {% endif %}
+                {% else %}
+                <div class="alert alert-warnig alert-block">
+                  <a class="close" data-dismiss="alert" href="#">×</a>
+                  <h4 class="alert-heading">Warning!</h4>
+                  登録された著者情報が見つかりません
+                </div>
+                {% endif %}
           </td>
-          <td class="status">
-          </td>
-          <td class="delete">
-            <button class="btn btn-success" data-type="DOWNLOAD" data-url="/photo/{{file.uuid}}/download/">
-              <i class="icon-download icon-white"></i>
-              <span>アーカイブ対象</span>
-            </button>
-            <input type="checkbox" name="download" value="{{photo.uuid}}" checked>
+          <!-- <td class="status"></td> -->
+          <td class="command">
+            <label>
+                <i class="icon-download"></i>
+                <span>アーカイブ対象</span>
+              <input type="checkbox" class="isarchive" name="isarchive" value="{{file.uuid}}" checked="checked">
+            </label>
           </td>
         </tr>
         {% endfor %}
@@ -136,14 +129,19 @@
       </label>
     </div>
   </div>
-</div>
   {% csrf_token %}
-</form>
-<div id="download" class="download-btn">
-  <a class="btn btn-primary disabled" id="btn_archive_downlowd" href="/archive/author/{{author.student_id|urlencode}}/" >ダウンロード</a>
+  <div id="download" class="download-btn">
+    <button class="btn btn-success" type="submit">
+      <span>アーカイブ化</span>
+    </button>
+  </div>
+<!-- <div id="download" class="download-btn"> -->
+<!--   <a class="btn btn-primary disabled" id="btn_archive_downlowd" href="#">ダウンロード</a> -->
+<!-- </div> -->
 </div>
+</form>
 {% else %}
 <p class="nocontent">アップロードされた写真がありません</p>
-  {% endif %}
-  {% include "component/image_modal.html" %}
-  {% endblock main %}
+{% endif %}
+{% include "component/image_modal.html" %}
+{% endblock main %}

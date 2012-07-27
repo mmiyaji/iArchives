@@ -73,19 +73,49 @@ def author(request, author_id):
     if not author:
         # 見つからない場合は404エラー送出
         raise Http404
-    files,entry_count = author.get_photos(all=True)
-    page_list,pages = get_page_list(1, entry_count, 10000)
-    temp_values = {
-        "target":"author",
-        "title":u"アーカイブページ[ %s ]" % author.name,
-        "author":author,
-        "files":files,
-        "page_list":page_list,
-        "pages":pages,
-        "subscroll":True,
-        }
-    return render_to_response('archive/author_detail.html',temp_values,
+    request_type = request.method
+    logger.debug(request_type)
+    print request_type
+    if request_type == 'GET':
+        files,entry_count = author.get_photos(all=True)
+        page_list,pages = get_page_list(1, entry_count, 10000)
+        temp_values = {
+            "target":"author",
+            "title":u"アーカイブページ[ %s ]" % author.name,
+            "author":author,
+            "files":files,
+            "page_list":page_list,
+            "pages":pages,
+            "subscroll":True,
+            }
+        return render_to_response('archive/author_detail.html',temp_values,
                               context_instance=RequestContext(request))
+    else:
+         isarchive = request.POST.getlist('isarchive')
+         archive_type = int(request.POST['archive_type'])
+         filename = "archive_"+author.student_id
+         dir_type = "/%Y/%m/%d/"
+         if archive_type == 1:
+             dir_type = "/%Y/%m/%d/"
+         elif archive_type == 2:
+             dir_type = "/%Y/%m/"
+         elif archive_type == 3:
+             dir_type = "/%Y/"
+         elif archive_type == 4:
+             dir_type = "/"
+         photos = []
+         fileList = []
+         exportPath = []
+         for i in isarchive:
+             p = Photo.get_by_uuid(i)
+             if p:
+                 photos.append(p)
+                 fileList.append(p.image.path)
+                 exportPath.append(filename+p.published_at.strftime(dir_type)+p.title)
+         print photos,fileList,exportPath
+         filepath = os.path.join(settings.MEDIA_URL, "tmp", filename+".zip")
+         execZip(fileList, exportPath, filepath)
+         return HttpResponseRedirect("/media/tmp/"+filename+".zip")
 def years(request):
     pass
 def year(request, year):
@@ -127,5 +157,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
 
