@@ -170,6 +170,8 @@ class UploadHandler(object):
                 #     result['author'] = None
                 result['published_at'] = photo.published_at.strftime("%Y-%m-%d %H:%M:%S")
                 result['uuid'] = photo.uuid
+                result['caption'] = photo.caption
+                result['comment'] = photo.comment
                 result['update_type'] = 'UPDATE'
                 result['update_url'] = "http://%s/photo/%s/update/" % (self._request.get_host(), photo.uuid)
                 result['delete_type'] = 'DELETE'

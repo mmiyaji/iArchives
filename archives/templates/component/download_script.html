@@ -12,18 +12,21 @@
       <a href="{%=file.url%}" title="{%=file.title%}" rel="gallery" download="{%=file.title%}" class="thumbnail" uuid="{%=file.uuid%}"><img src="{%=file.thumbnail_url%}"></a>
       {% } %}</td>
     <td class="name">
-      <p><a href="{%=file.url%}" title="{%=file.title%}" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.title%}" uuid="{%=file.uuid%}">{%=file.title%}</a>
-        <small>[ {%=file.name%} ]</small>
-      </p>
-      <p>created at: {%=file.published_at%}</p>
+      <ul>
+        <li>ファイル名: <a href="{%=file.url%}" title="{%=file.title%}" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.title%}" uuid="{%=file.uuid%}">{%=file.title%}</a></li>
+        <li>元のファイル名: <span>{%=file.name%}</span></li>
+        <li>撮影日: <span>{%=file.published_at%}</span></li>
+        <li>写真の大きさ: <span>{%=o.formatFileSize(file.size)%}</span></li>
+        <li>キャプション: <span>{%=file.caption%}</span></li>
+        <li>コメント: <span>{%=file.comment%}</span></li>
+      </ul>
     </td>
-    <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-    <td class="status">
+    <td class="author">
       {% if (file.already) { %}
       <div class="alert alert-error alert-block">
         <a class="close" data-dismiss="alert" href="#">×</a>
         <h4 class="alert-heading">Warning!</h4>
-        Already exists.
+        すでに登録済みの写真です
       </div>
       {% } %}
       {% if (file.author) { %}
@@ -32,24 +35,28 @@
       <div class="alert alert-warnig alert-block">
         <a class="close" data-dismiss="alert" href="#">×</a>
         <h4 class="alert-heading">Warning!</h4>
-        Author not found.
+        登録された著者情報が見つかりません
       </div>
       {% } %}
     </td>
     {% } %}
-    <td class="delete">
-      <button class="btn btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}">
-        <i class="icon-trash icon-white"></i>
-        <span>{%=locale.fileupload.destroy%}</span>
-      </button>
-      <input type="checkbox" name="delete" value="1">
-    </td>
+    <!-- <td class="delete"> -->
+    <!--   <button class="btn btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"> -->
+    <!--     <i class="icon-trash icon-white"></i> -->
+    <!--     <span>{%=locale.fileupload.destroy%}</span> -->
+    <!--   </button> -->
+    <!--   <input type="checkbox" name="delete" value="1"> -->
+    <!-- </td> -->
     <td class="update">
-      <button class="btn btn-info" data-type="{%=file.update_type%}" data-url="{%=file.update_url%}">
+      <a class="btn btn-success" href="/photo/{%=file.uuid%}/">
         <i class="icon-refresh icon-white"></i>
-        <span>{%=locale.fileupload.update%}</span>
-      </button>
-      <input type="checkbox" name="update" value="1">
+        編集
+      </a>
+      <!-- <button class="btn btn-info" data-type="{%=file.update_type%}" data-url="{%=file.update_url%}"> -->
+      <!--   <i class="icon-refresh icon-white"></i> -->
+      <!--   <span>{%=locale.fileupload.update%}</span> -->
+      <!-- </button> -->
+      <!-- <input type="checkbox" name="update" value="1"> -->
     </td>
   </tr>
   {% } %}
