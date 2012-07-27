@@ -113,9 +113,9 @@ def author(request, author_id):
                  fileList.append(p.image.path)
                  exportPath.append(filename+p.published_at.strftime(dir_type)+p.title)
          print photos,fileList,exportPath
-         filepath = os.path.join(settings.MEDIA_URL, "tmp", filename+".zip")
+         filepath = os.path.join(settings.MEDIA_URL, settings.EXPORT_PATH, filename+".zip")
          execZip(fileList, exportPath, filepath)
-         return HttpResponseRedirect("/media/tmp/"+filename+".zip")
+         return HttpResponseRedirect(settings.EXPORT_URL+filename+".zip")
 def years(request):
     pass
 def year(request, year):

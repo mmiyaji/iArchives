@@ -12,6 +12,8 @@ ADMINS = (
 SQLADMIN_PASS = ""
 MANAGERS = SQLADMIN_PASS
 DBPATH = os.path.join(BASE_DIR, 'mains.db')
+EXPORT_PATH = "archives/download/"
+EXPORT_URL = "/media/"+EXPORT_PATH
 try:
     from settings_local import *
 except:
