@@ -3,59 +3,117 @@
 <!-- Masthead
      ================================================== -->
 <header class="jumbotron subhead" id="overview">
-  <h1>iArchives</h1>
+  <h1 id="title">iArchives</h1>
   <!-- <h2 id="about">本アプリケーションについて</h2> -->
   <p class="lead">
     iArchivesは写真によって知財管理を円滑かつ容易に行うためのソフトウェアです．<br>
     知財をQRコードと一緒に撮影し，アップロードすることで自動で写真を振り分け保存します．
   </p>
-  <!-- <h3>使い方</h3> -->
-  <!-- <div class="alert alert-info alert-ja"> -->
-  <!--   <ol> -->
-  <!--     <li>写真撮影</li> -->
-  <!--     <li>写真撮影</li> -->
-  <!--     <li>写真撮影</li> -->
-  <!--   </ol> -->
-  <!-- </div> -->
   <div class="subnav">
     <ul class="nav nav-pills">
-      <li><a href="#about">About</a></li>
+      <li><a href="#about">使い方の例</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          ファイルアップロード方法
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="#take_photo">1. 写真を撮る</a></li>
+          <li><a href="#tarans_photo">2. 写真をパソコンに転送</a></li>
+          <li><a href="#upload_photo">3. 写真をアップロードする</a></li>
+          <li><a href="#edit_photo">4. 写真の情報を編集する</a></li>
+        </ul>
+      </li>
     </ul>
   </div>
 </header>
+<hr class="soften">
 <div class="marketing">
-
-  <hr class="soften">
-
-  <h1>使い方の例</h1>
+  <h1 id="about">使い方の例</h1>
   <p class="marketing-byline">管理したい知財を<a href="#">QRコード</a>と一緒に写真を撮ってアップロードしてみましょう．</p>
   <ul class="thumbnails example-sites">
     <li class="span3">
       <h2>ファイルアップロード</h2>
-      <a class="thumbnail" href="#" target="_blank">
+      <a class="thumbnail" href="#about_upload">
         <img src="{{ STATIC_URL }}/img/screenshot/upload_sample.png" alt="upload sample">
       </a>
     </li>
     <li class="span3">
       <h2>写真管理</h2>
-      <a class="thumbnail" href="#" target="_blank">
+      <a class="thumbnail" href="#">
         <img src="{{ STATIC_URL }}/img/screenshot/photo_sample.png" alt="photo sample">
       </a>
     </li>
     <li class="span3">
       <h2>著者情報管理</h2>
-      <a class="thumbnail" href="#" target="_blank">
+      <a class="thumbnail" href="#">
         <img src="{{ STATIC_URL }}/img/screenshot/author_sample.png" alt="author sample">
       </a>
     </li>
     <li class="span3">
       <h2>アーカイブ化</h2>
-      <a class="thumbnail" href="#" target="_blank">
+      <a class="thumbnail" href="#">
         <img src="{{ STATIC_URL }}/img/screenshot/archive_sample.png" alt="archive sample">
       </a>
     </li>
   </ul>
-
 </div><!-- /.marketing -->
-
+<hr class="soften">
+<section>
+  <div class="page-header">
+    <h1 id="about_upload">ファイルアップロード <small>知財データの登録</small></h1>
+  </div>
+  <div class="row">
+    <div class="span4">
+      <h2 id="take_photo">1. 写真を撮る</h2>
+      <div>
+        <div class="thumbnail">
+          <img src="{{ STATIC_URL }}/img/screenshot/take_photo.png">
+          <div class="caption">
+            <p>登録したい知財をQRコードと一緒にデジタルカメラで撮影しましょう．
+              なるべくQRコードは作品の右下に設置して，きちんと四角に写るように撮影してください．
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="span4">
+      <h2 id="trans_photo">2. 写真をパソコンに転送する</h2>
+      <div>
+        <div class="thumbnail">
+          <img src="{{ STATIC_URL }}/img/screenshot/trans_photo.png">
+          <div class="caption">
+            <p>お使いのデジタルカメラ付属のケーブルなどで手元のPCに写真ファイルを転送(コピー)してください．ファイル名の変更等は必要ありません．
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="span4">
+      <h2 id="upload_photo">3. 写真をアップロードする</h2>
+      <div>
+        <div class="thumbnail">
+          <img src="{{ STATIC_URL }}/img/screenshot/upload_photo.png">
+          <div class="caption">
+            <p>お使いのWebブラウザから<a href="/upload/">写真アップロードページ</a>にアクセスして，先ほど保存した写真ファイルを選択アップロードしましょう．アップロードした写真はQRコードタグを解析して自動で著者の情報や撮影日などを入力して保存します．
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="span4">
+      <h2 id="edit_photo">4. 写真の情報を編集する</h2>
+      <div>
+        <div class="thumbnail">
+          <img src="{{ STATIC_URL }}/img/screenshot/edit_photo.png">
+          <div class="caption">
+            <p>アップロードしたファイルには自動で情報が付加されますが，間違っている場合や不十分な場合があります．その時は編集ボタンを押して手動で編集できます．
+              また，写真のキャプションやコメントなどを保存しておくこともできます．
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock main %}

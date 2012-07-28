@@ -15,6 +15,9 @@ def home(request):
     home page
     """
     temp_values = Context()
+    # temp_values = {
+    #     "subscroll":True,
+    #     }
     return render_to_response('general/index.html',temp_values,
                               context_instance=RequestContext(request))
 
