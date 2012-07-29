@@ -99,7 +99,7 @@ def author(request, author_id):
         archive_filename = int(request.POST['archive_filename'])
         # zipファイル名
         archive_zipfile = request.POST['archive_zipfile']
-        filename = archive_zipfile #"archive_"+author.student_id
+        filename = replace_validname(force_unicode(archive_zipfile)) #"archive_"+author.student_id
         dir_type = "/%Y/%m/%d/"
         if archive_type == 1:
             dir_type = "/%Y/%m/%d/"
@@ -130,9 +130,9 @@ def author(request, author_id):
                         title = p.title
                 exportPath.append(filename+p.published_at.strftime(dir_type)+title)
         print photos,fileList,exportPath
-        filepath = os.path.join(settings.MEDIA_URL, settings.EXPORT_PATH, filename)
+        filepath = os.path.join(settings.MEDIA_URL, settings.EXPORT_PATH, filename+".zip")
         execZip(fileList, exportPath, filepath)
-        return HttpResponseRedirect(settings.EXPORT_URL+filename)
+        return HttpResponseRedirect(settings.EXPORT_URL+filename+".zip")
 def years(request):
     pass
 def year(request, year):

@@ -162,10 +162,10 @@
   <hr class="soften">
   <h2 id="select_zipfile">書き出しファイル名設定</h2>
   <div>
-    <div class="controls">
+    <div class="controls input-append">
       <label class="control-label">初期設定: archive_学生ID.zip</label>
-      <input type="text" name="archive_zipfile" class="input-xlarge" value="archive_{{author.student_id}}.zip">
-
+      <input type="text" name="archive_zipfile" class="input-xlarge" value="archive_{{author.student_id}}">
+      <span class="add-on">.zip</span>
     </div>
   </div>
   {% csrf_token %}
