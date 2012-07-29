@@ -43,19 +43,19 @@
     </li>
     <li class="span3">
       <h2>写真管理</h2>
-      <a class="thumbnail" href="#">
+      <a class="thumbnail" href="#about_album">
         <img src="{{ STATIC_URL }}/img/screenshot/photo_sample.png" alt="photo sample">
       </a>
     </li>
     <li class="span3">
       <h2>著者情報管理</h2>
-      <a class="thumbnail" href="#">
+      <a class="thumbnail" href="#about_author">
         <img src="{{ STATIC_URL }}/img/screenshot/author_sample.png" alt="author sample">
       </a>
     </li>
     <li class="span3">
       <h2>アーカイブ化</h2>
-      <a class="thumbnail" href="#">
+      <a class="thumbnail" href="#about_archive">
         <img src="{{ STATIC_URL }}/img/screenshot/archive_sample.png" alt="archive sample">
       </a>
     </li>
@@ -123,15 +123,51 @@
   <div class="page-header">
     <h1 id="about_album">写真管理</h1>
   </div>
+  <div class="row">
+    <div class="span4">
+      <div class="thumbnail">
+        <a class="thumbnail" href="/photo/" alt="">
+          <img src="{{ STATIC_URL }}/img/screenshot/photo_sample.png" alt="photo">
+        </a>
+        <div class="caption">
+          <p>アップロードした写真にキャプションやコメントを登録しましょう．アーカイブ時にファイル名に指定することができます．</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 <section>
   <div class="page-header">
     <h1 id="about_author">著者情報管理</h1>
   </div>
+  <div class="row">
+    <div class="span4">
+      <div class="thumbnail">
+        <a class="thumbnail" href="/author/" alt="">
+          <img src="{{ STATIC_URL }}/img/screenshot/author_sample.png" alt="photo">
+        </a>
+        <div class="caption">
+          <p>著者の情報はQRコードタグから読み取った情報をもとに自動で生成されます．そのため自分で入力する必要はありません．</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 <section>
   <div class="page-header">
     <h1 id="about_archive">アーカイブ化</h1>
+  </div>
+  <div class="row">
+    <div class="span4">
+      <div class="thumbnail">
+        <a class="thumbnail" href="/archive/" alt="">
+          <img src="{{ STATIC_URL }}/img/screenshot/archive_sample.png" alt="photo">
+        </a>
+        <div class="caption">
+          <p>アップロードした写真を著者別に圧縮ファイルにまとめてダウンロードすることができます．ファイル名やフォルダの構造などを選択することもできます．</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 {% endblock main %}
