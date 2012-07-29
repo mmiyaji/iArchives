@@ -91,31 +91,48 @@ def author(request, author_id):
         return render_to_response('archive/author_detail.html',temp_values,
                               context_instance=RequestContext(request))
     else:
-         isarchive = request.POST.getlist('isarchive')
-         archive_type = int(request.POST['archive_type'])
-         filename = "archive_"+author.student_id
-         dir_type = "/%Y/%m/%d/"
-         if archive_type == 1:
-             dir_type = "/%Y/%m/%d/"
-         elif archive_type == 2:
-             dir_type = "/%Y/%m/"
-         elif archive_type == 3:
-             dir_type = "/%Y/"
-         elif archive_type == 4:
-             dir_type = "/"
-         photos = []
-         fileList = []
-         exportPath = []
-         for i in isarchive:
-             p = Photo.get_by_uuid(i)
-             if p:
-                 photos.append(p)
-                 fileList.append(p.image.path)
-                 exportPath.append(filename+p.published_at.strftime(dir_type)+p.title)
-         print photos,fileList,exportPath
-         filepath = os.path.join(settings.MEDIA_URL, settings.EXPORT_PATH, filename+".zip")
-         execZip(fileList, exportPath, filepath)
-         return HttpResponseRedirect(settings.EXPORT_URL+filename+".zip")
+        # アーカイブ対象の写真UUIDが入ったリスト
+        isarchive = request.POST.getlist('isarchive')
+        # ディレクトリ構造
+        archive_type = int(request.POST['archive_type'])
+        # ファイル名
+        archive_filename = int(request.POST['archive_filename'])
+        # zipファイル名
+        archive_zipfile = request.POST['archive_zipfile']
+        filename = archive_zipfile #"archive_"+author.student_id
+        dir_type = "/%Y/%m/%d/"
+        if archive_type == 1:
+            dir_type = "/%Y/%m/%d/"
+        elif archive_type == 2:
+            dir_type = "/%Y/%m/"
+        elif archive_type == 3:
+            dir_type = "/%Y/"
+        elif archive_type == 4:
+            dir_type = "/"
+        photos = []
+        fileList = []
+        exportPath = []
+        for i in isarchive:
+            p = Photo.get_by_uuid(i)
+            if p:
+                photos.append(p)
+                fileList.append(p.image.path)
+                title = ""
+                if archive_filename == 1:
+                    title = p.title
+                elif archive_filename == 2:
+                    title = p.original_title
+                else:
+                    if p.caption:
+                        title = p.caption + "." +p.title.split(".")[-1]
+                        title = replace_validname(title)
+                    else:
+                        title = p.title
+                exportPath.append(filename+p.published_at.strftime(dir_type)+title)
+        print photos,fileList,exportPath
+        filepath = os.path.join(settings.MEDIA_URL, settings.EXPORT_PATH, filename)
+        execZip(fileList, exportPath, filepath)
+        return HttpResponseRedirect(settings.EXPORT_URL+filename)
 def years(request):
     pass
 def year(request, year):
@@ -126,7 +143,7 @@ def execZip(fileList, exportPath, filename):
     # execZip(["/Users/mmiyaji/tmp/sc.JPG","/Users/mmiyaji/tmp/sc.psd","/Users/mmiyaji/tmp/scs.jpg"], ["a/sc.JPG","a/psd/sc.psd","a/scs.JPG"],"exporttest.zip")
     z = zipfile.ZipFile(filename, 'w', zipfile.ZIP_DEFLATED)
     for l,p in zip(fileList, exportPath):
-        z.write(l.encode('cp932'), p)
+        z.write(force_unicode(l).encode('cp932'), p)
     z.close()
     return filename
 

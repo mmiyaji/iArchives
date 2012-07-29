@@ -11,8 +11,6 @@ from views import *
 import simplejson, re, urllib
 from django import forms
 from scan import Scanner
-from django.utils.encoding import force_unicode, smart_str
-from django.core import serializers
 WEBSITE = 'http://ruhenheim.org/'
 MIN_FILE_SIZE = 1 # bytes
 MAX_FILE_SIZE = 20000000 # bytes

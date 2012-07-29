@@ -18,6 +18,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_protect
 from archives.models import *
+from django.utils.encoding import force_unicode, smart_str
+from django.core import serializers
 from django.conf import settings
 from django.http import Http404
 
@@ -32,7 +34,12 @@ def date_validate(date, dateformat="%Y-%m-%d"):
         return datetime.datetime.strptime(date, dateformat)
     except:
         return None
-
+def replace_validname(filename):
+    valid = ["/", "*", "?", "\\", ";", ":" ]
+    exp = "_"
+    for i in valid:
+        filename = filename.replace(i, exp)
+    return filename
 def get_page_list(page, count, search_span, view_max=13):
     # pagerのために必要な値を計算するメソッド
     pages = dict()
