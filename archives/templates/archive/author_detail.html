@@ -10,7 +10,9 @@
 <div class="subnav">
   <ul class="nav nav-pills">
     <li><a href="#select_photo">写真選択</a></li>
-    <li><a href="#select_type">書き出し形式</a></li>
+    <li><a href="#select_type">書き出しフォルダ形式設定</a></li>
+    <li><a href="#select_finelame">写真ファイル名設定</a></li>
+    <li><a href="#select_zipfile">書き出しファイル名設定</a></li>
     <li><a href="#download_archive">ダウンロード</a></li>
   </ul>
 </div>
@@ -47,7 +49,7 @@
             <label>
               <i class="icon-check"></i>
               <span>全選択</span>
-            <input type="checkbox" id="atoggle" class="atoggle" checked="checked">
+              <input type="checkbox" id="atoggle" class="atoggle" checked="checked">
             </label>
           </th>
         </tr>
@@ -57,7 +59,7 @@
         <tr class="template-download">
           <td class="preview">
             <a href="{{file.get_original_img_url}}" title="{{file.title}}" rel="gallery" download="{{file.title}}" class="thumbnail" uuid="{{file.uuid}}">
-              <img src="{{file.get_thumbnail_img_url}}">
+              <img src="{{file.get_thumbnail_img_url}}" alt="photo">
             </a>
           </td>
           <td class="name">
@@ -78,20 +80,20 @@
                 <a href="/author/{{a.student_id|urlencode}}/" target="_blank">{{a.student_id}}({{a.name}})</a>
               </li>
               {% endfor %}
-              <ul>
-                {% else %}
-                <div class="alert alert-warnig alert-block">
-                  <a class="close" data-dismiss="alert" href="#">×</a>
-                  <h4 class="alert-heading">Warning!</h4>
-                  登録された著者情報が見つかりません
-                </div>
-                {% endif %}
+            </ul>
+            {% else %}
+            <div class="alert alert-warnig alert-block">
+              <a class="close" data-dismiss="alert" href="#">×</a>
+              <h4 class="alert-heading">Warning!</h4>
+              登録された著者情報が見つかりません
+            </div>
+            {% endif %}
           </td>
           <!-- <td class="status"></td> -->
           <td class="command">
             <label>
-                <i class="icon-download"></i>
-                <span>アーカイブ対象</span>
+              <i class="icon-download"></i>
+              <span>アーカイブ対象</span>
               <input type="checkbox" class="isarchive" name="isarchive" value="{{file.uuid}}" checked="checked">
             </label>
           </td>
@@ -101,35 +103,69 @@
     </table>
   </div>
   <hr class="soften">
-  <h2 id="select_type">書き出し形式選択</h2>
+  <h2 id="select_type">書き出しフォルダ形式設定</h2>
   <div class="row thumbnails">
     <div class="span3">
       <label class="radio">
         <input type="radio" name="archive_type" value="1" checked>
         日付ごとにフォルダ分け(年月日)
-        <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype01.png">
+        <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype01.png" alt="format y/m/d">
       </label>
     </div>
     <div class="span3">
       <label class="radio">
         <input type="radio" name="archive_type" value="2">
         日付ごとにフォルダ分け(年月)
-        <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype02.png">
+        <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype02.png" alt="format y/m">
       </label>
     </div>
     <div class="span3">
       <label class="radio">
         <input type="radio" name="archive_type" value="3">
         日付ごとにフォルダ分け(年)
-        <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype03.png">
+        <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype03.png"  alt="format y">
       </label>
     </div>
     <div class="span3">
       <label class="radio">
         <input type="radio" name="archive_type" value="4">
         すべて同じフォルダ
-        <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype04.png">
+        <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype04.png" alt="same folder">
       </label>
+    </div>
+  </div>
+  <hr class="soften">
+  <h2 id="select_finelame">写真ファイル名設定</h2>
+  <div class="row thumbnails">
+    <div class="span3">
+      <label class="radio">
+        <input type="radio" name="archive_filename" value="1" checked>
+        自動設定されたファイル名(撮影日)<br>
+        例) 20120724192207_00046.jpg
+      </label>
+    </div>
+    <div class="span3">
+      <label class="radio">
+        <input type="radio" name="archive_filename" value="2">
+        オリジナル(元)のファイル名<br>
+        例) P1020016.JPG
+      </label>
+    </div>
+    <div class="span3">
+      <label class="radio">
+        <input type="radio" name="archive_filename" value="3">
+        キャプションとして設定した名前(未設定ファイルは日付)<br>
+        例) 夏季自由研究.jpg
+      </label>
+    </div>
+  </div>
+  <hr class="soften">
+  <h2 id="select_zipfile">書き出しファイル名設定</h2>
+  <div>
+    <div class="controls">
+      <label class="control-label">初期設定: archive_学生ID.zip</label>
+      <input type="text" name="archive_zipfile" class="input-xlarge" value="archive_{{author.student_id}}.zip">
+
     </div>
   </div>
   {% csrf_token %}
@@ -141,9 +177,9 @@
     </button>
   </div>
   <!-- <div id="download" class="download-btn"> -->
-<!--   <a class="btn btn-primary disabled" id="btn_archive_downlowd" href="#">ダウンロード</a> -->
-<!-- </div> -->
-</div>
+  <!--   <a class="btn btn-primary disabled" id="btn_archive_downlowd" href="#">ダウンロード</a> -->
+  <!-- </div> -->
+  <!-- </div> -->
 </form>
 {% else %}
 <p class="nocontent">アップロードされた写真がありません</p>
