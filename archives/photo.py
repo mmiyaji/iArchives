@@ -50,6 +50,7 @@ def detail(request, photo_uuid):
         "target":"photo",
         "title":u"写真詳細[ %s ]" % photo.title,
         "photo":photo,
+        "recent_authors":Author.objects.order_by("-updated_at").all()[:100],
         "subscroll":True,
         "datepicker":"datepicker",
         }
