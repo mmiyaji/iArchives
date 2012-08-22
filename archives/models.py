@@ -22,22 +22,22 @@ class Author(models.Model):
     著者モデル
     QRコードから抽出した情報を保持する
     """
-    name = models.CharField(max_length = 100, default="", blank=True, null=True)
+    name = models.CharField(max_length = 100, default="", blank=True, null=True, db_index=True)
     nickname = models.CharField(max_length=255, blank=True, null=True)
     roman = models.CharField(max_length=255, blank=True, null=True)
-    student_id = models.CharField(max_length = 100, default="", blank=True, null=True, unique=True)
+    student_id = models.CharField(max_length = 100, default="", blank=True, null=True, unique=True, db_index=True)
     ROLL_CHOICES = (
         ('s','Student'),
         ('t','Teacher'),
         ('g','Graduated'),
         ('e','Etcetera'),
         )
-    roll = models.CharField(max_length=10, choices=ROLL_CHOICES, default="s")
-    # isvalid = models.BooleanField(default=True)
-    admitted_at = models.DateTimeField(blank=True, null=True)
-    graduated_at = models.DateTimeField(blank=True, null=True)
-    updated_at = models.DateTimeField(auto_now = True)
-    created_at = models.DateTimeField(auto_now_add = True)
+    roll = models.CharField(max_length=10, choices=ROLL_CHOICES, default="s", db_index=True)
+    isvalid = models.BooleanField(default=True, db_index=True)
+    admitted_at = models.DateTimeField(blank=True, null=True, db_index=True)
+    graduated_at = models.DateTimeField(blank=True, null=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now = True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add = True, db_index=True)
     def get_photos(self, span=10, page=0, search_query=None, isvalid=True, order="-created_at", all=False):
         """
         自分の著作を返す
@@ -60,7 +60,7 @@ class Author(models.Model):
         # try:
         if True:
             # 検索対象のすべてのエントリー数とSPANで区切ったエントリーを返す
-            result = Author.objects.order_by(order)#.filter(isvalid=isvalid)
+            result = Author.objects.order_by(order).filter(isvalid=isvalid)
             if search_query:
                 qs = [Q(name__icontains=w) for w in search_query]
                 query = qs.pop()
@@ -113,8 +113,8 @@ class Photo(models.Model):
     アップロードした写真を保存、保存時にQRコードとExif情報を解析してメタ情報を記録しておく
     保存時には、自動で縮小したサムネイル用画像も作成する
     """
-    authors = models.ManyToManyField(Author, blank=True, null=True)
-    uuid = models.CharField(max_length = 32, default="")
+    authors = models.ManyToManyField(Author, blank=True, null=True, db_index=True)
+    uuid = models.CharField(max_length = 32, default="", db_index=True)
     title = models.CharField(max_length = 100, default="", blank=True, null=True)
     original_title = models.CharField(max_length = 100, default="", blank=True, null=True)
     image = models.ImageField(upload_to=get_origin_photo_upload_path,
@@ -133,10 +133,10 @@ class Photo(models.Model):
     thumbnail_height = models.IntegerField(blank=True, null=True)
     caption = models.CharField(max_length = 250, default="", blank=True, null=True)
     comment = models.TextField(default="", blank=True, null=True)
-    isvalid = models.BooleanField(default=True)
-    published_at = models.DateTimeField(blank=True, null=True)
-    updated_at = models.DateTimeField(auto_now = True)
-    created_at = models.DateTimeField(auto_now_add = True)
+    isvalid = models.BooleanField(default=True, db_index=True)
+    published_at = models.DateTimeField(blank=True, null=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now = True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add = True, db_index=True)
 
     @staticmethod
     def get_items(author=None, span=10, page=0, isvalid=True, search_query=None, order="-published_at", all=False):

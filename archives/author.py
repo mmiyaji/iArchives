@@ -94,13 +94,22 @@ def update(request, author_id):
         param = {
             "name":request.POST['name'],
             "student_id":request.POST['student_id'],
+            "admitted_year":request.POST['admitted_year'],
             "nickname":request.POST['nickname'],
             }
-        print param
+        print "param",param
         if param['name']:
             author.name = param['name']
         if param['student_id']:
             author.student_id = param['student_id']
+            adate = None
+            try:
+                adate = date_validate(param['admitted_year'].replace(u"　",u" ").strip()+"-04-01")
+                print "A",adate
+            except:
+                pass
+            print adate
+            author.admitted_at = adate
         if param['nickname']:
             author.nickname = param['nickname']
         author.save()

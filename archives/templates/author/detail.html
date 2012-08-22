@@ -119,6 +119,12 @@
           </div>
         </div>
         <div class="control-group">
+          <label class="control-label" for="input_admitted">入学年度</label>
+          <div class="controls">
+            <input type="text" class="input-xlarge" name="admitted_year" value="{{author.admitted_at.year}}">
+          </div>
+        </div>
+        <div class="control-group">
           <label class="control-label" for="input_nickname">ニックネーム</label>
           <div class="controls">
             <input type="text" class="input-xlarge" name="nickname" value="{{author.nickname|default:""}}">

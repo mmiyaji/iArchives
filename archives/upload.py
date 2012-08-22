@@ -138,14 +138,23 @@ class UploadHandler(object):
                             if not author:
                                 author = Author()
                                 author.student_id = element[2].replace("　"," ").strip()
+                                # 学籍番号の最初4桁を入学年度として扱う
+                                adate = None
+                                try:
+                                    # せめて数字かどうかチェック それ以外なら今日の日付を入力
+                                    ayear = int(element[2].replace("　"," ").strip()[:4])
+                                    adate = date_validate(str(ayear)+"-04-01")
+                                except:
+                                    pass
+                                if not adate:
+                                    adate = datetime.datetime.now()
+                                author.admitted_at = adate
                                 author.name = element[1].replace("　"," ").strip()
                                 author.nickname = element[3].replace("　"," ").strip()
                                 author.save()
                             authors.append(author)
-                # photo.author_id = 1
                 photo = Photo.get_by_pub_and_name(published_at, result["name"])
                 if photo:
-                    print "Already exists?"
                     result['already'] = True
                 else:
                     photo = Photo()
@@ -163,9 +172,8 @@ class UploadHandler(object):
                 # result['authors'] = serializers.serialize("json", photo.authors.all())
                 if len(photo.authors.all()):
                     result['author'] = {'name':photo.authors.all()[0].name,
-                                        'student_id':photo.authors.all()[0].student_id}
-                # else:
-                #     result['author'] = None
+                                        'student_id':photo.authors.all()[0].student_id,
+                                        'admitted_year':photo.authors.all()[0].admitted_at.year}
                 result['published_at'] = photo.published_at.strftime("%Y-%m-%d %H:%M:%S")
                 result['uuid'] = photo.uuid
                 result['caption'] = photo.caption

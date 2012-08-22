@@ -30,7 +30,7 @@
       </div>
       {% } %}
       {% if (file.author) { %}
-      <a href="/author/{%=file.author.student_id%}/" target="_blank"><p>Author: {%=file.author.name%}<small> ID: {%=file.author.student_id%}</small></p></a>
+      <a href="/author/{%=file.author.student_id%}/" target="_blank"><p>Author: {%=file.author.name%}<small><br>ID: {%=file.author.student_id%}<br>入学年度: {%=file.author.admitted_year%}</small></p></a>
       {% } else { %}
       <div class="alert alert-warnig alert-block">
         <a class="close" data-dismiss="alert" href="#">×</a>
