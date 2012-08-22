@@ -83,12 +83,18 @@
                 </div>
                 {% endif %}
           </td>
-          <td class="delete">
-            <button class="btn btn-danger" data-type="DELETE" data-url="/photo/{{file.uuid}}/delete/">
-              <i class="icon-trash icon-white"></i>
-              <span>削除</span>
-            </button>
-            <!-- <input type="checkbox" name="delete" value="1"> -->
+          <!-- <td class="delete"> -->
+          <!--   <button class="btn btn-danger" data-type="DELETE" data-url="/photo/{{file.uuid}}/delete/"> -->
+          <!--     <i class="icon-trash icon-white"></i> -->
+          <!--     <span>削除</span> -->
+          <!--   </button> -->
+          <!--   <\!-- <input type="checkbox" name="delete" value="1"> -\-> -->
+          <!-- </td> -->
+          <td class="update">
+            <a class="btn btn-success" href="/photo/{{file.uuid}}/">
+              <i class="icon-refresh icon-white"></i>
+              編集
+            </a>
           </td>
         </tr>
         {% endfor %}

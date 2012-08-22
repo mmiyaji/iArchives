@@ -35,7 +35,24 @@
       <i class="icon-download icon-white"></i>
       <span>Download</span>
     </a>
+    <form method="POST" action="/photo/{{photo.uuid}}/delete/">
+      <button type="submit" class="btn btn-danger">
+        <i class="icon-trash icon-white"></i>
+        <span>削除</span>
+      </button>
+      {% csrf_token %}
+    </form>
   </div>
+  <!-- <div class="modal hide" id="delete_{{file.uuid}}"> -->
+  <!--   <div class="modal-header"> -->
+  <!--     <button class="close" data-dismiss="modal">x</button> -->
+  <!--     <h3>削除してもよいですか？</h3> -->
+  <!--   </div> -->
+  <!--   <div class="modal-footer"> -->
+  <!--     <a href="#" class="btn btn-danger">削除</a> -->
+  <!--     <a href="#" class="btn">キャンセル</a> -->
+  <!--   </div> -->
+  <!-- </div> -->
   <hr class="soften">
   <div class="photo-info" id="info">
     <h2>写真の詳細</h2>

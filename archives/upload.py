@@ -164,7 +164,7 @@ class UploadHandler(object):
                 photo.title = name
                 photo.image = fieldStorage
                 photo.original_title = result['name']
-                photo.authors.clear()
+                # photo.authors.clear()
                 for a in authors:
                     photo.authors.add(a)
                 photo.save()

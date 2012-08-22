@@ -57,13 +57,28 @@ def detail(request, photo_uuid):
     return render_to_response('photo/detail.html',temp_values,
                               context_instance=RequestContext(request))
 
+@csrf_protect
 def delete(request, photo_uuid):
     """
     Case of DELETE REQUEST '/photo/<photo_uuid>/delete/'
     対象画像の削除
     DELETE リクエストにのみレスポンス
     """
-
+    request_type = request.method
+    print request_type
+    logger.debug(request_type)
+    if request_type == 'GET':
+        raise Http404
+    elif request_type == 'OPTION' or request_type == 'HEAD':
+        return HttpResponse("OK")
+    elif request_type == 'POST' or request_type == 'DELETE':
+        # uuidからPhotoを取得
+        photo = Photo.get_by_uuid(photo_uuid)
+        if not photo:
+            # 見つからない場合は404エラー送出
+            raise Http404
+        photo.delete()
+        return HttpResponseRedirect("/")
 @csrf_protect
 def update(request, photo_uuid):
     """
