@@ -40,34 +40,62 @@ def authors(request):
     著者アーカイブ化(ダウンロード)ページ
     """
     temp_values = Context()
-    page=1
-    span = 30
-    search_query = None
-    admitted_query = None
-    if request.GET.has_key('page'):
-        page = int(request.GET['page'])
-    if request.GET.has_key('span'):
-        span = int(request.GET['span'])
-    if request.GET.has_key('q'):
-        search_query = request.GET['q'].replace(u"　", " ").split(" ")
-    if request.GET.has_key('a'):
-        admitted_query = int(request.GET['a'])
-    authors,entry_count = Author.get_items(span=span, page=page, search_query=search_query, admitted_query=admitted_query, order="-created_at")
-    print authors
-    page_list,pages = get_page_list(page, entry_count, span)
-    temp_values = {
-        "target":"author",
-        "title":u"製作者(著者)一覧ページ",
-        "authors":authors,
-        "auth_years":Author.get_years(),
-        "page_list":page_list,
-        "pages":pages,
-        "search_query":search_query,
-        "admitted_query":admitted_query,
-        }
-    return render_to_response('author/index.html',temp_values,
+    request_type = request.method
+    if request_type == 'GET':
+        page=1
+        span = 100
+        search_query = None
+        admitted_query = None
+        if request.GET.has_key('page'):
+            page = int(request.GET['page'])
+        if request.GET.has_key('span'):
+            span = int(request.GET['span'])
+        if request.GET.has_key('q'):
+            search_query = request.GET['q'].replace(u"　", " ").split(" ")
+        if request.GET.has_key('a'):
+            admitted_query = int(request.GET['a'])
+        authors,entry_count = Author.get_items(span=span, page=page, search_query=search_query, admitted_query=admitted_query, order="-created_at")
+        print authors
+        page_list,pages = get_page_list(page, entry_count, span)
+        temp_values = {
+            "target":"author",
+            "title":u"製作者(著者)一覧ページ",
+            "authors":authors,
+            "auth_years":Author.get_years(),
+            "page_list":page_list,
+            "pages":pages,
+            "search_query":search_query,
+            "admitted_query":admitted_query,
+            }
+        return render_to_response('archive/authors.html',temp_values,
                               context_instance=RequestContext(request))
-
+    else:
+        ziplist = []
+        exportlist = []
+        # アーカイブ対象のユーザIDが入ったリスト
+        isarchive = request.POST.getlist('isarchive')
+        # ディレクトリ構造
+        archive_type = int(request.POST['archive_type'])
+        # ファイル名
+        archive_filename = int(request.POST['archive_filename'])
+        # zipファイル名
+        archive_zipfile = request.POST['archive_zipfile']
+        filename = replace_validname(force_unicode(archive_zipfile)) #"archive_"+author.student_id
+        for i in isarchive:
+            author = Author.get_by_student_id(i)
+            if not author:
+                continue
+            zip_filename = replace_validname(force_unicode(i))
+            print zip_filename
+            files,entry_count = author.get_photos(all=True, listvalue="uuid")
+            z = createZip(list(files[0]), archive_type, archive_filename, zip_filename)
+            filepath = os.path.join(settings.MEDIA_URL, settings.EXPORT_PATH, zip_filename+".zip")
+            ziplist.append(filepath)
+            exportlist.append(zip_filename+".zip")
+        all_filepath = os.path.join(settings.EXPORT_URL, filename+".zip")
+        filepath = os.path.join(settings.MEDIA_URL, settings.EXPORT_PATH, filename+".zip")
+        execZip(ziplist, exportlist, filepath)
+        return HttpResponseRedirect(all_filepath)
 def author(request, author_id):
     """
     Case of GET REQUEST '/archive/author/<author_id>/'
@@ -104,40 +132,46 @@ def author(request, author_id):
         archive_filename = int(request.POST['archive_filename'])
         # zipファイル名
         archive_zipfile = request.POST['archive_zipfile']
-        filename = replace_validname(force_unicode(archive_zipfile)) #"archive_"+author.student_id
+        return HttpResponseRedirect(createZip(isarchive, archive_type, archive_filename, archive_zipfile))
+
+def createZip(isarchive, archive_type, archive_filename, archive_zipfile):
+    """
+    """
+    filename = replace_validname(force_unicode(archive_zipfile)) #"archive_"+author.student_id
+    dir_type = "/%Y/%m/%d/"
+    if archive_type == 1:
         dir_type = "/%Y/%m/%d/"
-        if archive_type == 1:
-            dir_type = "/%Y/%m/%d/"
-        elif archive_type == 2:
-            dir_type = "/%Y/%m/"
-        elif archive_type == 3:
-            dir_type = "/%Y/"
-        elif archive_type == 4:
-            dir_type = "/"
-        photos = []
-        fileList = []
-        exportPath = []
-        for i in isarchive:
-            p = Photo.get_by_uuid(i)
-            if p:
-                photos.append(p)
-                fileList.append(p.image.path)
-                title = ""
-                if archive_filename == 1:
-                    title = p.title
-                elif archive_filename == 2:
-                    title = p.original_title
+    elif archive_type == 2:
+        dir_type = "/%Y/%m/"
+    elif archive_type == 3:
+        dir_type = "/%Y/"
+    elif archive_type == 4:
+        dir_type = "/"
+    photos = []
+    fileList = []
+    exportPath = []
+    for i in isarchive:
+        p = Photo.get_by_uuid(i)
+        if p:
+            photos.append(p)
+            fileList.append(p.image.path)
+            title = ""
+            if archive_filename == 1:
+                title = p.title
+            elif archive_filename == 2:
+                title = p.original_title
+            else:
+                if p.caption:
+                    title = p.caption + "." +p.title.split(".")[-1]
+                    title = replace_validname(title)
                 else:
-                    if p.caption:
-                        title = p.caption + "." +p.title.split(".")[-1]
-                        title = replace_validname(title)
-                    else:
-                        title = p.title
-                exportPath.append(filename+p.published_at.strftime(dir_type)+title)
-        print photos,fileList,exportPath
-        filepath = os.path.join(settings.MEDIA_URL, settings.EXPORT_PATH, filename+".zip")
-        execZip(fileList, exportPath, filepath)
-        return HttpResponseRedirect(settings.EXPORT_URL+filename+".zip")
+                    title = p.title
+            exportPath.append(filename+p.published_at.strftime(dir_type)+title)
+    print photos,fileList,exportPath
+    filepath = os.path.join(settings.MEDIA_URL, settings.EXPORT_PATH, filename+".zip")
+    execZip(fileList, exportPath, filepath)
+    return os.path.join(settings.EXPORT_URL, filename+".zip")
+
 def years(request):
     pass
 def year(request, year):

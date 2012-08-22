@@ -38,11 +38,11 @@ class Author(models.Model):
     graduated_at = models.DateTimeField(blank=True, null=True, db_index=True)
     updated_at = models.DateTimeField(auto_now = True, db_index=True)
     created_at = models.DateTimeField(auto_now_add = True, db_index=True)
-    def get_photos(self, span=10, page=0, search_query=None, isvalid=True, order="-created_at", all=False):
+    def get_photos(self, span=10, page=0, search_query=None, isvalid=True, order="-created_at", all=False, listvalue=None):
         """
         自分の著作を返す
         """
-        result,count = Photo.get_items(author=self, span=span, page=page, search_query=search_query, isvalid=isvalid, order=order, all=all)
+        result,count = Photo.get_items(author=self, span=span, page=page, search_query=search_query, isvalid=isvalid, order=order, all=all, listvalue=listvalue)
         return result,count
     def get_photo_num(self):
         """
@@ -57,7 +57,7 @@ class Author(models.Model):
         """
         return Author.objects.dates('admitted_at', 'year')
     @staticmethod
-    def get_items(span=10, page=0, search_query=None, admitted_query=None, isvalid=True, order="-created_at", all=False):
+    def get_items(span=10, page=0, search_query=None, admitted_query=None, isvalid=True, order="-created_at", all=False, listvalue=None):
         result = None
         result_count = 0
         if page!=0:
@@ -78,6 +78,8 @@ class Author(models.Model):
             result_count = result.count()
             if not all:
                 result = result[page:endpage]
+            if listvalue:
+                result = result.values_list(listvalue)
         # except:
         #     pass
         return result, result_count
@@ -147,7 +149,7 @@ class Photo(models.Model):
     created_at = models.DateTimeField(auto_now_add = True, db_index=True)
 
     @staticmethod
-    def get_items(author=None, span=10, page=0, isvalid=True, search_query=None, admitted_query=None, order="-published_at", all=False):
+    def get_items(author=None, span=10, page=0, isvalid=True, search_query=None, admitted_query=None, order="-published_at", all=False, listvalue=None):
         result = None
         result_count = 0
         if page!=0:
@@ -169,6 +171,8 @@ class Photo(models.Model):
             result_count = result.count()
             if not all:
                 result = result[page:endpage]
+            if listvalue:
+                result = result.values_list(listvalue)
         except:
             pass
         return result, result_count

@@ -1,0 +1,219 @@
+{% extends "base/base.html" %}
+{% block main %}
+<!-- Masthead
+     ================================================== -->
+<header class="jumbotron subhead" id="overview">
+  <h1 id="title">著者一覧</h1>
+  <p class="lead">{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示 / {{pages.now_page}}ページ目{% endif %}</p>
+</header>
+<!-- Photo view
+     ================================================== -->
+<div class="btn-toolbar">
+  <!-- <div class="btn-group"> -->
+  <!--   <button class="btn">ソート順序(学籍番号)</button> -->
+  <!--   <button class="btn dropdown-toggle" data-toggle="dropdown"> -->
+  <!--     <span class="caret"></span> -->
+  <!--   </button> -->
+  <!--   <ul class="dropdown-menu"> -->
+  <!--     <\!-- dropdown menu links -\-> -->
+  <!--     <li><a href="#">ソート順序(学籍番号)</a></li> -->
+  <!--     <li><a href="#">ソート順序(氏名)</a></li> -->
+  <!--     <li><a href="#">ソート順序(更新日)</a></li> -->
+  <!--   </ul> -->
+  <!-- </div> -->
+  <!-- <div class="btn-group"> -->
+  <!--   <button class="btn">昇順</button> -->
+  <!--   <button class="btn dropdown-toggle" data-toggle="dropdown"> -->
+  <!--     <span class="caret"></span> -->
+  <!--   </button> -->
+  <!--   <ul class="dropdown-menu"> -->
+  <!--     <\!-- dropdown menu links -\-> -->
+  <!--     <li><a href="#">昇順</a></li> -->
+  <!--     <li><a href="#">降順</a></li> -->
+  <!--   </ul> -->
+  <!-- </div> -->
+  <form class="form-search form-inline input-prepend" action="/archive/author/" method="GET" accept-charset="UTF-8">
+    <span class="add-on">入学年度</span>
+    <select class="input-medium" name="a">
+      <option value="0">すべて</option>
+      {% for y in auth_years %}
+      <option value="{{y.year}}"{% ifequal y.year admitted_query %}selected{% endifequal %}>{{y.year}} 年度</option>
+      {% endfor %}
+    </select>
+    <span class="add-on">氏名</span>
+    <input type="text" class="input-medium" name="q">
+    <button type="submit" class="btn">検索</button>
+  </form>
+  <div class="pagination">
+    <ul>
+      <p>{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示{% endif %}</p>
+      {% if pages.pre_page %}
+      <li><a href="/archive/author/?page={{pages.pre_page}}">&laquo;</a></li>
+      {% endif %}
+      {% for page in page_list %}{% ifequal page pages.now_page %}
+      <li class="active">
+        <a href="#">{{page}}</a>
+      </li>{% else %}
+      {% ifequal page -1 %}
+      <li class="disabled"><a href="#">...</a></li>
+      {% else %}
+      <li><a href="/archive/author/?page={{page}}">{{page}}</a></li>
+      {% endifequal %}{% endifequal %}{% endfor %}
+      {% if pages.next_page %}
+      <li><a href="/archive/author/?page={{pages.next_page}}">&raquo;</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+<section>
+  {% if search_query %}
+  <div class="page-header">
+    <h1>{% if admitted_query %}{{admitted_query}} 年度生 {% endif %}{% if search_query %}[ {% for s in search_query %}{{s}} {% endfor %} ]{% endif %}検索結果</h1>
+  </div>
+  {% endif %}
+  <form id="fileuploads" action="/archive/author/" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
+    <div>
+      <table id="author_tables" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>学籍番号</th>
+            <th>入学年度</th>
+            <th>氏名</th>
+            <th>種別</th>
+            {# <th>ニックネーム</th> #}
+            {#- <th>氏名読み</th> #}
+            <th>最終更新日</th>
+            <th>作成日</th>
+            <th>登録作品数</th>
+            <th>
+              <label>
+                <i class="icon-check"></i>
+                <span>全選択</span>
+                <input type="checkbox" id="atoggle" class="atoggle" checked="checked">
+              </label>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for author in authors %}
+          <tr id="author_{{author.student_id|urlencode}}">
+            <td>{{ forloop.counter }}</td>
+            <td>{{author.student_id}}</td>
+            <td>{{author.admitted_at.year}}</td>
+            <td><a href="/author/{{author.student_id}}/" target="_blank">{{author.name}}</a></td>
+            <td>{{author.get_roll_display}}</td>
+            {# <td>{{author.nickname}}</td> #}
+            {# <td>{{author.roman}}</td> #}
+            <td>{{author.updated_at}}</td>
+            <td>{{author.created_at}}</td>
+            <td>{{author.get_photo_num}}</td>
+            <td class="command">
+              <label>
+                <i class="icon-download"></i>
+                <span>アーカイブ対象</span>
+                <input type="checkbox" class="isarchive" name="isarchive" value="{{author.student_id}}" checked="checked">
+              </label>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination">
+      <p>{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示{% endif %}</p>
+      <ul>
+        {% if pages.pre_page %}
+        <li><a href="/author/?page={{pages.pre_page}}">&laquo;</a></li>
+        {% endif %}
+        {% for page in page_list %}{% ifequal page pages.now_page %}
+        <li class="active">
+          <a href="#">{{page}}</a>
+        </li>{% else %}
+        {% ifequal page -1 %}
+        <li class="disabled"><a href="#">...</a></li>
+        {% else %}
+        <li><a href="/author/?page={{page}}">{{page}}</a></li>
+        {% endifequal %}{% endifequal %}{% endfor %}
+        {% if pages.next_page %}
+        <li><a href="/author/?page={{pages.next_page}}">&raquo;</a></li>
+        {% endif %}
+      </ul>
+    </div>
+    <hr class="soften">
+    <h2 id="select_type">書き出しフォルダ形式設定</h2>
+    <div class="row thumbnails">
+      <div class="span3">
+        <label class="radio">
+          <input type="radio" name="archive_type" value="1" checked>
+          日付ごとにフォルダ分け(年月日)
+          <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype01.png" alt="format y/m/d">
+        </label>
+      </div>
+      <div class="span3">
+        <label class="radio">
+          <input type="radio" name="archive_type" value="2">
+          日付ごとにフォルダ分け(年月)
+          <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype02.png" alt="format y/m">
+        </label>
+      </div>
+      <div class="span3">
+        <label class="radio">
+          <input type="radio" name="archive_type" value="3">
+          日付ごとにフォルダ分け(年)
+          <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype03.png"  alt="format y">
+        </label>
+      </div>
+      <div class="span3">
+        <label class="radio">
+          <input type="radio" name="archive_type" value="4">
+          すべて同じフォルダ
+          <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype04.png" alt="same folder">
+        </label>
+      </div>
+    </div>
+    <hr class="soften">
+    <h2 id="select_finelame">写真ファイル名設定</h2>
+    <div class="row thumbnails">
+      <div class="span3">
+        <label class="radio">
+          <input type="radio" name="archive_filename" value="1" checked>
+          自動設定されたファイル名(撮影日)<br>
+          例) 20120724192207_00046.jpg
+        </label>
+      </div>
+      <div class="span3">
+        <label class="radio">
+          <input type="radio" name="archive_filename" value="2">
+          オリジナル(元)のファイル名<br>
+          例) P1020016.JPG
+        </label>
+      </div>
+      <div class="span3">
+        <label class="radio">
+          <input type="radio" name="archive_filename" value="3">
+          キャプションとして設定した名前(未設定ファイルは日付)<br>
+          例) 夏季自由研究.jpg
+        </label>
+      </div>
+    </div>
+    <hr class="soften">
+    <h2 id="select_zipfile">書き出しファイル名設定</h2>
+    <div>
+      <div class="controls input-append">
+        <label class="control-label">初期設定: archive_日付.zip</label>
+        <input type="text" name="archive_zipfile" class="input-xlarge" value="archive_{% now 'YmdHis' %}">
+        <span class="add-on">.zip</span>
+      </div>
+    </div>
+    {% csrf_token %}
+    <hr class="soften">
+    <h2 id="download_archive">ダウンロード</h2>
+    <div id="download" class="download-btn">
+      <button class="btn btn-success" type="submit">
+        <span>アーカイブ化</span>
+      </button>
+    </div>
+  </form>
+</section>
+{% endblock main %}
