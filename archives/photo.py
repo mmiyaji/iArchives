@@ -106,6 +106,12 @@ def update(request, photo_uuid):
                     author = Author()
                     author.name = aname
                     author.student_id = aid
+                    adate = None
+                    try:
+                        adate = date_validate(aid[:4]+"-04-01")
+                    except:
+                        pass
+                    author.admitted_at = adate
                     author.save()
                 photo.authors.add(author)
         if param['caption']:

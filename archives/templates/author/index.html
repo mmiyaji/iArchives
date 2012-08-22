@@ -33,8 +33,15 @@
   <!--   </ul> -->
   <!-- </div> -->
   <form class="form-search form-inline input-prepend" action="/author/" method="GET" accept-charset="UTF-8">
+    <span class="add-on">入学年度</span>
+    <select class="input-medium" name="a">
+      <option value="0">すべて</option>
+      {% for y in auth_years %}
+      <option value="{{y.year}}"{% ifequal y.year admitted_query %}selected{% endifequal %}>{{y.year}} 年度</option>
+      {% endfor %}
+    </select>
     <span class="add-on">氏名</span>
-    <input type="text" class="input-medium" name="search_query">
+    <input type="text" class="input-medium" name="q">
     <button type="submit" class="btn">検索</button>
   </form>
   <div class="pagination">
@@ -61,7 +68,7 @@
 <section>
   {% if search_query %}
   <div class="page-header">
-  <h1>[ {% for s in search_query %}{{s}} {% endfor %} ]検索結果</h1>
+  <h1>{% if admitted_query %}{{admitted_query}} 年度生 {% endif %}{% if search_query %}[ {% for s in search_query %}{{s}} {% endfor %} ]{% endif %}検索結果</h1>
   </div>
   {% endif %}
   <div>
@@ -70,6 +77,7 @@
       <tr>
         <th>#</th>
         <th>学籍番号</th>
+        <th>入学年度</th>
         <th>氏名</th>
         <th>種別</th>
         {# <th>ニックネーム</th> #}
@@ -85,6 +93,7 @@
       <tr id="author_{{author.student_id|urlencode}}">
         <td>{{ forloop.counter }}</td>
         <td>{{author.student_id}}</td>
+        <td>{{author.admitted_at.year}}</td>
         <td>{{author.name}}</td>
         <td>{{author.get_roll_display}}</td>
         {# <td>{{author.nickname}}</td> #}
