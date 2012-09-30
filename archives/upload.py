@@ -132,7 +132,11 @@ class UploadHandler(object):
                 if zimage:
                     for i in zimage:
                         if "QRCODE" == str(i.type):
-                            element = i.data.split(",")
+                            # ","がひとつ以上あれば旧式のQRコード
+                            if i.data.count(",") < 1: # 新バージョンのQRコード．学生IDのみ入力されている
+                                element = ["do-ele","",i.data,""]
+                            else: # 旧バージョンのQRコード．"do-ele",氏名,学生ID,nickname,passwd
+                                element = i.data.split(",")
                             print element
                             author = Author.get_by_student_id(element[2])
                             if not author:
