@@ -240,4 +240,4 @@ class Photo(models.Model):
             super(Photo, self).save(force_update, force_insert)
 
 class Meta:
-    ordering = ['-create_at']
+    ordering = ['-created_at']
