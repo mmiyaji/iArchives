@@ -6,7 +6,10 @@ scan.py
 Created by mmiyaji on 2012-07-16.
 Copyright (c) 2012  ruhenheim.org. All rights reserved.
 """
-import zbar
+try:
+    import zbar
+except:
+    pass
 from PIL import Image, ExifTags
 
 class Scanner():

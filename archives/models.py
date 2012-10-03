@@ -211,7 +211,13 @@ class Photo(models.Model):
     def save(self, force_update=False, force_insert=False, thumb_size=(180,300), isFirst = False):
         if isFirst:
             if not self.uuid:
-                self.uuid = uuid.uuid4().hex
+                # 万が一uuidの被りがあった場合は再精製。最大10回繰り返す。
+                cuuid = ""
+                for i in range(0,10):
+                    cuuid = uuid.uuid4().hex
+                    if not Photo.get_by_uuid(cuuid):
+                        break
+                self.uuid = cuuid
             super(Photo, self).save(force_update, force_insert)
         else:
             image = Image.open(self.image)
