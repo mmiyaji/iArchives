@@ -7,10 +7,8 @@ Created by mmiyaji on 2012-07-16.
 Copyright (c) 2012  ruhenheim.org. All rights reserved.
 """
 import zbar
-try:
-    from PIL import Image, ExifTags
-except:
-    pass
+from PIL import Image, ExifTags
+
 class Scanner():
     """
     Scan QR tag and Exif form image.
