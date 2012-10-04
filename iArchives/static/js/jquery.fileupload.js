@@ -73,7 +73,7 @@
             // To limit the number of files uploaded with one XHR request,
             // set the following option to an integer greater than 0:
             // limitMultiFileUploads: undefined,
-            limitMultiFileUploads: 3,
+            limitMultiFileUploads: 1,
             // Set the following option to true to issue all file upload requests
             // in a sequential order:
             sequentialUploads: false,
