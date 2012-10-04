@@ -149,6 +149,7 @@ def update(request, author_id):
         # 必要なリクエストパラメータを変数に抽出
         param = {
             "name":request.POST['name'],
+            "roman":request.POST['roman'],
             "student_id":request.POST['student_id'],
             "admitted_year":request.POST['admitted_year'],
             "nickname":request.POST['nickname'],
@@ -156,6 +157,8 @@ def update(request, author_id):
         print "param",param
         if param['name']:
             author.name = param['name']
+        if param['roman']:
+            author.roman = param['roman']
         if param['student_id']:
             author.student_id = param['student_id']
             adate = None
