@@ -76,6 +76,57 @@ def detail(request, author_id):
     return render_to_response('author/detail.html',temp_values,
                               context_instance=RequestContext(request))
 @csrf_protect
+def meiboadd(request):
+    """
+    Case of UPDATE REQUEST '/author/meibo/add/'
+    著者の一括登録
+    UPDATE/POST リクエストにのみレスポンス
+    """
+    request_type = request.method
+    print request_type
+    logger.debug(request_type)
+    if request_type == 'GET':
+        raise Http404
+    elif request_type == 'OPTION' or request_type == 'HEAD':
+        return HttpResponse("OK")
+    elif request_type == 'POST' or request_type == 'UPDATE':
+        # 学籍番号,氏名,ニックネーム,名前のよみ, の形式で入力
+        meibo = request.POST['meibo']
+        # 行ごとに分割
+        meibos = meibo.split("\n")
+        for m in meibos:
+            # カンマ区切り に分割
+            element = m.split(",")
+            if not element:
+                continue
+            if not element[0]:
+                continue
+            author = Author.get_by_student_id(element[0].strip())
+            if not author:
+                author = Author()
+                author.student_id = element[0].strip()
+                adate = None
+                try:
+                    # せめて数字かどうかチェック それ以外なら今日の日付を入力
+                    ayear = int(element[0].strip()[:4])
+                    adate = date_validate(str(ayear)+"-04-01")
+                except:
+                    pass
+                if not adate:
+                    adate = datetime.datetime.now()
+                author.admitted_at = adate
+                if len(element) > 1:
+                    author.name = element[1].strip()
+                if len(element) > 2:
+                    author.nickname = element[2].strip()
+                if len(element) > 3:
+                    author.roman = element[3].strip()
+                author.save()
+        return HttpResponseRedirect("/author/")
+    else:
+        raise Http404
+
+@csrf_protect
 def update(request, author_id):
     """
     Case of UPDATE REQUEST '/author/<author_id>/update/'
