@@ -90,7 +90,7 @@ def meiboadd(request):
     elif request_type == 'OPTION' or request_type == 'HEAD':
         return HttpResponse("OK")
     elif request_type == 'POST' or request_type == 'UPDATE':
-        # 学籍番号,氏名,ニックネーム,名前のよみ, の形式で入力
+        # 学籍番号,名前のよみ,氏名,ニックネーム, の形式で入力
         meibo = request.POST['meibo']
         # 行ごとに分割
         meibos = meibo.split("\n")
@@ -116,11 +116,11 @@ def meiboadd(request):
                     adate = datetime.datetime.now()
                 author.admitted_at = adate
                 if len(element) > 1:
-                    author.name = element[1].strip()
+                    author.roman = element[1].strip()
                 if len(element) > 2:
-                    author.nickname = element[2].strip()
+                    author.name = element[2].strip()
                 if len(element) > 3:
-                    author.roman = element[3].strip()
+                    author.nickname = element[3].strip()
                 author.save()
         return HttpResponseRedirect("/author/")
     else:
