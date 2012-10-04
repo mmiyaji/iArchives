@@ -78,7 +78,7 @@ def delete(request, photo_uuid):
             # 見つからない場合は404エラー送出
             raise Http404
         photo.delete()
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect("/photo/")
 @csrf_protect
 def update(request, photo_uuid):
     """
