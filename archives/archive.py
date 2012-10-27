@@ -22,7 +22,6 @@ def home(request):
     if request.GET.has_key('span'):
         span = int(request.GET['span'])
     photos,entry_count = Photo.get_items(span=span, page=page, order="-created_at")
-    print photos
     page_list,pages = get_page_list(page, entry_count, span)
     temp_values = {
         "target":"archive",
@@ -55,7 +54,6 @@ def authors(request):
         if request.GET.has_key('a'):
             admitted_query = int(request.GET['a'])
         authors,entry_count = Author.get_items(span=span, page=page, search_query=search_query, admitted_query=admitted_query, order="-created_at")
-        print authors
         page_list,pages = get_page_list(page, entry_count, span)
         temp_values = {
             "target":"author",
@@ -86,7 +84,6 @@ def authors(request):
             if not author:
                 continue
             zip_filename = replace_validname(force_unicode(i))
-            print zip_filename
             files,entry_count = author.get_photos(all=True, listvalue="uuid")
             z = createZip(list(files[0]), archive_type, archive_filename, zip_filename)
             filepath = os.path.join(settings.MEDIA_URL, settings.EXPORT_PATH, zip_filename+".zip")
@@ -108,7 +105,6 @@ def author(request, author_id):
         raise Http404
     request_type = request.method
     logger.debug(request_type)
-    print request_type
     if request_type == 'GET':
         files,entry_count = author.get_photos(all=True)
         page_list,pages = get_page_list(1, entry_count, 10000)
@@ -167,7 +163,6 @@ def createZip(isarchive, archive_type, archive_filename, archive_zipfile):
                 else:
                     title = p.title
             exportPath.append(filename+p.published_at.strftime(dir_type)+title)
-    print photos,fileList,exportPath
     filepath = os.path.join(settings.MEDIA_URL, settings.EXPORT_PATH, filename+".zip")
     execZip(fileList, exportPath, filepath)
     return os.path.join(settings.EXPORT_URL, filename+".zip")

@@ -24,7 +24,6 @@ def home(request):
     if request.GET.has_key('search_query'):
         search_query = request.GET['search_query'].replace(u"　", " ").split(" ")
     photos,entry_count = Photo.get_items(span=span, page=page, search_query=search_query, order="-created_at")
-    print photos
     page_list,pages = get_page_list(page, entry_count, span)
     temp_values = {
         "target":"photo",
@@ -65,7 +64,6 @@ def delete(request, photo_uuid):
     DELETE リクエストにのみレスポンス
     """
     request_type = request.method
-    print request_type
     logger.debug(request_type)
     if request_type == 'GET':
         raise Http404
@@ -87,7 +85,6 @@ def update(request, photo_uuid):
     UPDATE/POST リクエストにのみレスポンス
     """
     request_type = request.method
-    print request_type
     logger.debug(request_type)
     if request_type == 'GET':
         raise Http404
@@ -106,7 +103,6 @@ def update(request, photo_uuid):
             "comment":request.POST['comment'],
             "pubdate":request.POST['pubdate'],
             }
-        print param
         # author登録
         photo.authors.clear()
         for i in param['authors'].split(','):

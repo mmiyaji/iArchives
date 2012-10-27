@@ -36,7 +36,6 @@ def home(request):
             query_type = True
             search_option += "qt=1&amp;"
     authors,entry_count = Author.get_items(span=span, page=page, search_query=search_query, admitted_query=admitted_query, query_type=query_type, order="-created_at")
-    print authors
     page_list,pages = get_page_list(page, entry_count, span)
     temp_values = {
         "target":"author",
@@ -94,7 +93,6 @@ def meiboadd(request):
     UPDATE/POST リクエストにのみレスポンス
     """
     request_type = request.method
-    print request_type
     logger.debug(request_type)
     if request_type == 'GET':
         raise Http404
@@ -145,7 +143,6 @@ def update(request, author_id):
     UPDATE/POST リクエストにのみレスポンス
     """
     request_type = request.method
-    print request_type
     logger.debug(request_type)
     if request_type == 'GET':
         raise Http404
@@ -165,7 +162,6 @@ def update(request, author_id):
             "admitted_year":request.POST['admitted_year'],
             "nickname":request.POST['nickname'],
             }
-        print "param",param
         if param['name']:
             author.name = param['name']
         if param['roman']:
@@ -175,10 +171,8 @@ def update(request, author_id):
             adate = None
             try:
                 adate = date_validate(param['admitted_year'].replace(u"　",u" ").strip()+"-04-01")
-                print "A",adate
             except:
                 pass
-            print adate
             author.admitted_at = adate
         if param['nickname']:
             author.nickname = param['nickname']

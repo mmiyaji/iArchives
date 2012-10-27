@@ -89,8 +89,6 @@ class UploadHandler(object):
     def handle_upload(self):
         results = []
         blob_keys = []
-        print len(self._request.POST),self._request.POST
-        print self._request.FILES.getlist('files[]')
         for fieldStorage in self._request.FILES.getlist('files[]'):
             if type(fieldStorage) is unicode:
                 continue
@@ -137,7 +135,6 @@ class UploadHandler(object):
                                 element = ["do-ele","",i.data,""]
                             else: # 旧バージョンのQRコード．"do-ele",氏名,学生ID,nickname,passwd
                                 element = i.data.split(",")
-                            print element
                             author = Author.get_by_student_id(element[2])
                             if not author:
                                 author = Author()
@@ -204,10 +201,8 @@ def home(request):
     URL REQUEST '/upload/'
     """
     request_type = request.method
-    # print request_type
     logger.debug(request_type)
     uhandler = UploadHandler(request)
-    print request_type
     if request_type == 'GET':
         return uhandler.uploadGET()
     elif request_type == 'OPTION' or request_type == 'HEAD':

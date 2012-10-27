@@ -115,10 +115,8 @@ def get_photo_upload_path(self, filename, types="originals"):
         # at the case of originals, set title
         name = self.title
         # self.title = name
-        print "origin: ", name, os.path.splitext(os.path.basename(self.title))[0]
     else:
         name = os.path.splitext(os.path.basename(self.title))[0]+"."+filename.split(".")[-1]
-        print "thumbs: ",name
     return os.path.join(user_path, name)
 
 class Photo(models.Model):
