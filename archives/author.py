@@ -16,9 +16,14 @@ def home(request):
     temp_values = Context()
     page=1
     span = 30
+    order = "-created_at"
     search_query = None
     admitted_query = None
     search_option = ""
+    sort_option = ""
+    s_option = ""
+    s_type = ""
+    sort_type = False # ordering type flag. False -> DESC, True -> ASC
     query_type = False # Search type flag. False -> OR, True -> AND
     if request.GET.has_key('page'):
         page = int(request.GET['page'])
@@ -28,14 +33,40 @@ def home(request):
         search_query = request.GET['q'].strip().replace(u"　", " ").split(" ")
         search_option += "q=%s&amp;" % "+".join(search_query)
     if request.GET.has_key('a'):
-        admitted_query = int(request.GET['a'])
-        if admitted_query:
-            search_option += "a=%s&amp;" % admitted_query
+        try: # int キャストで失敗したらすべての年度生を返す
+            admitted = int(request.GET['a'])
+            if admitted is not 0:
+                admitted_query = admitted
+                search_option += "a=%s&amp;" % admitted_query
+        except:
+            pass
     if request.GET.has_key('qt'):
         if request.GET['qt']:
             query_type = True
             search_option += "qt=1&amp;"
-    authors,entry_count = Author.get_items(span=span, page=page, search_query=search_query, admitted_query=admitted_query, query_type=query_type, order="-created_at")
+    if request.GET.has_key('s'):
+        # 同じクエリがきた場合、後を優先する
+        sort_option = request.GET.getlist('s')[-1]
+        search_option += "s=%s&amp;" % sort_option
+        if sort_option == "name":
+            order = "-name"
+            s_option = u"氏名"
+        elif sort_option == "id": # sort as STRINGS
+            order = "-student_id"
+            s_option = u"学籍番号"
+        elif sort_option == "update":
+            order = "-updated_at"
+            s_option = u"更新日"
+    if request.GET.has_key('st'):
+        # 同じクエリがきた場合、後を優先する
+        if int(request.GET.getlist('st')[-1]):
+            order = order.lstrip("-")
+            # sort_type = True
+            search_option += "st=1&amp;"
+            s_type = u"昇順"
+    authors,entry_count = Author.get_items(span=span, page=page, search_query=search_query,
+                                           admitted_query=admitted_query, query_type=query_type,
+                                           order=order)
     page_list,pages = get_page_list(page, entry_count, span)
     temp_values = {
         "target":"author",
@@ -48,6 +79,8 @@ def home(request):
         "admitted_query":admitted_query,
         "query_type" : query_type,
         "search_option" : search_option,
+        "sort_option": s_option,
+        "sort_type": s_type,
         }
     return render_to_response('author/index.html',temp_values,
                               context_instance=RequestContext(request))
