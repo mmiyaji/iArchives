@@ -182,7 +182,7 @@ def execZip(fileList, exportPath, filename):
     # execZip(["/Users/mmiyaji/tmp/sc.JPG","/Users/mmiyaji/tmp/sc.psd","/Users/mmiyaji/tmp/scs.jpg"], ["a/sc.JPG","a/psd/sc.psd","a/scs.JPG"],"exporttest.zip")
     z = zipfile.ZipFile(filename, 'w', zipfile.ZIP_DEFLATED)
     for l,p in zip(fileList, exportPath):
-        z.write(force_unicode(l).encode('cp932'), p)
+        z.write(force_unicode(l).encode('cp932'), p.encode('cp932'))
     z.close()
     return filename
 
