@@ -19,7 +19,7 @@
     </select>
     <span class="add-on">氏名</span>
     <input type="text" class="input-medium" name="q" value="{% for q in search_query %}{{q}} {% endfor %}">
-    <select name="qt" class="span2">
+    <select name="qt" class="input-mini">
       <option value="">OR</option>
       <option value="1"{% if query_type %} selected=selected{% endif %}>AND</option>
     </select>

@@ -57,14 +57,13 @@ class Author(models.Model):
         """
         return Author.objects.dates('admitted_at', 'year')
     @staticmethod
-    def get_items(span=10, page=0, search_query=None, admitted_query=None, query_type=False, sort_type=False, isvalid=True, order="-created_at", all=False, listvalue=None):
+    def get_items(span=10, page=0, search_query=None, admitted_query=None, query_type=False, isvalid=True, order="-created_at", all=False, listvalue=None):
         result = None
         result_count = 0
         if page!=0:
             page = page*span - span
         endpage = page + span
-        # try:
-        if True:
+        try:
             # 検索対象のすべてのエントリー数とSPANで区切ったエントリーを返す
             result = Author.objects.order_by(order).filter(isvalid=isvalid)
             if admitted_query:
@@ -92,8 +91,8 @@ class Author(models.Model):
                 result = result[page:endpage]
             if listvalue:
                 result = result.values_list(listvalue)
-        # except:
-        #     pass
+        except:
+            pass
         return result, result_count
     @staticmethod
     def get_by_student_id(keyid=""):
@@ -151,21 +150,27 @@ class Photo(models.Model):
                                   )
     thumbnail_width = models.IntegerField(blank=True, null=True)
     thumbnail_height = models.IntegerField(blank=True, null=True)
-    caption = models.CharField(max_length = 250, default="", blank=True, null=True)
-    comment = models.TextField(default="", blank=True, null=True)
+    caption = models.CharField(max_length = 250, default="", blank=True, null=True, db_index=True)
+    comment = models.TextField(default="", blank=True, null=True, db_index=True)
     isvalid = models.BooleanField(default=True, db_index=True)
     published_at = models.DateTimeField(blank=True, null=True, db_index=True)
     updated_at = models.DateTimeField(auto_now = True, db_index=True)
     created_at = models.DateTimeField(auto_now_add = True, db_index=True)
-
     @staticmethod
-    def get_items(author=None, span=10, page=0, isvalid=True, search_query=None, admitted_query=None, order="-published_at", all=False, listvalue=None):
+    def get_years():
+        """
+        すべての登録書籍の年度リストを返す
+        """
+        return Photo.objects.dates('published_at', 'year')
+    @staticmethod
+    def get_items(author=None, span=10, page=0, search_query=None, admitted_query=None, query_type=False, order="-published_at", search_target=0, isvalid=True, all=False, listvalue=None):
         result = None
         result_count = 0
         if page!=0:
             page = page*span - span
         endpage = page + span
-        try:
+        # try:
+        if True:
             # 検索対象のすべてのエントリー数とSPANで区切ったエントリーを返す
             result = Photo.objects.order_by(order).filter(isvalid=isvalid)
             if author:
@@ -173,18 +178,40 @@ class Photo(models.Model):
             if admitted_query:
                 result = result.filter(authors__admitted_at__year=admitted_query)
             if search_query:
-                Qs = [Q(title__icontains=w) for w in search_query]
-                query = qs.pop()
-                for q in qs:
-                    query |= q
+                qs1 = []
+                qs2 = []
+                query1 = []
+                query2 = []
+                if search_target is not 1:
+                    qs1 = [Q(caption__icontains=w) for w in search_query]
+                    query1 = qs1.pop()
+                if search_target is not 0:
+                    qs2 = [Q(comment__icontains=w) for w in search_query]
+                    query2 = qs2.pop()
+                if query_type: # AND method
+                    for q in qs1:
+                        query1 &= q
+                    for q in qs2:
+                        query2 &= q
+                else: # OR method
+                    for q in qs1:
+                        query1 |= q
+                    for q in qs2:
+                        query2 |= q
+                if query1 and not query2:
+                    query = query1
+                elif query2 and not query1:
+                    query = query2
+                else:
+                    query = query1 | query2
                 result = result.filter(query)
             result_count = result.count()
             if not all:
                 result = result[page:endpage]
             if listvalue:
                 result = result.values_list(listvalue)
-        except:
-            pass
+        # except:
+        #     pass
         return result, result_count
 
     @staticmethod

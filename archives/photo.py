@@ -16,21 +16,84 @@ def home(request):
     temp_values = Context()
     page=1
     span = 15
+    order = "-created_at"
     search_query = None
+    admitted_query = None
+    search_target = 0
+    search_option = ""
+    sort_option = ""
+    s_option = ""
+    s_type = ""
+    sort_type = False # ordering type flag. False -> DESC, True -> ASC
+    query_type = False # Search type flag. False -> OR, True -> AND
     if request.GET.has_key('page'):
         page = int(request.GET['page'])
     if request.GET.has_key('span'):
         span = int(request.GET['span'])
-    if request.GET.has_key('search_query'):
-        search_query = request.GET['search_query'].replace(u"　", " ").split(" ")
-    photos,entry_count = Photo.get_items(span=span, page=page, search_query=search_query, order="-created_at")
+    if request.GET.has_key('q'):
+        search_query = request.GET['q'].strip().replace(u"　", " ").split(" ")
+        search_option += "q=%s&amp;" % "+".join(search_query)
+    if request.GET.has_key('a'):
+        try: # int キャストで失敗したらすべての年度生を返す
+            admitted = int(request.GET['a'])
+            if admitted is not 0:
+                admitted_query = admitted
+                search_option += "a=%s&amp;" % admitted_query
+        except:
+            pass
+    if request.GET.has_key('t'):
+        try: # int キャストで失敗したらすべての年度生を返す
+            t = int(request.GET['t'])
+            if t is not 0:
+                search_target = t
+                search_option += "t=%s&amp;" % search_target
+        except:
+            pass
+    if request.GET.has_key('qt'):
+        if request.GET['qt']:
+            query_type = True
+            search_option += "qt=1&amp;"
+    if request.GET.has_key('s'):
+        # 同じクエリがきた場合、後を優先する
+        sort_option = request.GET.getlist('s')[-1]
+        search_option += "s=%s&amp;" % sort_option
+        if sort_option == "name":
+            order = "-name"
+            s_option = u"氏名"
+        elif sort_option == "id": # sort as STRINGS
+            order = "-student_id"
+            s_option = u"学籍番号"
+        elif sort_option == "update":
+            order = "-updated_at"
+            s_option = u"更新日"
+    if request.GET.has_key('st'):
+        # 同じクエリがきた場合、後を優先する
+        try: # キャストで失敗したら降順表示
+            if int(request.GET.getlist('st')[-1]):
+                order = order.lstrip("-")
+                # sort_type = True
+                search_option += "st=1&amp;"
+                s_type = u"昇順"
+        except:
+            pass
+    photos,entry_count = Photo.get_items(span=span, page=page, search_query=search_query,
+                                         admitted_query=admitted_query, query_type=query_type, search_target=search_target,
+                                         order=order)
     page_list,pages = get_page_list(page, entry_count, span)
     temp_values = {
         "target":"photo",
         "title":u"写真一覧ページ",
         "photos":photos,
+        "auth_years":Photo.get_years(),
         "page_list":page_list,
         "pages":pages,
+        "search_query":search_query,
+        "admitted_query":admitted_query,
+        "query_type" : query_type,
+        "search_option" : search_option,
+        "sort_option": s_option,
+        "sort_type": s_type,
+        "search_target": search_target,
         }
     return render_to_response('photo/index.html',temp_values,
                               context_instance=RequestContext(request))
