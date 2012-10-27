@@ -59,11 +59,14 @@ def home(request):
             s_option = u"更新日"
     if request.GET.has_key('st'):
         # 同じクエリがきた場合、後を優先する
-        if int(request.GET.getlist('st')[-1]):
-            order = order.lstrip("-")
-            # sort_type = True
-            search_option += "st=1&amp;"
-            s_type = u"昇順"
+        try: # キャストで失敗したら降順表示
+            if int(request.GET.getlist('st')[-1]):
+                order = order.lstrip("-")
+                # sort_type = True
+                search_option += "st=1&amp;"
+                s_type = u"昇順"
+        except:
+            pass
     authors,entry_count = Author.get_items(span=span, page=page, search_query=search_query,
                                            admitted_query=admitted_query, query_type=query_type,
                                            order=order)
