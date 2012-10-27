@@ -19,6 +19,7 @@ def home(request):
     search_query = None
     admitted_query = None
     search_option = ""
+    query_type = False # Search type flag. False -> OR, True -> AND
     if request.GET.has_key('page'):
         page = int(request.GET['page'])
     if request.GET.has_key('span'):
@@ -30,7 +31,11 @@ def home(request):
         admitted_query = int(request.GET['a'])
         if admitted_query:
             search_option += "a=%s&amp;" % admitted_query
-    authors,entry_count = Author.get_items(span=span, page=page, search_query=search_query, admitted_query=admitted_query, order="-created_at")
+    if request.GET.has_key('qt'):
+        if request.GET['qt']:
+            query_type = True
+            search_option += "qt=1&amp;"
+    authors,entry_count = Author.get_items(span=span, page=page, search_query=search_query, admitted_query=admitted_query, query_type=query_type, order="-created_at")
     print authors
     page_list,pages = get_page_list(page, entry_count, span)
     temp_values = {
@@ -42,6 +47,7 @@ def home(request):
         "pages":pages,
         "search_query":search_query,
         "admitted_query":admitted_query,
+        "query_type" : query_type,
         "search_option" : search_option,
         }
     return render_to_response('author/index.html',temp_values,

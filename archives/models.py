@@ -57,7 +57,7 @@ class Author(models.Model):
         """
         return Author.objects.dates('admitted_at', 'year')
     @staticmethod
-    def get_items(span=10, page=0, search_query=None, admitted_query=None, isvalid=True, order="-created_at", all=False, listvalue=None):
+    def get_items(span=10, page=0, search_query=None, admitted_query=None, query_type=False, isvalid=True, order="-created_at", all=False, listvalue=None):
         result = None
         result_count = 0
         if page!=0:
@@ -72,8 +72,12 @@ class Author(models.Model):
             if search_query:
                 qs = [Q(name__icontains=w) for w in search_query]
                 query = qs.pop()
-                for q in qs:
-                    query |= q
+                if query_type: # AND method
+                    for q in qs:
+                        query &= q
+                else: # OR method
+                    for q in qs:
+                        query |= q
                 result = result.filter(query)
             result_count = result.count()
             if not all:
