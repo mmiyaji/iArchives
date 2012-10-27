@@ -70,14 +70,22 @@ class Author(models.Model):
             if admitted_query:
                 result = result.filter(admitted_at__year=admitted_query)
             if search_query:
-                qs = [Q(name__icontains=w) for w in search_query]
-                query = qs.pop()
+                # 漢字とよみがなの場合を結合して検索．ANDかつ混合時には検索対象にならない
+                qs1 = [Q(name__icontains=w) for w in search_query]
+                qs2 = [Q(roman__icontains=w) for w in search_query]
+                query1 = qs1.pop()
+                query2 = qs2.pop()
                 if query_type: # AND method
-                    for q in qs:
-                        query &= q
+                    for q in qs1:
+                        query1 &= q
+                    for q in qs2:
+                        query2 &= q
                 else: # OR method
-                    for q in qs:
-                        query |= q
+                    for q in qs1:
+                        query1 |= q
+                    for q in qs2:
+                        query2 |= q
+                query = query1 | query2
                 result = result.filter(query)
             result_count = result.count()
             if not all:
