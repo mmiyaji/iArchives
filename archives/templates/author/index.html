@@ -41,14 +41,14 @@
       {% endfor %}
     </select>
     <span class="add-on">氏名</span>
-    <input type="text" class="input-medium" name="q">
+    <input type="text" class="input-medium" name="q" value="{% for q in search_query %}{{q}}{% endfor %}">
     <button type="submit" class="btn">検索</button>
   </form>
   <div class="pagination">
     <ul>
       <p>{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示{% endif %}</p>
       {% if pages.pre_page %}
-      <li><a href="/author/?page={{pages.pre_page}}">&laquo;</a></li>
+      <li><a href="/author/?{% if search_option %}{{search_option}}&{% endif %}page={{pages.pre_page}}">&laquo;</a></li>
       {% endif %}
       {% for page in page_list %}{% ifequal page pages.now_page %}
       <li class="active">
@@ -57,10 +57,10 @@
       {% ifequal page -1 %}
       <li class="disabled"><a href="#">...</a></li>
       {% else %}
-      <li><a href="/author/?page={{page}}">{{page}}</a></li>
+      <li><a href="/author/?{% if search_option %}{{search_option}}&{% endif %}page={{page}}">{{page}}</a></li>
       {% endifequal %}{% endifequal %}{% endfor %}
       {% if pages.next_page %}
-      <li><a href="/author/?page={{pages.next_page}}">&raquo;</a></li>
+      <li><a href="/author/?{% if search_option %}{{search_option}}&{% endif %}page={{pages.next_page}}">&raquo;</a></li>
       {% endif %}
     </ul>
   </div>

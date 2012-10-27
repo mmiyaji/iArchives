@@ -18,14 +18,18 @@ def home(request):
     span = 30
     search_query = None
     admitted_query = None
+    search_option = ""
     if request.GET.has_key('page'):
         page = int(request.GET['page'])
     if request.GET.has_key('span'):
         span = int(request.GET['span'])
     if request.GET.has_key('q'):
-        search_query = request.GET['q'].replace(u"　", " ").split(" ")
+        search_query = request.GET['q'].strip().replace(u"　", " ").split(" ")
+        search_option += "q=%s&amp;" % "+".join(search_query)
     if request.GET.has_key('a'):
         admitted_query = int(request.GET['a'])
+        if admitted_query:
+            search_option += "a=%s&amp;" % admitted_query
     authors,entry_count = Author.get_items(span=span, page=page, search_query=search_query, admitted_query=admitted_query, order="-created_at")
     print authors
     page_list,pages = get_page_list(page, entry_count, span)
@@ -38,6 +42,7 @@ def home(request):
         "pages":pages,
         "search_query":search_query,
         "admitted_query":admitted_query,
+        "search_option" : search_option,
         }
     return render_to_response('author/index.html',temp_values,
                               context_instance=RequestContext(request))
