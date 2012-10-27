@@ -32,6 +32,7 @@
     <h1>{% if admitted_query %}{{admitted_query}} 年度生 {% endif %}{% if search_query %}[ {% for s in search_query %}{{s}} {% endfor %} ]{% endif %}検索結果</h1>
   </div>
   {% endif %}
+  {% if authors %}
   <div class="btn-toolbar">
     <div class="pagination btn-group">
       <!-- <p>{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示{% endif %}</p> -->
@@ -134,6 +135,12 @@
       {% endif %}
     </ul>
   </div>
+  {% else %}
+  <div class="alert alert-error">
+    <h3>該当する著者は登録されていません</h3>
+    <p><a href="/author/">&gt;著者一覧を表示する</a></p>
+  </div>
+  {% endif %}
   <hr class="soften">
 </section>
 <section id="info">
