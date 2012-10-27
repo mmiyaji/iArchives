@@ -14,14 +14,14 @@
     <select class="input-medium" name="a">
       <option value="0">すべて</option>
       {% for y in auth_years %}
-      <option value="{{y.year}}"{% ifequal y.year admitted_query %}selected{% endifequal %}>{{y.year}} 年度</option>
+      <option value="{{y.year}}"{% ifequal y.year admitted_query %} selected=selected{% endifequal %}>{{y.year}} 年度</option>
       {% endfor %}
     </select>
     <span class="add-on">氏名</span>
     <input type="text" class="input-medium" name="q" value="{% for q in search_query %}{{q}} {% endfor %}">
     <select name="qt" class="span2">
       <option value="">OR</option>
-      <option value="1" {% if query_type %}selected=selected{% endif %}>AND</option>
+      <option value="1"{% if query_type %} selected=selected{% endif %}>AND</option>
     </select>
     <button type="submit" class="btn">検索</button>
   </form>
@@ -136,7 +136,7 @@
     </ul>
   </div>
   {% else %}
-  <div class="alert alert-error">
+  <div class="alert alert-ja alert-error">
     <h3>該当する著者は登録されていません</h3>
     <p><a href="/author/">&gt;著者一覧を表示する</a></p>
   </div>
@@ -151,13 +151,13 @@
     <form class="form-horizontal" method="POST" action="/author/meibo/add/" accept-charset="UTF-8">
       <fieldset>
         <div class="control-group span10">
-          <p class="alert help-block">学籍番号,名前のよみ,氏名,ニックネーム, の形式で入力．複数入力する場合は改行を入力すること．<br />すでに同一IDが登録済みだった場合，上書きはしない．</p>
+          <p class="alert alert-ja">学籍番号,名前のよみ,氏名,ニックネーム, の形式で入力．複数入力する場合は改行を入力すること．<br />すでに同一IDが登録済みだった場合，上書きはしない．</p>
           <textarea class="input-xlarge span10" name="meibo" ></textarea>
         </div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary">上記の内容で一括登録</button>
-        </div>
       </fieldset>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">上記の内容で一括登録</button>
+      </div>
       {% csrf_token %}
     </form>
   </div>
