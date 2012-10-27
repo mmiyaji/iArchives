@@ -83,11 +83,11 @@
         <th>学籍番号</th>
         <th>入学年度</th>
         <th>氏名</th>
-        <th>種別</th>
-        {# <th>ニックネーム</th> #}
-        {#- <th>氏名読み</th> #}
+        <!-- <th>種別</th> -->
+        <!-- <th>ニックネーム</th> -->
+        <th>氏名読み</th>
         <th>最終更新日</th>
-        <th>作成日</th>
+        <!-- <th>作成日</th> -->
         <th>登録作品数</th>
         <!-- <th></th> -->
       </tr>
@@ -99,11 +99,11 @@
         <td>{{author.student_id}}</td>
         <td>{{author.admitted_at.year}}</td>
         <td>{{author.name}}</td>
-        <td>{{author.get_roll_display}}</td>
+        {# <td>{{author.get_roll_display}}</td> #}
         {# <td>{{author.nickname}}</td> #}
-        {# <td>{{author.roman}}</td> #}
+        <td>{{author.roman}}</td>
         <td>{{author.updated_at}}</td>
-        <td>{{author.created_at}}</td>
+        <!-- <td>{{author.created_at}}</td> -->
         <td>{{author.get_photo_num}}</td>
         <!-- <td><a class="btn" href="#"><i class="icon-wrench"></i><span>Edit</span></a></td> -->
       </tr>
