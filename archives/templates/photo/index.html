@@ -17,7 +17,7 @@
       <option value="{{y.year}}"{% ifequal y.year admitted_query %} selected=selected{% endifequal %}>{{y.year}} 年度</option>
       {% endfor %}
     </select>
-    <span class="add-on">検索対象{{search_target}}</span>
+    <span class="add-on">検索対象</span>
     <select class="input-large" name="t">
       <option value="0">キャプション</option>
       <option value="1"{% ifequal search_target 1 %} selected=selected{% endifequal %}>コメント</option>

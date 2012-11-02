@@ -89,6 +89,12 @@ class UploadHandler(object):
     def handle_upload(self):
         results = []
         blob_keys = []
+        allcaption = ""
+        if self._request.POST.has_key('allcaption'):
+            allcaption = self._request.POST['allcaption']
+        allcomment = ""
+        if self._request.POST.has_key('allcomment'):
+            allcomment = self._request.POST['allcomment']
         for fieldStorage in self._request.FILES.getlist('files[]'):
             if type(fieldStorage) is unicode:
                 continue
@@ -159,6 +165,10 @@ class UploadHandler(object):
                     result['already'] = True
                 else:
                     photo = Photo()
+                if allcaption:
+                    photo.caption = allcaption
+                if allcomment:
+                    photo.comment = allcomment
                 photo.published_at = published_at
                 photo.save(isFirst = True)
                 name = force_unicode(photo.published_at.strftime((smart_str("%Y%m%d%H%M%S_"+str(photo.id).zfill(5)+"."+result['name'].split(".")[-1]))))
