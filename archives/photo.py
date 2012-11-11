@@ -29,20 +29,16 @@ def home(request):
     if request.GET.has_key('page'):
         page = int(request.GET['page'])
     if request.GET.has_key('span'):
-        try:
-            span = int(request.GET['span'])
-            search_option += "span=%d&" % span
-        except:
-            pass
+        span = int(request.GET['span'])
     if request.GET.has_key('q'):
         search_query = request.GET['q'].strip().replace(u"　", " ").split(" ")
-        search_option += "q=%s&" % "+".join(search_query)
+        search_option += "q=%s&amp;" % "+".join(search_query)
     if request.GET.has_key('a'):
         try: # int キャストで失敗したらすべての年度生を返す
             admitted = int(request.GET['a'])
             if admitted is not 0:
                 admitted_query = admitted
-                search_option += "a=%s&" % admitted_query
+                search_option += "a=%s&amp;" % admitted_query
         except:
             pass
     if request.GET.has_key('t'):
@@ -50,17 +46,17 @@ def home(request):
             t = int(request.GET['t'])
             if t is not 0:
                 search_target = t
-                search_option += "t=%s&" % search_target
+                search_option += "t=%s&amp;" % search_target
         except:
             pass
     if request.GET.has_key('qt'):
         if request.GET['qt']:
             query_type = True
-            search_option += "qt=1&"
+            search_option += "qt=1&amp;"
     if request.GET.has_key('s'):
         # 同じクエリがきた場合、後を優先する
         sort_option = request.GET.getlist('s')[-1]
-        search_option += "s=%s&" % sort_option
+        search_option += "s=%s&amp;" % sort_option
         if sort_option == "name":
             order = "-name"
             s_option = u"氏名"
@@ -76,7 +72,7 @@ def home(request):
             if int(request.GET.getlist('st')[-1]):
                 order = order.lstrip("-")
                 # sort_type = True
-                search_option += "st=1&"
+                search_option += "st=1&amp;"
                 s_type = u"昇順"
         except:
             pass
