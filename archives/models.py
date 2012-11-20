@@ -275,6 +275,54 @@ class Photo(models.Model):
             self.thumbnail_width, self.thumbnail_height = image.size
             # save the image object
             super(Photo, self).save(force_update, force_insert)
+class Group(models.Model):
+    """
+    グループモデル
+    著者が所属するグループの定義
+    年度ごとに所属するグループを変更可能。学年と組の関係などを表すときに使います。
+    """
+    name = models.CharField(max_length = 100, default="", blank=True, null=True)
+    roman = models.CharField(max_length = 100, default="", blank=True, null=True)
+    image_url = models.CharField(max_length = 255, default="", blank=True, null=True)
+    comment = models.TextField(default="", blank=True, null=True, db_index=True)
+    isvalid = models.BooleanField(default=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now = True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add = True, db_index=True)
+
+    @staticmethod
+    def get_groups(page=0, span=10):
+        result = Group.objects.order_by('-update_at').filter(isvalid__exact=True)
+        if page!=0:
+            page = page*span - span
+            endpage = page + span
+        return result[page:endpage],result.count()
+    @staticmethod
+    def group_list():
+        return Group.objects.all()
+
+    @staticmethod
+    def get_by_name(name=""):
+        result=None
+        try:
+            result = Group.objects.filter(name=name).get()
+        except:
+            result = None
+            return result
+    def __unicode__(self):
+        return self.name
+    def get_absolute_url(self):
+        return "/groups/%s" % self.name
+
+class GroupHandler(models.Model):
+    author = models.ForeignKey(Author, db_index=True)
+    group = models.ForeignKey(Group, db_index=True)
+    year = models.DateTimeField(blank=True, null=True, db_index=True)
+    isvalid = models.BooleanField(default=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now = True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add = True, db_index=True)
+
+    def __unicode__(self):
+        return self.author.name
 
 class Meta:
     ordering = ['-created_at']
