@@ -1,0 +1,35 @@
+{% extends "base/base.html" %}
+{% block main %}
+<div id="container" class="container">
+  <div class="hero-unit">
+    <div class="row-fluid">
+      <form class="form-horizontal" method="POST" action="/login/" accept-charset="UTF-8">
+      <h3>管理者ユーザ</h3>
+      {% if loginError %}
+      <div class="alert">
+        {{loginError}}
+      </div>
+      {% endif %}
+        <div class="control-group">
+          <label class="control-label" for="inputEmail">ユーザ名</label>
+          <div class="controls">
+            <input type="text" id="inputEmail" placeholder="ユーザ名" name="name" value="{{username}}">
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputPassword">パスワード</label>
+          <div class="controls">
+            <input type="password" id="inputPassword" placeholder="パスワード" name="pass">
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            <button type="submit" class="btn btn-success">ログイン</button>
+          </div>
+        </div>
+      {% csrf_token %}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock main %}

@@ -19,6 +19,8 @@ class AuthorAdmin(admin.ModelAdmin):
 # モデルをadminサイトに表示させる
 admin.site.register(Photo, AuthorAdmin)
 admin.site.register(Author, AuthorAdmin)
+admin.site.register(Group, AuthorAdmin)
+admin.site.register(GroupHandler, AuthorAdmin)
 
 def main():
     pass

@@ -1,0 +1,67 @@
+{% extends "base/base.html" %}
+{% block main %}
+<!-- Masthead
+     ================================================== -->
+<header class="jumbotron subhead" id="overview">
+  <h2 id="title">グループ一覧</h2>
+  <p class="lead">{% if pages.max %}全 {{pages.max}}件中 {{pages.start}}~{{pages.end}}件目を表示 / {{pages.now_page}}ページ目{% endif %}</p>
+</header>
+<section>
+  <div>
+    {% if groups %}
+    <table id="author_table" class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>グループ名</th>
+          <th>よみがな</th>
+          <!-- <th>種別</th> -->
+          <!-- <th>ニックネーム</th> -->
+          <th>最終更新日</th>
+          <!-- <th>作成日</th> -->
+          <!-- <th></th> -->
+        </tr>
+      </thead>
+      <tbody>
+        {% for group in groups %}
+        <tr id="group_{{group.id|urlencode}}">
+          <td>{{ forloop.counter }}</td>
+          <td>{{group.name}}</td>
+          <td>{{group.roman}}</td>
+          <td>{{group.updated_at}}</td>
+          <!-- <td>{{author.created_at}}</td> -->
+          <!-- <td><a class="btn" href="#"><i class="icon-wrench"></i><span>Edit</span></a></td> -->
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="alert alert-ja alert-error">
+    <h3>該当するグループは登録されていません</h3>
+  </div>
+  {% endif %}
+  <hr class="soften">
+</section>
+<section id="info">
+  <div class="page-header">
+    <h1>グループ一括登録</h1>
+  </div>
+  <div>
+    <form class="form-horizontal" method="POST" action="/group/meibo/add/" accept-charset="UTF-8">
+      <fieldset>
+        <div class="control-group span10">
+          <p class="alert alert-ja">グループ名,よみがな の形式で入力．複数入力する場合は改行を入力すること．
+            <br />
+            すでに同一IDが登録済みだった場合，上書きはしない．</p>
+          <textarea class="input-xlarge span10" name="meibo" ></textarea>
+        </div>
+      </fieldset>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">上記の内容で一括登録</button>
+      </div>
+      {% csrf_token %}
+    </form>
+  </div>
+</section>
+{% endblock main %}

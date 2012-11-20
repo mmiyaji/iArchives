@@ -301,13 +301,21 @@ class Group(models.Model):
         return Group.objects.all()
 
     @staticmethod
+    def get_by_id(id):
+        result=None
+        try:
+            result = Group.objects.get(pk=int(id))
+        except:
+            result = None
+        return result
+    @staticmethod
     def get_by_name(name=""):
         result=None
         try:
             result = Group.objects.filter(name=name).get()
         except:
             result = None
-            return result
+        return result
     def __unicode__(self):
         return self.name
     def get_absolute_url(self):

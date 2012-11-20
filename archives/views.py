@@ -16,6 +16,7 @@ from django.core.urlresolvers import reverse
 from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from archives.models import *
 from django.utils.encoding import force_unicode, smart_str
