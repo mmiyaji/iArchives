@@ -111,6 +111,9 @@ STATIC_URL = '/static/'
 # ADMIN_MEDIA_PREFIX = os.path.join(STATIC_URL, 'admin')
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
+LOGIN_REDIRECT_URL = "/login/"
+LOGIN_URL = "/login/"
+
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".

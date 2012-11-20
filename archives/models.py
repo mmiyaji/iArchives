@@ -290,8 +290,8 @@ class Group(models.Model):
     created_at = models.DateTimeField(auto_now_add = True, db_index=True)
 
     @staticmethod
-    def get_groups(page=0, span=10):
-        result = Group.objects.order_by('-update_at').filter(isvalid__exact=True)
+    def get_items(page=0, span=10):
+        result = Group.objects.filter(isvalid__exact=True)
         if page!=0:
             page = page*span - span
             endpage = page + span
@@ -311,7 +311,7 @@ class Group(models.Model):
     def __unicode__(self):
         return self.name
     def get_absolute_url(self):
-        return "/groups/%s" % self.name
+        return "/group/%s" % self.id
 
 class GroupHandler(models.Model):
     author = models.ForeignKey(Author, db_index=True)
