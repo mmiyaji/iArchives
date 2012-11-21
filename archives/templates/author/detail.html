@@ -64,6 +64,7 @@
               <li>写真の大きさ: <span>{{file.image_width}} x {{file.image_height}}, {{file.image.size|filesizeformat}}</span></li>
               <li>キャプション: <span>{{file.caption|default:"なし"}}</span></li>
               <li>コメント: <span>{{file.comment|default:"なし"}}</span></li>
+              <li>タグ: <span>{% for tag in file.tag.all %}{{tag.name}},{% endfor %}</span></li>
             </ul>
           </td>
           <td class="author">

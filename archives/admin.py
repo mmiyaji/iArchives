@@ -21,6 +21,7 @@ admin.site.register(Photo, AuthorAdmin)
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(Group, AuthorAdmin)
 admin.site.register(GroupHandler, AuthorAdmin)
+admin.site.register(Tag, AuthorAdmin)
 
 def main():
     pass

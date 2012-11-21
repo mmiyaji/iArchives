@@ -40,6 +40,7 @@ class UploadHandler(object):
         temp_values = {
             "target":"upload",
             "title":"Upload form",
+            "tags":Tag.get_all(),
             "download_script":download_script,
             "upload_script":upload_script,
             }
@@ -95,6 +96,10 @@ class UploadHandler(object):
         allcomment = ""
         if self._request.POST.has_key('allcomment'):
             allcomment = self._request.POST['allcomment']
+        alltag = None
+        print 'aaaaa'
+        if self._request.POST.has_key('alltag'):
+            alltag = self._request.POST.getlist('alltag')
         for fieldStorage in self._request.FILES.getlist('files[]'):
             if type(fieldStorage) is unicode:
                 continue
@@ -186,6 +191,13 @@ class UploadHandler(object):
                 # photo.authors.clear()
                 for a in authors:
                     photo.authors.add(a)
+                photo.tag.clear()
+                tags = ""
+                if alltag:
+                    for t in alltag:
+                        tt = Tag.get_by_id(t)
+                        photo.tag.add(tt)
+                        tags += "%s," % tt.name
                 photo.save()
                 result['title'] = name
                 # result['authors'] = serializers.serialize("json", photo.authors.all())
@@ -197,6 +209,7 @@ class UploadHandler(object):
                 result['uuid'] = photo.uuid
                 result['caption'] = photo.caption
                 result['comment'] = photo.comment
+                result['tag'] = tags
                 result['update_type'] = 'UPDATE'
                 result['update_url'] = "http://%s/photo/%s/update/" % (self._request.get_host(), photo.uuid)
                 result['delete_type'] = 'DELETE'

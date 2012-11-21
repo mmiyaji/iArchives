@@ -164,6 +164,7 @@ def update(request, photo_uuid):
             "authors":request.POST['authors'],
             "caption":request.POST['caption'],
             "comment":request.POST['comment'],
+            "tag":request.POST['tag'],
             "pubdate":request.POST['pubdate'],
             }
         # author登録
@@ -188,6 +189,14 @@ def update(request, photo_uuid):
                     author.admitted_at = adate
                     author.save()
                 photo.authors.add(author)
+        # tag登録
+        photo.tag.clear()
+        for i in param['tag'].split(','):
+            t = i.strip()
+            if t:
+                tag = Tag.get_by_name(t)
+                if tag:
+                    photo.tag.add(tag)
         if param['caption']:
             photo.caption = param['caption']
         if param['comment']:

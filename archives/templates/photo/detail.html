@@ -123,6 +123,13 @@
           </div>
         </div>
         <div class="control-group">
+          <label class="control-label" for="input_tag">タグ</label>
+          <div class="controls">
+            <input type="text" class="input-xlarge" id="input_tag" name="tag" value="{% for t in photo.tag.all %}{{t.name}},{% endfor %}">
+            <p class="help-block">写真に付加するタグです．","区切りで入力してください．</p>
+          </div>
+        </div>
+        <div class="control-group">
           <label class="control-label" for="input_pubdate">撮影日</label>
           <div class="controls date" id="datepicker" data-date="{{photo.published_at|date:'Y-m-d'}}" data-date-format="yyyy-mm-dd">
             <input type="text" class="input-xlarge" id="input_pubdate" name="pubdate" value="{{photo.published_at|date:'Y-m-d'}}" readonly>

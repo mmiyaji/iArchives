@@ -1,0 +1,71 @@
+{% extends "base/base.html" %}
+{% block main %}
+<!-- Masthead
+     ================================================== -->
+<header class="jumbotron subhead" id="overview">
+  <h2 id="title">{{ tag.name }}</h2>
+  <p class="lead">{{ tag.comment|default:"" }}</p>
+</header>
+<!-- Tag view
+     ================================================== -->
+<section>
+  <div class="group-info" id="info">
+    <h2>タグの詳細</h2>
+    <form class="form-horizontal" method="POST" action="/tag/{{tag.id}}/update/" accept-charset="UTF-8">
+      <fieldset>
+        <div class="control-group">
+          <label class="control-label" for="input_caption">タグ名</label>
+          <div class="controls">
+            <input type="text" class="input-xlarge" id="input_caption" name="name" value="{{tag.name}}">
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="input_roman">よみがな</label>
+          <div class="controls">
+            <input type="text" class="input-xlarge" id="input_caption" name="roman" value="{{tag.roman}}">
+          </div>
+        </div>
+                <div class="control-group">
+          <label class="control-label" for="input_updateat">最終更新日</label>
+          <div class="controls">
+            <span class="input-xlarge uneditable-input">{{tag.updated_at}}</span>
+            <p class="help-block">変更不可</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="input_createat">登録日時</label>
+          <div class="controls">
+            <span class="input-xlarge uneditable-input">{{tag.created_at}}</span>
+            <p class="help-block">変更不可</p>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">変更を保存</button>
+          <a href="#myModal" role="button" class="btn" data-toggle="modal">削除</a>
+        </div>
+      </fieldset>
+      {% csrf_token %}
+    </form>
+    <div class="modal hide" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">警告</h3>
+      </div>
+      <div class="modal-body">
+        <p>本当に削除しますか？</p>
+      </div>
+      <div class="modal-footer">
+        <br />
+        <form method="POST" action="/tag/{{tag.id}}/delete/">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">取り消し</button>
+          <button type="submit" class="btn btn-danger">
+            <i class="icon-trash icon-white"></i>
+            <span>削除</span>
+          </button>
+          {% csrf_token %}
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock main %}

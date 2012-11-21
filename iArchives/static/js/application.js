@@ -71,6 +71,9 @@
       $("#group_table tbody tr").click(function () {
           document.location = "/group/"+$(this).attr("id").split("_")[1]+"/";
       });
+      $("#tag_table tbody tr").click(function () {
+          document.location = "/tag/"+$(this).attr("id").split("_")[1]+"/";
+      });
       $("#atoggle").click(function(){
           if($(this).attr('checked')){
               $('.isarchive').attr('checked', true);

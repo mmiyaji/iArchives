@@ -34,6 +34,13 @@
       <span class="add-on">一括コメント登録</span>
       <input type="text" class="input-medium" name="allcomment" value="">
       </div>
+      <p class="help-block">一括でタグの登録をします．下のから選択してください（複数選択可能：CTRL押しながら選択）．</p>
+      <select multiple="multiple" class="input-medium" name="alltag">
+        <option>タグなし</option>
+        {% for t in tags %}
+        <option value="{{t.id}}">{{t.name}}</option>
+        {% endfor %}
+      </select>
       <!-- <button type="button" class="btn btn-danger delete"> -->
       <!--   <i class="icon-trash icon-white"></i> -->
       <!--   <span>削除</span> -->

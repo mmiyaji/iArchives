@@ -30,6 +30,7 @@
                 </ul>
               </li>
               {% if not user.is_anonymous %}
+              <li {%ifequal target "tag"%}class="active"{%endifequal%}><a href="/tag/">タグ管理</a></li>
               <li {%ifequal target "group"%}class="active"{%endifequal%}><a href="/group/">グループ管理</a></li>
               {% endif %}
               <li {%ifequal target "login"%}class="active"{%endifequal%}>{% if user.is_anonymous %}<a href="/login/">ログイン</a>{% else %}<a href="/logout/">ログアウト【{{user}}】</a>{% endif %}</li>

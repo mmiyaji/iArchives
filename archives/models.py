@@ -71,8 +71,8 @@ class Author(models.Model):
         if page!=0:
             page = page*span - span
         endpage = page + span
-        # try:
-        if True:
+        try:
+        # if True:
             # 検索対象のすべてのエントリー数とSPANで区切ったエントリーを返す
             result = Author.objects.order_by(order).filter(isvalid=isvalid)
             if admitted_query:
@@ -109,8 +109,8 @@ class Author(models.Model):
                 result = result[page:endpage]
             if listvalue:
                 result = result.values_list(listvalue)
-        # except:
-        #     pass
+        except:
+            pass
         return result, result_count
     @staticmethod
     def get_by_student_id(keyid=""):
@@ -143,6 +143,51 @@ def get_photo_upload_path(self, filename, types="originals"):
     else:
         name = os.path.splitext(os.path.basename(self.title))[0]+"."+filename.split(".")[-1]
     return os.path.join(user_path, name)
+class Tag(models.Model):
+    """
+    タグモデル
+    写真につけるタグの定義
+    """
+    name = models.CharField(max_length = 100, default="", blank=True, null=True)
+    roman = models.CharField(max_length = 100, default="", blank=True, null=True)
+    image_url = models.CharField(max_length = 255, default="", blank=True, null=True)
+    comment = models.TextField(default="", blank=True, null=True, db_index=True)
+    isvalid = models.BooleanField(default=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now = True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add = True, db_index=True)
+    @staticmethod
+    def get_all():
+        return Tag.objects.filter(isvalid__exact=True)
+    @staticmethod
+    def get_items(page=0, span=10):
+        result = Tag.objects.filter(isvalid__exact=True)
+        if page!=0:
+            page = page*span - span
+            endpage = page + span
+        return result[page:endpage],result.count()
+    @staticmethod
+    def tag_list():
+        return Tag.objects.all()
+    @staticmethod
+    def get_by_id(id):
+        result=None
+        try:
+            result = Tag.objects.get(id=int(id))
+        except:
+            result = None
+        return result
+    @staticmethod
+    def get_by_name(name=""):
+        result=None
+        try:
+            result = Tag.objects.filter(name=name).get()
+        except:
+            result = None
+        return result
+    def __unicode__(self):
+        return self.name
+    def get_absolute_url(self):
+        return "/tag/%s" % self.id
 
 class Photo(models.Model):
     """
@@ -175,6 +220,7 @@ class Photo(models.Model):
     published_at = models.DateTimeField(blank=True, null=True, db_index=True)
     updated_at = models.DateTimeField(auto_now = True, db_index=True)
     created_at = models.DateTimeField(auto_now_add = True, db_index=True)
+    tag = models.ManyToManyField(Tag, blank=True, null=True, db_index=True)
     @staticmethod
     def get_years():
         """
@@ -331,7 +377,7 @@ class Group(models.Model):
     def get_by_id(id):
         result=None
         try:
-            result = Group.objects.get(pk=int(id))
+            result = Group.objects.get(id=int(id))
         except:
             result = None
         return result
