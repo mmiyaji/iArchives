@@ -43,6 +43,7 @@
   {% endif %}
   <hr class="soften">
 </section>
+{% if not user.is_anonymous %}
 <section id="info">
   <div class="page-header">
     <h1>グループ一括登録</h1>
@@ -64,4 +65,5 @@
     </form>
   </div>
 </section>
+{% endif %}
 {% endblock main %}
