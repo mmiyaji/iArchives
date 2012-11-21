@@ -13,8 +13,21 @@
     <span class="add-on">入学年度</span>
     <select class="input-medium" name="a">
       <option value="0">すべて</option>
-      {% for y in auth_years %}
-      <option value="{{y.year}}"{% ifequal y.year admitted_query %} selected=selected{% endifequal %}>{{y.year}} 年度</option>
+      {% for y in auth_years reversed %}
+      <option value="{{y.year}}"{% ifequal y.year admitted_query %} selected=selected{% endifequal %}>{{y.year}} 年度入学</option>
+      {% endfor %}
+    </select>
+    <span class="add-on">所属</span>
+    <select class="input-medium" name="gy">
+      <option value="">いずれかの年度で</option>
+      {% for y in group_years reversed %}
+      <option value="{{y.year}}"{% ifequal y.year group_year %} selected=selected{% endifequal %}>{{y.year}} 年度時</option>
+      {% endfor %}
+    </select>
+    <select class="input-medium" name="gn">
+      <option value="">すべて</option>
+      {% for g in auth_groups %}
+      <option value="{{g.name}}"{% ifequal g.name group_name %} selected=selected{% endifequal %}>{{g.name}} 所属</option>
       {% endfor %}
     </select>
     <span class="add-on">氏名</span>
@@ -29,7 +42,7 @@
 <section>
   {% if search_query %}
   <div class="page-header">
-    <h1>{% if admitted_query %}{{admitted_query}} 年度生 {% endif %}{% if search_query %}[ {% for s in search_query %}{{s}} {% endfor %} ]{% endif %}検索結果</h1>
+    <h1>{% if admitted_query %}{{admitted_query}} 年度生 {% endif %}{% if group_year %}{{group_year}}年度 {% if group_name %}{{group_name}}{% endif %}に在籍 {% else %}{% if group_name %}{{group_name}}に在籍 {% endif %}{% endif %}{% if search_query %} [ {% for s in search_query %}{{s}} {% endfor %} ] 検索結果{% endif %}</h1>
   </div>
   {% endif %}
   {% if authors %}
@@ -143,6 +156,7 @@
   {% endif %}
   <hr class="soften">
 </section>
+{% if not user.is_anonymous %}
 <section id="info">
   <div class="page-header">
     <h1>著者一括登録</h1>
@@ -164,4 +178,5 @@
     </form>
   </div>
 </section>
+{% endif %}
 {% endblock main %}

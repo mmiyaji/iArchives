@@ -19,6 +19,8 @@ def home(request):
     order = "-created_at"
     search_query = None
     admitted_query = None
+    group_year = ""
+    group_name = ""
     search_option = ""
     sort_option = ""
     s_option = ""
@@ -31,23 +33,35 @@ def home(request):
         span = int(request.GET['span'])
     if request.GET.has_key('q'):
         search_query = request.GET['q'].strip().replace(u"　", " ").split(" ")
-        search_option += "q=%s&amp;" % "+".join(search_query)
+        search_option += "q=%s&" % "+".join(search_query)
     if request.GET.has_key('a'):
         try: # int キャストで失敗したらすべての年度生を返す
             admitted = int(request.GET['a'])
             if admitted is not 0:
                 admitted_query = admitted
-                search_option += "a=%s&amp;" % admitted_query
+                search_option += "a=%s&" % admitted_query
         except:
             pass
     if request.GET.has_key('qt'):
         if request.GET['qt']:
             query_type = True
-            search_option += "qt=1&amp;"
+            search_option += "qt=1&"
+    if request.GET.has_key('gn'):
+        if request.GET['gn']:
+            group_name = request.GET['gn']
+            search_option += "gn=%s&" % group_name
+    if request.GET.has_key('gy'):
+        try: # int キャストで失敗したらすべての年度生を返す
+            gy = int(request.GET['gy'])
+            if gy is not 0:
+                group_year = gy
+                search_option += "gy=%s&" % group_year
+        except:
+            pass
     if request.GET.has_key('s'):
         # 同じクエリがきた場合、後を優先する
         sort_option = request.GET.getlist('s')[-1]
-        search_option += "s=%s&amp;" % sort_option
+        search_option += "s=%s&" % sort_option
         if sort_option == "name":
             order = "-name"
             s_option = u"氏名"
@@ -63,12 +77,13 @@ def home(request):
             if int(request.GET.getlist('st')[-1]):
                 order = order.lstrip("-")
                 # sort_type = True
-                search_option += "st=1&amp;"
+                search_option += "st=1&"
                 s_type = u"昇順"
         except:
             pass
     authors,entry_count = Author.get_items(span=span, page=page, search_query=search_query,
                                            admitted_query=admitted_query, query_type=query_type,
+                                           group_year=group_year, group_name=group_name,
                                            order=order)
     page_list,pages = get_page_list(page, entry_count, span)
     temp_values = {
@@ -76,6 +91,8 @@ def home(request):
         "title":u"製作者(著者)一覧ページ",
         "authors":authors,
         "auth_years":Author.get_years(),
+        "group_years":GroupHandler.get_years(),
+        "auth_groups":Group.get_all(),
         "page_list":page_list,
         "pages":pages,
         "search_query":search_query,
@@ -84,6 +101,8 @@ def home(request):
         "search_option" : search_option,
         "sort_option": s_option,
         "sort_type": s_type,
+        "group_year": group_year,
+        "group_name": group_name,
         }
     return render_to_response('author/index.html',temp_values,
                               context_instance=RequestContext(request))
@@ -133,6 +152,7 @@ def detail(request, author_id):
     return render_to_response('author/detail.html',temp_values,
                               context_instance=RequestContext(request))
 @csrf_protect
+@login_required
 def meiboadd(request):
     """
     Case of UPDATE REQUEST '/author/meibo/add/'

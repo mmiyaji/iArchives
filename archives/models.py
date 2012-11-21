@@ -63,17 +63,29 @@ class Author(models.Model):
         """
         return Author.objects.dates('admitted_at', 'year')
     @staticmethod
-    def get_items(span=10, page=0, search_query=None, admitted_query=None, query_type=False, isvalid=True, order="-created_at", all=False, listvalue=None):
+    def get_items(span=10, page=0, search_query=None, admitted_query=None, query_type=False,
+                  group_year=None, group_name=None,
+                  isvalid=True, order="-created_at", all=False, listvalue=None):
         result = None
         result_count = 0
         if page!=0:
             page = page*span - span
         endpage = page + span
-        try:
+        # try:
+        if True:
             # 検索対象のすべてのエントリー数とSPANで区切ったエントリーを返す
             result = Author.objects.order_by(order).filter(isvalid=isvalid)
             if admitted_query:
                 result = result.filter(admitted_at__year=admitted_query)
+            if group_name:
+                group = Group.get_by_name(group_name)
+                if group_year:
+                    result = result.filter(grouphandler__group=group,grouphandler__year__year=group_year) # 後方参照
+                else:
+                    result = result.filter(grouphandler__group=group) # 後方参照
+            else:
+                if group_year:
+                    result = result.filter(grouphandler__year__year=group_year) # 後方参照
             if search_query:
                 # 漢字とよみがなの場合を結合して検索．ANDかつ混合時には検索対象にならない
                 qs1 = [Q(name__icontains=w) for w in search_query]
@@ -97,8 +109,8 @@ class Author(models.Model):
                 result = result[page:endpage]
             if listvalue:
                 result = result.values_list(listvalue)
-        except:
-            pass
+        # except:
+        #     pass
         return result, result_count
     @staticmethod
     def get_by_student_id(keyid=""):
@@ -348,6 +360,18 @@ class GroupHandler(models.Model):
         except:
             pass
         return result
+    @staticmethod
+    def get_authors(group=None):
+        result = GroupHandler.objects.order_by("year")
+        if group:
+            result = result.filter(group=group)
+        return result
+    @staticmethod
+    def get_years():
+        """
+        すべての年度のリストを返す
+        """
+        return GroupHandler.objects.dates('year', 'year')
     def __unicode__(self):
         return self.author.name
 
