@@ -21,9 +21,9 @@
     <h1>{{ photo.title }} <small>{{ photo.get_original_img_url }}</small></h1>
     {% endifnotequal %}
   </div>
-  <div class="thumbnail">
+  <div class="thumbnail" >
     <a href="{{ photo.get_original_img_url }}" class="thumbnail" target="_blank">
-      <img src="{{ photo.get_original_img_url }}" alt="{{ photo.title }}">
+      <img src="{{ photo.get_thumbnail_img_url }}" alt="{{ photo.title }}">
     </a>
     {% ifnotequal photo.caption "" %}
     <h2>{{ photo.caption }}</h2>
@@ -33,7 +33,7 @@
   <div class="form-actions">
     <a class="btn btn-primary modal-download" target="_blank" href="{{ photo.get_original_img_url }}">
       <i class="icon-download icon-white"></i>
-      <span>Download</span>
+      <span>オリジナルサイズで表示</span>
     </a>
     <a href="#myModal" role="button" class="btn" data-toggle="modal">削除</a>
   </div>

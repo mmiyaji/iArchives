@@ -154,6 +154,7 @@ class Photo(models.Model):
     uuid = models.CharField(max_length = 32, default="", db_index=True)
     title = models.CharField(max_length = 100, default="", blank=True, null=True)
     original_title = models.CharField(max_length = 100, default="", blank=True, null=True)
+    orientation = models.IntegerField(default=0, blank=True, null=True)
     image = models.ImageField(upload_to=get_origin_photo_upload_path,
                               width_field="image_width",
                               height_field="image_height",
@@ -263,7 +264,7 @@ class Photo(models.Model):
         return self.title
     def __unicode__(self):
         return self.title
-    def save(self, force_update=False, force_insert=False, thumb_size=(180,300), isFirst = False):
+    def save(self, force_update=False, force_insert=False, thumb_size=(800,1000), isFirst = False):
         if isFirst:
             if not self.uuid:
                 # 万が一uuidの被りがあった場合は再精製。最大10回繰り返す。
@@ -276,11 +277,17 @@ class Photo(models.Model):
             super(Photo, self).save(force_update, force_insert)
         else:
             image = Image.open(self.image)
-            if image.mode not in ('L', 'RGB'):
-                image = image.convert('RGB')
+            # if image.mode not in ('L', 'RGB'): # ウィンドウシャドウが消えるので変換中止
+            #     image = image.convert('RGB')
             # save the original size
             self.image_width, self.image_height = image.size
             image.thumbnail(thumb_size, Image.ANTIALIAS)
+            try: # EXIF にしたがってサムネイル画像を回転
+                if self.orientation and self.orientation != 1:
+                    r = {3:180,6:-90,8:90}
+                    image = image.rotate(r[self.orientation])
+            except:
+                pass
             # save the thumbnail to memory
             temp_handle = StringIO()
             image.save(temp_handle, 'png')

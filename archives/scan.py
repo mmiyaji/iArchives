@@ -6,6 +6,7 @@ scan.py
 Created by mmiyaji on 2012-07-16.
 Copyright (c) 2012  ruhenheim.org. All rights reserved.
 """
+import os, sys
 try:
     import zbar
 except:
@@ -39,13 +40,15 @@ class Scanner():
             exif = self.image._getexif()
         except:
             exif = None
-        # if exif:
-        #     print exif.__class__
-        #     for tag,value in exif.items():
-        #         if tag!=37500:
-        #             tagname=ExifTags.TAGS.get(tag)
-        #             print str(tagname) + "==>" + str(value)
         return exif
+    def scanExifAll(self):
+        exif = self.scanExif()
+        if exif:
+            print exif.__class__
+            for tag,value in exif.items():
+                if tag!=37500:
+                    tagname=ExifTags.TAGS.get(tag)
+                    print str(tagname) + "==>" + str(value)
     def scanQR(self):
         """
         """
@@ -80,8 +83,11 @@ def main():
     """
     write tests
     """
-    scan = Scanner("/Users/mmiyaji/tmp/scs.jpg")
-    scan.scanExif()
+    url = "./test.jpg"
+    if len(sys.argv) > 1:
+        url = sys.argv[1]
+    scan = Scanner(url)
+    scan.scanExifAll()
     scan.scanQR()
 
 if __name__ == '__main__':

@@ -114,6 +114,7 @@ class UploadHandler(object):
                 exif = scan.scanExif()
                 zimage = scan.scanQR()
                 published_at = None
+                orientation = 0
                 try:
                     if exif:
                         if exif.has_key(36867):
@@ -132,6 +133,11 @@ class UploadHandler(object):
                         published_at = datetime.datetime.now()
                 except:
                     published_at = datetime.datetime.now()
+                try:
+                    if exif.has_key(274):
+                        orientation = int(exif[274])
+                except:
+                    pass
                 authors = []
                 if zimage:
                     for i in zimage:
@@ -169,6 +175,8 @@ class UploadHandler(object):
                     photo.caption = allcaption
                 if allcomment:
                     photo.comment = allcomment
+                if orientation:
+                    photo.orientation = orientation
                 photo.published_at = published_at
                 photo.save(isFirst = True)
                 name = force_unicode(photo.published_at.strftime((smart_str("%Y%m%d%H%M%S_"+str(photo.id).zfill(5)+"."+result['name'].split(".")[-1]))))
