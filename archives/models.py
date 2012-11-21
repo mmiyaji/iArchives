@@ -50,6 +50,12 @@ class Author(models.Model):
         """
         num = Photo.objects.filter(authors__exact=self).count()
         return num
+    def get_groups(self):
+        """
+        自分の所属グループリスト（年度別）を返す
+        """
+        result = GroupHandler.get_by_author(self)
+        return result
     @staticmethod
     def get_years():
         """
@@ -288,7 +294,9 @@ class Group(models.Model):
     isvalid = models.BooleanField(default=True, db_index=True)
     updated_at = models.DateTimeField(auto_now = True, db_index=True)
     created_at = models.DateTimeField(auto_now_add = True, db_index=True)
-
+    @staticmethod
+    def get_all():
+        return Group.objects.filter(isvalid__exact=True)
     @staticmethod
     def get_items(page=0, span=10):
         result = Group.objects.filter(isvalid__exact=True)
@@ -323,12 +331,23 @@ class Group(models.Model):
 
 class GroupHandler(models.Model):
     author = models.ForeignKey(Author, db_index=True)
-    group = models.ForeignKey(Group, db_index=True)
+    group = models.ForeignKey(Group, db_index=True, blank=True, null=True, )
     year = models.DateTimeField(blank=True, null=True, db_index=True)
     isvalid = models.BooleanField(default=True, db_index=True)
     updated_at = models.DateTimeField(auto_now = True, db_index=True)
     created_at = models.DateTimeField(auto_now_add = True, db_index=True)
-
+    @staticmethod
+    def get_by_author(author):
+        result = GroupHandler.objects.order_by("year").filter(author__exact=author)
+        return result
+    @staticmethod
+    def get_item(author, year):
+        result = None
+        try:
+            result = GroupHandler.objects.filter(isvalid__exact=True).filter(author__exact=author).filter(year__year=year)[0]
+        except:
+            pass
+        return result
     def __unicode__(self):
         return self.author.name
 

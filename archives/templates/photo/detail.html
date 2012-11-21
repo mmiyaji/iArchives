@@ -36,36 +36,7 @@
       <span>Download</span>
     </a>
     <a href="#myModal" role="button" class="btn" data-toggle="modal">削除</a>
-    <!-- <form method="POST" action="/photo/{{photo.uuid}}/delete/"> -->
-    <!--   <button type="submit" class="btn btn-danger"> -->
-    <!--     <i class="icon-trash icon-white"></i> -->
-    <!--     <span>削除</span> -->
-    <!--   </button> -->
-    <!--   {% csrf_token %} -->
-    <!-- </form> -->
   </div>
-  <!-- <div id="modal-delete" class="modal" style="display: none; "> -->
-  <!--   <div class="modal-header"> -->
-  <!--     <a href="#" class="close">×</a> -->
-  <!--     <h3>削除</h3><\!-- モーダルのヘッダー部分 -\-> -->
-  <!--   </div> -->
-  <!--   <div class="modal-body"> -->
-  <!--     <p> -->
-  <!--       本当に削除しますか？ <\!-- ここにモーダルの本文を記述します。 -\-> -->
-  <!--     </p> -->
-  <!--   </div> -->
-  <!--   <div class="modal-footer"> -->
-  <!--     <form method="POST" action="/photo/{{photo.uuid}}/delete/"> -->
-  <!--       <button type="submit" class="btn btn-danger"> -->
-  <!--         <i class="icon-trash icon-white"></i> -->
-  <!--         <span>削除</span> -->
-  <!--       </button> -->
-  <!--       {% csrf_token %} -->
-  <!--     </form> -->
-  <!--     <a href="#" class="btn secondary hide-modal">取り消し</a> -->
-  <!--     <\!-- モーダルのフッター部分。主にボタンを配置する場所。 -\-> -->
-  <!--   </div> -->
-  <!-- </div> -->
   <div class="modal hide" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -75,9 +46,9 @@
     <p>本当に削除しますか？</p>
   </div>
   <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">取り消し</button>
     <br />
     <form method="POST" action="/photo/{{photo.uuid}}/delete/">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">取り消し</button>
       <button type="submit" class="btn btn-danger">
         <i class="icon-trash icon-white"></i>
         <span>削除</span>

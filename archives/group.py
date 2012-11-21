@@ -121,6 +121,28 @@ def update(request, group_id):
         return HttpResponseRedirect("/group/%s/?update=%d" % (group_id, datetime.datetime.now().microsecond))
     else:
         raise Http404
+@csrf_protect
+@login_required
+def delete(request, group_id):
+    """
+    Case of DELETE REQUEST '/group/<group_id>/delete/'
+    対象画像の削除
+    DELETE リクエストにのみレスポンス
+    """
+    request_type = request.method
+    logger.debug(request_type)
+    if request_type == 'GET':
+        raise Http404
+    elif request_type == 'OPTION' or request_type == 'HEAD':
+        return HttpResponse("OK")
+    elif request_type == 'POST' or request_type == 'DELETE':
+        # idからGroupを取得
+        group = Group.get_by_id(group_id)
+        if not group:
+            # 見つからない場合は404エラー送出
+            raise Http404
+        group.delete()
+        return HttpResponseRedirect("/group/")
 
 def main():
     pass

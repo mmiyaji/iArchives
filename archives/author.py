@@ -107,11 +107,22 @@ def detail(request, author_id):
     if request.GET.has_key('search_query'):
         search_query = request.GET['search_query'].replace(u"　", " ").split(" ")
     files,entry_count = author.get_photos(span=span, page=page, search_query=search_query)
+    # 所属するグループのリストを作成
+    groups = []
+    g = author.get_groups()
+    syear = author.admitted_at.year
+    for i in range(syear, syear+6):
+        gh = GroupHandler.get_item(author,i)
+        gn = ""
+        if gh and gh.group: gn = gh.group.name
+        groups.append((i,gn))
     page_list,pages = get_page_list(page, entry_count, span)
     temp_values = {
         "target":"author",
         "title":u"著者詳細[ %s ]" % author.name,
         "author":author,
+        "my_groups":groups, # 所属するグループ情報が含まれたリスト
+        "groups":Group.get_all(), # すべてのグループのリスト
         "files":files,
         "page_list":page_list,
         "pages":pages,
@@ -197,6 +208,7 @@ def update(request, author_id):
             "student_id":request.POST['student_id'],
             "admitted_year":request.POST['admitted_year'],
             "nickname":request.POST['nickname'],
+            "groups":request.POST.getlist('groups'),
             }
         if param['name']:
             author.name = param['name']
@@ -213,6 +225,42 @@ def update(request, author_id):
         if param['nickname']:
             author.nickname = param['nickname']
         author.save()
+        g = author.get_groups()
+        syear = author.admitted_at.year
+        count = 0
+        for i in range(syear, syear+6):
+            gh = GroupHandler.get_item(author,i)
+            if not gh:
+                 gh = GroupHandler()
+                 gh.author = author
+                 gh.year = date_validate("%d-04-01" % i)
+            gg = None
+            print param['groups']
+            if param['groups'][count]:
+                gg = Group.objects.get(id=int(param['groups'][count]))
+            gh.group = gg
+            gh.save()
+            count += 1
+        if False: # テキストからグループ入力する場合
+            groups = GroupHandler.get_by_author(author)
+            gs = param['groups'].strip().split(",")
+            for i in gs:
+                if not i:
+                    continue
+                j = i.split(":")
+                gh = None
+                try:
+                    gh = groups.filter(year__year=int(j[0]))[0]
+                except:
+                    pass
+                if not gh:
+                    gh = GroupHandler()
+                    gh.author = author
+                    gh.year = date_validate(str(j[0])+"-04-01")
+                group = Group.get_by_name(j[1])
+                if group:
+                    gh.group = group
+                    gh.save()
         # 元のページにリダイレクト ブラウザのキャッシュで更新されてない画面が出るのを防止
         return HttpResponseRedirect("/author/%s/?update=%d" % (param['student_id'], datetime.datetime.now().microsecond))
     else:

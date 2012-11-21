@@ -83,13 +83,6 @@
                 </div>
                 {% endif %}
           </td>
-          <!-- <td class="delete"> -->
-          <!--   <button class="btn btn-danger" data-type="DELETE" data-url="/photo/{{file.uuid}}/delete/"> -->
-          <!--     <i class="icon-trash icon-white"></i> -->
-          <!--     <span>削除</span> -->
-          <!--   </button> -->
-          <!--   <\!-- <input type="checkbox" name="delete" value="1"> -\-> -->
-          <!-- </td> -->
           <td class="update">
             <a class="btn btn-success" href="/photo/{{file.uuid}}/">
               <i class="icon-refresh icon-white"></i>
@@ -134,6 +127,28 @@
           <label class="control-label" for="input_admitted">入学年度</label>
           <div class="controls">
             <input type="text" class="input-xlarge" name="admitted_year" value="{{author.admitted_at.year}}">
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="input_groups">所属</label>
+          <div class="controls">
+            <!-- <input type="text" class="input-xlarge" name="groups" value="{% for g in author.get_groups %}{{g.year.year}}:{{g.group.name}},{% endfor %}"> -->
+            <ol>
+            {% for y,g in my_groups %}
+            <li>
+            <div class="input-prepend">
+              <span class="add-on">{{y}}年度</span>
+              <select name="groups">
+                <option value="">未設定</option>
+                {% for group in groups %}
+                <option value="{{group.id}}" {% ifequal group.name g %}selected=selected{% endifequal %}>{{group}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            </li>
+            {% endfor %}
+            </ol>
+            <p class="help-block">所属するグループです．</p>
           </div>
         </div>
         <div class="control-group">
