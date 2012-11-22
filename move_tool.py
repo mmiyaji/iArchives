@@ -140,6 +140,9 @@ def update_all():
                 except:
                     print "error"
 if __name__ == '__main__':
-    # main()
-    update_all()
+    args = sys.argv
+    if len(args) > 1:
+        main()
+    else:
+        update_all()
 
