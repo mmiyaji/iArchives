@@ -97,7 +97,6 @@ class UploadHandler(object):
         if self._request.POST.has_key('allcomment'):
             allcomment = self._request.POST['allcomment']
         alltag = None
-        print 'aaaaa'
         if self._request.POST.has_key('alltag'):
             alltag = self._request.POST.getlist('alltag')
         for fieldStorage in self._request.FILES.getlist('files[]'):

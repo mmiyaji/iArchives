@@ -35,7 +35,18 @@
       <i class="icon-download icon-white"></i>
       <span>オリジナルサイズで表示</span>
     </a>
-    <a href="#myModal" role="button" class="btn" data-toggle="modal">削除</a>
+    <a href="#myModal" role="button" class="btn btn-danger" data-toggle="modal">削除</a>
+    <div class="btn-toolbar">
+      <form class="form-search form-inline input-prepend" method="POST" action="/photo/{{photo.uuid}}/rotate/" accept-charset="UTF-8">
+        <select name="orient">
+          <option value="1">右回りに90度回転</option>
+          <option value="2">左回りに90度回転</option>
+          <option value="3">180度回転</option>
+        </select>
+        <button class="btn btn-inverse">回転</button>
+        {% csrf_token %}
+      </form>
+    </div>
   </div>
   <div class="modal hide" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
@@ -98,7 +109,13 @@
             <p class="help-block">サムネイル写真の保存場所です．変更できません．</p>
           </div>
         </div>
-
+        <div class="control-group">
+          <label class="control-label">画像の回転</label>
+          <div class="controls">
+            <span class="input-xlarge uneditable-input">{{photo.orientation}}</span>
+            <p class="help-block"></p>
+          </div>
+        </div>
         <hr class="soften">
         <div class="control-group">
           <label class="control-label" for="input_author">製作者</label>

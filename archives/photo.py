@@ -106,6 +106,7 @@ def home(request):
         "title":u"写真一覧ページ",
         "photos":photos,
         "tags":Tag.get_all(),
+        "auth_years":Photo.get_years(),
         "pub_years":Photo.get_years(),
         "page_list":page_list,
         "pages":pages,
@@ -235,6 +236,49 @@ def update(request, photo_uuid):
         return HttpResponseRedirect("/photo/%s/?update=%d" % (photo_uuid, datetime.datetime.now().microsecond))
     else:
         raise Http404
+@csrf_protect
+def rotate(request, photo_uuid):
+    """
+    Case of POST REQUEST '/photo/<photo_uuid>/rotate/'
+    対象画像の回転
+    POST リクエストにのみレスポンス
+    """
+    request_type = request.method
+    logger.debug(request_type)
+    if request_type == 'GET':
+        raise Http404
+    elif request_type == 'OPTION' or request_type == 'HEAD':
+        return HttpResponse("OK")
+    elif request_type == 'POST' or request_type == 'UPDATE':
+        # uuidからPhotoを取得
+        photo = Photo.get_by_uuid(photo_uuid)
+        if not photo:
+            # 見つからない場合は404エラー送出
+            raise Http404
+        orient = photo.orientation
+        o = int(request.POST['orient'])
+        orientation = 1
+        print orient,o
+        # r = {3:180,6:-90,8:90}
+        if orient == 1:
+            if o == 1:orientation = 6
+            elif o == 2:orientation = 8
+            else:orientation = 3
+        elif orient == 3:
+            if o == 1:orientation = 8
+            elif o == 2:orientation = 6
+            else:orientation = 1
+        elif orient == 6:
+            if o == 1:orientation = 3
+            elif o == 2:orientation = 1
+            else:orientation = 8
+        elif orient == 8:
+            if o == 1:orientation = 1
+            elif o == 2:orientation = 3
+            else:orientation = 6
+        photo.orientation = orientation
+        photo.save()
+        return HttpResponseRedirect("/photo/%s/" % photo_uuid)
 
 def main():
     pass

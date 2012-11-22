@@ -70,6 +70,8 @@ class Scanner():
         #     # do something useful with results
         #     print 'decoded', symbol.type, 'symbol', '"%s"' % symbol.data
         return zimage
+    def get_image(self):
+        return self.image
     def __def__(self):
         """
         destructor
