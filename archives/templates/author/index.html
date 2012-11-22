@@ -42,7 +42,7 @@
 <section>
   {% if search_query %}
   <div class="page-header">
-    <h1>{% if admitted_query %}{{admitted_query}} 年度生 {% endif %}{% if group_year %}{{group_year}}年度 {% if group_name %}{{group_name}}{% endif %}に在籍 {% else %}{% if group_name %}{{group_name}}に在籍 {% endif %}{% endif %}{% if search_query %} [ {% for s in search_query %}{{s}} {% endfor %} ] 検索結果{% endif %}</h1>
+    <h1>{% if admitted_query %}{{admitted_query}} 年度生 {% endif %}{% if group_year %}{{group_year}}年度 {% if group_name %}{{group_name}}{% endif %}に在籍 {% else %}いずれかの年度で {% if group_name %}{{group_name}}に在籍 {% endif %}{% endif %}{% if search_query %} [ {% for s in search_query %}{{s}} {% endfor %} ] 検索結果{% endif %}</h1>
   </div>
   {% endif %}
   {% if authors %}
