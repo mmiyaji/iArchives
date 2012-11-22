@@ -127,14 +127,7 @@ def detail(request, author_id):
         search_query = request.GET['search_query'].replace(u"　", " ").split(" ")
     files,entry_count = author.get_photos(span=span, page=page, search_query=search_query)
     # 所属するグループのリストを作成
-    groups = []
-    g = author.get_groups()
-    syear = author.admitted_at.year
-    for i in range(syear, syear+6):
-        gh = GroupHandler.get_item(author,i)
-        gn = ""
-        if gh and gh.group: gn = gh.group.name
-        groups.append((i,gn))
+    groups = author.my_groups
     page_list,pages = get_page_list(page, entry_count, span)
     temp_values = {
         "target":"author",
@@ -198,6 +191,24 @@ def meiboadd(request):
                 if len(element) > 3:
                     author.nickname = element[3].strip()
                 author.save()
+            if len(element) > 4:
+                g_year = element[4::2]
+                g_name = element[5::2]
+                for y,n in zip(g_year,g_name):
+                    try:
+                        year = date_validate("%s-04-01" % y)
+                        group = Group.get_by_name(n)
+                        if not year or not group:
+                            continue
+                        gh = GroupHandler.get_item(author,y)
+                        if not gh:
+                            gh = GroupHandler()
+                            gh.author = author
+                            gh.year = year
+                        gh.group = group
+                        gh.save()
+                    except:
+                        pass
         return HttpResponseRedirect("/author/")
     else:
         raise Http404

@@ -56,6 +56,17 @@ class Author(models.Model):
         """
         result = GroupHandler.get_by_author(self)
         return result
+    def my_groups(self):
+        # 所属するグループのリストを作成
+        groups = []
+        g = self.get_groups()
+        syear = self.admitted_at.year
+        for i in range(syear, syear+6):
+            gh = GroupHandler.get_item(self,i)
+            gn = ""
+            if gh and gh.group: gn = gh.group.name
+            groups.append((i,gn))
+        return groups
     @staticmethod
     def get_years():
         """
