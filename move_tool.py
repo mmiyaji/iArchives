@@ -112,23 +112,33 @@ def main():
 
 def update_all():
     all = Photo.objects.all()
-    for i in all:
-        if i.image:
-            orientation = None
-            print i
-            if i.orientation > 0:
-                print "skip"
-                continue
-            image_url = i.image.path
-            scan = Scanner(image_url)
-            exif = scan.scanExif()
-            try:
-                if exif.has_key(274):
-                    orientation = int(exif[274])
-            except:
-                pass
-            print "orientation: ", orientation
-            i.save()
+#    c = len(allobj)
+#    span = 50
+#    step = c/50
+#    for j in range(0,step):
+#        all = allobj[j*span:(j+1)*span]
+    if True:
+        for i in all:
+            if i.image:
+                orientation = 1
+                print i
+                if i.orientation > 0:
+                    print "skip"
+                    continue
+                image_url = i.image.path
+                scan = Scanner(image_url)
+                exif = scan.scanExif()
+                try:
+                    if exif.has_key(274):
+                        orientation = int(exif[274])
+                except:
+                    pass
+                print "orientation: ", orientation
+                try:
+                    i.orientation = orientation
+                    i.save()
+                except:
+                    print "error"
 if __name__ == '__main__':
     # main()
     update_all()
