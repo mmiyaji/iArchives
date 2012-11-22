@@ -128,8 +128,11 @@ def detail(request, photo_uuid):
     Case of GET REQUEST '/photo/<photo_uuid>/'
     個別の画像の詳細を表示するページ
     """
+    rotate = None
     temp_values = Context()
     photo = Photo.get_by_uuid(photo_uuid)
+    if request.GET.has_key('rotate'):
+        rotate = "%s" % datetime.datetime.now().microsecond
     if not photo:
         # 見つからない場合は404エラー送出
         raise Http404
@@ -137,6 +140,7 @@ def detail(request, photo_uuid):
         "target":"photo",
         "title":u"写真詳細[ %s ]" % photo.title,
         "photo":photo,
+        "rotate":rotate,
         "recent_authors":Author.objects.order_by("-updated_at").all()[:100],
         "subscroll":True,
         "datepicker":"datepicker",
@@ -258,7 +262,6 @@ def rotate(request, photo_uuid):
         orient = photo.orientation
         o = int(request.POST['orient'])
         orientation = 1
-        print orient,o
         # r = {3:180,6:-90,8:90}
         if orient == 1:
             if o == 1:orientation = 6
@@ -278,7 +281,7 @@ def rotate(request, photo_uuid):
             else:orientation = 6
         photo.orientation = orientation
         photo.save()
-        return HttpResponseRedirect("/photo/%s/" % photo_uuid)
+        return HttpResponseRedirect("/photo/%s/?rotate=true" % photo_uuid)
 
 def main():
     pass

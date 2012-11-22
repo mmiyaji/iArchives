@@ -23,7 +23,7 @@
   </div>
   <div class="thumbnail" >
     <a href="{{ photo.get_original_img_url }}" class="thumbnail" target="_blank">
-      <img src="{{ photo.get_thumbnail_img_url }}" alt="{{ photo.title }}">
+      <img src="{{ photo.get_thumbnail_img_url }}{% if rotate %}?r={{rotate}}{% endif %}" alt="{{ photo.title }}">
     </a>
     {% ifnotequal photo.caption "" %}
     <h2>{{ photo.caption }}</h2>
