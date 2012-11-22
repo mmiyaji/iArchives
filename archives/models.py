@@ -228,20 +228,24 @@ class Photo(models.Model):
         """
         return Photo.objects.dates('published_at', 'year')
     @staticmethod
-    def get_items(author=None, span=10, page=0, search_query=None, admitted_query=None, query_type=False, order="-published_at", search_target=0, isvalid=True, all=False, listvalue=None):
+    def get_items(author=None, span=10, page=0,
+                  search_query=None, admitted_query=None, published_query=None, tag_queries=None, query_type=False,
+                  order="-published_at", search_target=0, isvalid=True, all=False, listvalue=None):
         result = None
         result_count = 0
         if page!=0:
             page = page*span - span
         endpage = page + span
-        # try:
-        if True:
+        try:
+        # if True:
             # 検索対象のすべてのエントリー数とSPANで区切ったエントリーを返す
             result = Photo.objects.order_by(order).filter(isvalid=isvalid)
             if author:
                 result = result.filter(authors__exact=author)
             if admitted_query:
                 result = result.filter(authors__admitted_at__year=admitted_query)
+            if published_query:
+                result = result.filter(published_at__year=published_query)
             if search_query:
                 qs1 = []
                 qs2 = []
@@ -270,13 +274,21 @@ class Photo(models.Model):
                 else:
                     query = query1 | query2
                 result = result.filter(query)
+            if tag_queries:
+                qs = []
+                query = []
+                qs = [Q(tag__exact=w) for w in tag_queries]
+                query = qs.pop()
+                for q in qs:
+                    query |= q
+                result = result.filter(query)
             result_count = result.count()
             if not all:
                 result = result[page:endpage]
             if listvalue:
                 result = result.values_list(listvalue)
-        # except:
-        #     pass
+        except:
+            pass
         return result, result_count
 
     @staticmethod

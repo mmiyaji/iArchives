@@ -11,10 +11,10 @@
 <div class="btn-toolbar">
   <form class="form-search form-inline input-prepend" action="/photo/" method="GET" accept-charset="UTF-8">
     <span class="add-on">登録年度</span>
-    <select class="input-medium" name="a">
+    <select class="input-medium" name="p">
       <option value="0">すべて</option>
-      {% for y in auth_years %}
-      <option value="{{y.year}}"{% ifequal y.year admitted_query %} selected=selected{% endifequal %}>{{y.year}} 年度</option>
+      {% for y in pub_years %}
+      <option value="{{y.year}}"{% ifequal y.year published_query %} selected=selected{% endifequal %}>{{y.year}} 年度</option>
       {% endfor %}
     </select>
     <span class="add-on">検索対象</span>
@@ -30,10 +30,25 @@
       <option value="1"{% if query_type %} selected=selected{% endif %}>AND</option>
     </select>
     <button type="submit" class="btn">検索</button>
+    <br />
+    {% if tags %}
+    <span class="add-on">タグ絞り込み</span>
+    <label class="checkbox inline">
+      <input type="checkbox" name="tag" value="0" {% if not tag_queries %}checked=cheked{% endif %}> すべて
+    </label>
+    {% for tag in tags %}
+    <label class="checkbox inline">
+      <input type="checkbox" name="tag" value="{{tag.id}}" {% for t in tag_queries %}{% ifequal tag.id t %}checked=checked{% endifequal %}{% endfor %}> {{tag.name}}
+    </label>
+    {% endfor %}{% endif %}
   </form>
 </div>
 <section>
-  <h1>プレビュー</h1>
+  {% if search_query %}
+  <div class="page-header">
+    <h1>{% if published_query %}{{published_query}} 年度登録 {% endif %}{% if search_query %} [ {% for s in search_query %}{{s}} {% endfor %} ] 検索結果{% endif %}</h1>
+  </div>
+  {% endif %}
   <div class="btn-toolbar">
     <div class="pagination btn-group">
       <ul>

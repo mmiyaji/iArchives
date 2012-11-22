@@ -19,6 +19,8 @@ def home(request):
     order = "-created_at"
     search_query = None
     admitted_query = None
+    published_query = None
+    tag_queries = []
     search_target = 0
     search_option = ""
     sort_option = ""
@@ -39,6 +41,14 @@ def home(request):
             if admitted is not 0:
                 admitted_query = admitted
                 search_option += "a=%s&" % admitted_query
+        except:
+            pass
+    if request.GET.has_key('p'):
+        try: # int キャストで失敗したらすべての年度の写真を返す
+            published = int(request.GET['p'])
+            if published is not 0:
+                published_query = published
+                search_option += "p=%s&" % published_query
         except:
             pass
     if request.GET.has_key('t'):
@@ -66,6 +76,16 @@ def home(request):
         elif sort_option == "update":
             order = "-updated_at"
             s_option = u"更新日"
+    if request.GET.has_key('tag'):
+        tg = request.GET.getlist('tag')
+        if u"0" in tg:
+            tg = []
+        for t in tg:
+            try:
+                tag_queries.append(int(t))
+                search_option += "tag=%s&" % t
+            except:
+                pass
     if request.GET.has_key('st'):
         # 同じクエリがきた場合、後を優先する
         try: # キャストで失敗したら降順表示
@@ -77,18 +97,22 @@ def home(request):
         except:
             pass
     photos,entry_count = Photo.get_items(span=span, page=page, search_query=search_query,
-                                         admitted_query=admitted_query, query_type=query_type, search_target=search_target,
+                                         admitted_query=admitted_query, published_query=published_query, query_type=query_type,
+                                         search_target=search_target, tag_queries=tag_queries,
                                          order=order)
     page_list,pages = get_page_list(page, entry_count, span)
     temp_values = {
         "target":"photo",
         "title":u"写真一覧ページ",
         "photos":photos,
-        "auth_years":Photo.get_years(),
+        "tags":Tag.get_all(),
+        "pub_years":Photo.get_years(),
         "page_list":page_list,
         "pages":pages,
         "search_query":search_query,
         "admitted_query":admitted_query,
+        "published_query":published_query,
+        "tag_queries":tag_queries,
         "query_type" : query_type,
         "search_option" : search_option,
         "sort_option": s_option,
