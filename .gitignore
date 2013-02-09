@@ -7,7 +7,9 @@ freeze/*
 *secretkey.txt
 .#*%
 media/tmp/*
-media/archives/*
-!media/tmp/*.txt
+media/archives/download/*
+media/archives/thumbs/*
+media/archives/originals/*
+!.gitkeep
 settings_local.py
 settings_deploy.py
