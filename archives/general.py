@@ -51,7 +51,7 @@ def login_user(request):
                 return HttpResponseRedirect('/')
             else:
                 return more_try(request,name,password)
-            return more_try(request,name,password)
+        return more_try(request,name,password)
     except:
         return more_try(request,name,password)
 def more_try(request,name,password = ''):

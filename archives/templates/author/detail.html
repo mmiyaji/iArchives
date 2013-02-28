@@ -109,25 +109,49 @@
         <div class="control-group">
           <label class="control-label" for="input_author">氏名</label>
           <div class="controls">
+	    {% if not user.is_anonymous %}
             <input type="text" class="input-xlarge" name="name" value="{{author.name|default:""}}">
+	    {% else %}
+            <span class="input-xlarge uneditable-input">
+	      {{author.name|default:""}}
+	     </span>
+	    {% endif %}
           </div>
         </div>
         <div class="control-group">
           <label class="control-label" for="input_roman">名前のよみ</label>
           <div class="controls">
+            {% if not user.is_anonymous %}
             <input type="text" class="input-xlarge" name="roman" value="{{author.roman|default:""}}">
+            {% else %}
+            <span class="input-xlarge uneditable-input">
+              {{author.roman|default:""}}
+             </span>
+            {% endif %}
           </div>
         </div>
         <div class="control-group">
           <label class="control-label" for="input_caption">学籍番号</label>
           <div class="controls">
+            {% if not user.is_anonymous %}
             <input type="text" class="input-xlarge" name="student_id" value="{{author.student_id}}">
+            {% else %}
+            <span class="input-xlarge uneditable-input">
+              {{author.student_id|default:""}}
+             </span>
+            {% endif %}
           </div>
         </div>
         <div class="control-group">
           <label class="control-label" for="input_admitted">入学年度</label>
           <div class="controls">
+            {% if not user.is_anonymous %}
             <input type="text" class="input-xlarge" name="admitted_year" value="{{author.admitted_at.year}}">
+            {% else %}
+            <span class="input-xlarge uneditable-input">
+              {{author.admitted_at.year|default:""}}
+             </span>
+            {% endif %}
           </div>
         </div>
         <div class="control-group">
@@ -152,25 +176,24 @@
             <p class="help-block">所属するグループです．</p>
           </div>
         </div>
-        <div class="control-group">
+<!--        <div class="control-group">
           <label class="control-label" for="input_nickname">ニックネーム</label>
           <div class="controls">
             <input type="text" class="input-xlarge" name="nickname" value="{{author.nickname|default:""}}">
             <p class="help-block">設定されたニックネームです．</p>
           </div>
         </div>
+!-->
         <div class="control-group">
           <label class="control-label" for="input_updateat">最終更新日</label>
           <div class="controls">
             <span class="input-xlarge uneditable-input">{{author.updated_at}}</span>
-            <p class="help-block">変更不可</p>
           </div>
         </div>
         <div class="control-group">
           <label class="control-label" for="input_createat">登録日時</label>
           <div class="controls">
             <span class="input-xlarge uneditable-input">{{author.created_at}}</span>
-            <p class="help-block">変更不可</p>
           </div>
         </div>
         <div class="control-group">

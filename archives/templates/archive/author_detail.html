@@ -107,7 +107,7 @@
   <div class="row thumbnails">
     <div class="span3">
       <label class="radio">
-        <input type="radio" name="archive_type" value="1" checked>
+        <input type="radio" name="archive_type" value="1">
         日付ごとにフォルダ分け(年月日)
         <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype01.png" alt="format y/m/d">
       </label>
@@ -121,7 +121,7 @@
     </div>
     <div class="span3">
       <label class="radio">
-        <input type="radio" name="archive_type" value="3">
+        <input type="radio" name="archive_type" value="3" checked>
         日付ごとにフォルダ分け(年)
         <img class="thumbnail" src="{{ STATIC_URL }}/img/screenshot/ziptype03.png"  alt="format y">
       </label>
@@ -139,7 +139,7 @@
   <div class="row thumbnails">
     <div class="span3">
       <label class="radio">
-        <input type="radio" name="archive_filename" value="1" checked>
+        <input type="radio" name="archive_filename" value="1">
         自動設定されたファイル名(撮影日)<br>
         例) 20120724192207_00046.jpg
       </label>
@@ -153,7 +153,7 @@
     </div>
     <div class="span3">
       <label class="radio">
-        <input type="radio" name="archive_filename" value="3">
+        <input type="radio" name="archive_filename" value="3" checked>
         キャプションとして設定した名前(未設定ファイルは日付)<br>
         例) 夏季自由研究.jpg
       </label>
@@ -163,8 +163,8 @@
   <h2 id="select_zipfile">書き出しファイル名設定</h2>
   <div>
     <div class="controls input-append">
-      <label class="control-label">初期設定: archive_学生ID.zip</label>
-      <input type="text" name="archive_zipfile" class="input-xlarge" value="archive_{{author.student_id}}">
+      <label class="control-label">初期設定: archive_学生ID_名前.zip</label>
+      <input type="text" name="archive_zipfile" class="input-xlarge" value="archive_{{author.student_id}}_{{author.name}}">
       <span class="add-on">.zip</span>
     </div>
   </div>

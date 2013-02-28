@@ -83,7 +83,9 @@ def authors(request):
             author = Author.get_by_student_id(i)
             if not author:
                 continue
+#            zip_filename = replace_validname(force_unicode(i+"_"+author.name))
             zip_filename = replace_validname(force_unicode(i))
+            print type(author.name)
             files,entry_count = author.get_photos(all=True, listvalue="uuid")
             z = createZip(list(files[0]), archive_type, archive_filename, zip_filename)
             filepath = os.path.join(settings.MEDIA_URL, settings.EXPORT_PATH, zip_filename+".zip")
@@ -171,13 +173,17 @@ def years(request):
     pass
 def year(request, year):
     pass
-
+import unicodedata
 def execZip(fileList, exportPath, filename):
     # 指定したファイル群をzipに圧縮する
     # execZip(["/Users/mmiyaji/tmp/sc.JPG","/Users/mmiyaji/tmp/sc.psd","/Users/mmiyaji/tmp/scs.jpg"], ["a/sc.JPG","a/psd/sc.psd","a/scs.JPG"],"exporttest.zip")
     z = zipfile.ZipFile(filename, 'w', zipfile.ZIP_DEFLATED)
     for l,p in zip(fileList, exportPath):
-        z.write(force_unicode(l).encode('cp932'), p.encode('cp932'))
+        try:
+            z.write(force_unicode(l).encode('cp932', 'ignore'), p.encode('cp932'))
+        except:
+            # encode for mac(dskuten moji)
+            z.write(force_unicode(l).encode('cp932'), unicodedata.normalize("NFC", p).encode('cp932', 'ignore'))
     z.close()
     return filename
 

@@ -43,7 +43,7 @@
                 {
                     action: 'load',
                     fileTypes: /^image\/(gif|jpeg|png)$/,
-                    maxFileSize: 20000000 // 20MB
+                    maxFileSize: 2000000000 // 20MB
                 },
                 {
                     action: 'resize',

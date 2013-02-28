@@ -13,7 +13,7 @@ from django import forms
 from scan import Scanner
 WEBSITE = 'http://ruhenheim.org/'
 MIN_FILE_SIZE = 1 # bytes
-MAX_FILE_SIZE = 20000000 # bytes
+MAX_FILE_SIZE = 2000000000 # bytes
 IMAGE_TYPES = re.compile('image/(gif|p?jpeg|(x-)?png)')
 ACCEPT_FILE_TYPES = IMAGE_TYPES
 THUMBNAIL_MODIFICATOR = '=s80' # max width / height
