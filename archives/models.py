@@ -59,13 +59,16 @@ class Author(models.Model):
     def my_groups(self):
         # 所属するグループのリストを作成
         groups = []
-        g = self.get_groups()
-        syear = self.admitted_at.year
-        for i in range(syear, syear+6):
-            gh = GroupHandler.get_item(self,i)
-            gn = ""
-            if gh and gh.group: gn = gh.group.name
-            groups.append((i,gn))
+        try:
+            g = self.get_groups()
+            syear = self.admitted_at.year
+            for i in range(syear, syear+6):
+                gh = GroupHandler.get_item(self,i)
+                gn = ""
+                if gh and gh.group: gn = gh.group.name
+                groups.append((i,gn))
+        except:
+            pass
         return groups
     @staticmethod
     def get_years():

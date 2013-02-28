@@ -110,7 +110,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for author in authors %}
+        {% for author in authors %}{% if author %}
         <tr id="author_{{author.student_id|urlencode}}">
           <td>{{ forloop.counter }}</td>
           <td>{{author.student_id}}</td>
@@ -134,7 +134,7 @@
           <!-- <td>{{author.created_at}}</td> -->
           <td>{{author.get_photo_num}}</td>
           <!-- <td><a class="btn" href="#"><i class="icon-wrench"></i><span>Edit</span></a></td> -->
-        </tr>
+        </tr>{% endif %}
         {% endfor %}
       </tbody>
     </table>

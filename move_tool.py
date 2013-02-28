@@ -91,8 +91,8 @@ def main():
     users_list = os.listdir(rootpath)
     print
     for i in users_list:
-        if i.count("-") > 0:
-            id,no = i.split("-",1)
+        if i.count(",") > 0:
+            id,no = i.split(",",1)
         else:
             id = i.strip()
             no = "no name"
@@ -101,7 +101,7 @@ def main():
         print "name: ", no
         author = Author.get_by_student_id(id)
         if author:
-            print "found on database: ", author
+            print "found on database: ", author.name
             image_list = os.listdir(os.path.join(rootpath,i))
             print "image list: ", image_list
             for j in image_list:

@@ -206,7 +206,8 @@ def update(request, photo_uuid):
                 aname = a.group(0).replace('(','').replace(')','').replace(u"　"," ").strip()
             if aid:
                 author = Author.get_by_student_id(aid)
-                if not author:
+#                if not author:
+                if False:
                     author = Author()
                     author.name = aname
                     author.student_id = aid
