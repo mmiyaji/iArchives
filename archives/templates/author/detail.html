@@ -61,7 +61,6 @@
               <li>ファイル名: <a href="{{file.get_original_img_url}}" title="{{file.title}}" rel="gallery" download="{{file.title}}" uuid="{{file.uuid}}">{{file.title}}</a></li>
               <li>元のファイル名: <span>{{file.original_title}}</span></li>
               <li>撮影日: <span>{{file.published_at}}</span></li>
-              <li>写真の大きさ: <span>{{file.image_width}} x {{file.image_height}}, {{file.image.size|filesizeformat}}</span></li>
               <li>キャプション: <span>{{file.caption|default:"なし"}}</span></li>
               <li>コメント: <span>{{file.comment|default:"なし"}}</span></li>
               <li>タグ: <span>{% for tag in file.tag.all %}{{tag.name}},{% endfor %}</span></li>
