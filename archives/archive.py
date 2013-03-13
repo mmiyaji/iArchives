@@ -179,11 +179,13 @@ def execZip(fileList, exportPath, filename):
     # execZip(["/Users/mmiyaji/tmp/sc.JPG","/Users/mmiyaji/tmp/sc.psd","/Users/mmiyaji/tmp/scs.jpg"], ["a/sc.JPG","a/psd/sc.psd","a/scs.JPG"],"exporttest.zip")
     z = zipfile.ZipFile(filename, 'w', zipfile.ZIP_DEFLATED)
     for l,p in zip(fileList, exportPath):
-        try:
-            z.write(force_unicode(l).encode('cp932', 'ignore'), p.encode('cp932'))
-        except:
-            # encode for mac(dskuten moji)
-            z.write(force_unicode(l).encode('cp932'), unicodedata.normalize("NFC", p).encode('cp932', 'ignore'))
+        flag = os.path.exists(l)
+        if flag:
+            try:
+                z.write(force_unicode(l).encode('cp932', 'ignore'), p.encode('cp932'))
+            except:
+                # encode for mac(dskuten moji)
+                z.write(force_unicode(l).encode('cp932'), unicodedata.normalize("NFC", p).encode('cp932', 'ignore'))
     z.close()
     return filename
 

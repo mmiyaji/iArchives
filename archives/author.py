@@ -118,7 +118,8 @@ def detail(request, author_id):
     author = Author.get_by_student_id(author_id)
     if not author:
         # 見つからない場合は404エラー送出
-        raise Http404
+        # raise Http404
+        return missAuthorDetail(request, author_id)
     if request.GET.has_key('page'):
         page = int(request.GET['page'])
     if request.GET.has_key('span'):
@@ -144,6 +145,14 @@ def detail(request, author_id):
         }
     return render_to_response('author/detail.html',temp_values,
                               context_instance=RequestContext(request))
+def missAuthorDetail(request, id):
+    temp_values = {
+                "target":"author",
+                "author_id": id
+                   }
+    return render_to_response('author/missing.html',temp_values,
+                              context_instance=RequestContext(request))
+
 @csrf_protect
 @login_required
 def meiboadd(request):
