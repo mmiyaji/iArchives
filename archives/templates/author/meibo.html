@@ -1,0 +1,35 @@
+{% extends "base/base.html" %}
+{% block main %}
+<!-- Masthead
+     ================================================== -->
+<header class="jumbotron subhead" id="overview">
+  <h2>著者一括登録 [管理者ユーザのみ]</h2>
+</header>
+<!-- Photo view
+     ================================================== -->
+{% if not user.is_anonymous %}
+<section id="info">
+  <div class="page-header">
+  </div>
+  <div>
+    <form class="form-horizontal" method="POST" action="/author/meibo/add/" accept-charset="UTF-8">
+      <fieldset>
+        <div class="control-group span10">
+          <p class="alert alert-ja">学籍番号,名前のよみ,氏名,ニックネーム,所属年度,所属グループ名,... の形式で入力．複数入力する場合は改行を入力すること．未設定項目は入力なしで,を入力する．
+            <br />
+            すでに同一IDが登録済みだった場合，上書きはしない．</p>
+          <p class="alert alert-ja">例) 20121221,あいうえ おとこ,阿井上 男,aiueo,2012,さくら,2013,ふじ,2014,うめ,2015,まつ,2016,さくら <br />
+            20121221,あいうえ おんな,阿井上 女,,2012,さくら
+          </p>
+          <textarea class="input-xlarge span10" name="meibo" ></textarea>
+        </div>
+      </fieldset>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">上記の内容で一括登録</button>
+      </div>
+      {% csrf_token %}
+    </form>
+  </div>
+</section>
+{% endif %}
+{% endblock main %}

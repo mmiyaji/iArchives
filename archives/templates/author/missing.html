@@ -1,0 +1,12 @@
+{% extends "base/base.html" %}
+{% block main %}
+<!-- Masthead
+     ================================================== -->
+<header class="jumbotron subhead" id="overview">
+  <h2 id="title">学籍番号「{{author_id}}」の著者は登録されていません</h2>
+</header>
+<section  id="photo">
+  <div class="page-header">
+    <button class="btn btn-large btn-primary" type="button" onClick="history.back(); return false;">元のページに戻る</button>
+  </div>
+{% endblock main %}
