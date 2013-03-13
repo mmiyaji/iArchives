@@ -1,12 +1,7 @@
-<html>
-  <head>
-<title>404 page not found</title>
-</head>
-<body>
+{% extends "base/base.html" %}
+{% block main %}
 <h1>404 page not found</h1>
+<h2>指定されたWebページ {{ request_path }} がみつかりません</h2>
 <p>The request URL {{ request_path }} was not found in this server.</p>
-<address>
-<a href="mailto:mmiyaji@ruhenheim.org">Masahiro MIYAJI</a>
-</address>
-</body>
-</html>
+<p>システム管理者にお問い合せください</p>
+{% endblock main %}
