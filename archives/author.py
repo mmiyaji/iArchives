@@ -152,6 +152,18 @@ def missAuthorDetail(request, id):
                    }
     return render_to_response('author/missing.html',temp_values,
                               context_instance=RequestContext(request))
+@login_required
+def meibo(request):
+    """
+    Case of UPDATE REQUEST '/author/meibo/'
+    著者の一括登録
+    GET リクエストにのみレスポンス
+    """
+    temp_values = {
+                "target":"meibo",
+                   }
+    return render_to_response('author/meibo.html',temp_values,
+                              context_instance=RequestContext(request))
 
 @csrf_protect
 @login_required
