@@ -264,11 +264,11 @@ def rotate(request, photo_uuid):
         o = int(request.POST['orient'])
         orientation = 1
         # r = {3:180,6:-90,8:90}
-        if orient == 1:
-            if o == 1:orientation = 6
-            elif o == 2:orientation = 8
-            else:orientation = 3
-        elif orient == 3:
+        # if orient == 1:
+        #     if o == 1:orientation = 6
+        #     elif o == 2:orientation = 8
+        #     else:orientation = 3
+        if orient == 3:
             if o == 1:orientation = 8
             elif o == 2:orientation = 6
             else:orientation = 1
@@ -280,6 +280,10 @@ def rotate(request, photo_uuid):
             if o == 1:orientation = 1
             elif o == 2:orientation = 3
             else:orientation = 6
+        else:
+            if o == 1:orientation = 6
+            elif o == 2:orientation = 8
+            else:orientation = 3
         photo.orientation = orientation
         photo.save()
         return HttpResponseRedirect("/photo/%s/?rotate=true" % photo_uuid)
