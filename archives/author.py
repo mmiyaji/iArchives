@@ -259,7 +259,7 @@ def update(request, author_id):
             "roman":request.POST['roman'],
             "student_id":request.POST['student_id'],
             "admitted_year":request.POST['admitted_year'],
-            "nickname":request.POST['nickname'],
+            "nickname":"",
             "groups":request.POST.getlist('groups'),
             }
         if param['name']:

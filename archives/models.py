@@ -341,35 +341,39 @@ class Photo(models.Model):
             if not self.uuid:
                 # 万が一uuidの被りがあった場合は再精製。最大10回繰り返す。
                 cuuid = ""
-                for i in range(0,10):
+                for i in range(0,30):
                     cuuid = uuid.uuid4().hex
-                    if not Photo.get_by_uuid(cuuid):
+		    c = Photo.objects.filter(uuid__exact=cuuid).count()
+                    if c < 1:
                         break
                 self.uuid = cuuid
             super(Photo, self).save(force_update, force_insert)
         else:
-            image = Image.open(self.image)
-            # if image.mode not in ('L', 'RGB'): # ウィンドウシャドウが消えるので変換中止
-            #     image = image.convert('RGB')
-            # save the original size
-            self.image_width, self.image_height = image.size
-            image.thumbnail(thumb_size, Image.ANTIALIAS)
-            try: # EXIF にしたがってサムネイル画像を回転
-                if self.orientation and self.orientation != 1:
-                    r = {3:180,6:-90,8:90}
-                    image = image.rotate(r[self.orientation])
-            except:
-                pass
-            # save the thumbnail to memory
-            temp_handle = StringIO()
-            image.save(temp_handle, 'png')
-            temp_handle.seek(0) # rewind the file
-            # save to the thumbnail field
-            suf = SimpleUploadedFile(os.path.split(self.image.name)[-1],
+            try:
+                image = Image.open(self.image)
+                # if image.mode not in ('L', 'RGB'): # ウィンドウシャドウが消えるので変換中止
+                #     image = image.convert('RGB')
+                # save the original size
+                self.image_width, self.image_height = image.size
+                image.thumbnail(thumb_size, Image.ANTIALIAS)
+                try: # EXIF にしたがってサムネイル画像を回転
+                    if self.orientation and self.orientation != 1:
+                        r = {3:180,6:-90,8:90}
+                        image = image.rotate(r[self.orientation])
+                except:
+                    pass
+                # save the thumbnail to memory
+                temp_handle = StringIO()
+                image.save(temp_handle, 'png')
+                temp_handle.seek(0) # rewind the file
+                # save to the thumbnail field
+                suf = SimpleUploadedFile(os.path.split(self.image.name)[-1],
                                      temp_handle.read(),
                                      content_type='image/png')
-            self.thumbnail.save(suf.name+'.png', suf, save=False)
-            self.thumbnail_width, self.thumbnail_height = image.size
+                self.thumbnail.save(suf.name+'.png', suf, save=False)
+                self.thumbnail_width, self.thumbnail_height = image.size
+            except IOError:
+                pass
             # save the image object
             super(Photo, self).save(force_update, force_insert)
 class Group(models.Model):
